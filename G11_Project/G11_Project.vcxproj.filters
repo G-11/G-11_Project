@@ -113,6 +113,9 @@
     <Filter Include="00_FrameWork\Loading">
       <UniqueIdentifier>{5f444f2f-322c-4729-ad9e-99f63c016ca5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_FrameWork\Collision">
+      <UniqueIdentifier>{4d1eab00-0d52-432e-aa5e-3fad3ac852c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -302,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="Loading.h">
       <Filter>00_FrameWork\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>00_FrameWork\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
