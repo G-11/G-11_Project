@@ -11,9 +11,9 @@
 //=============================================================================
 #define REPEATE_TRIGGER (20)
 
-CKeyboard* CKeyboard::Self = new CKeyboard;
+Keyboard* Keyboard::Self = new Keyboard;
 
-CKeyboard::~CKeyboard()
+Keyboard::~Keyboard()
 {
 	if (InputDevice != nullptr)
 	{
@@ -25,7 +25,7 @@ CKeyboard::~CKeyboard()
 //=============================================================================
 // 初期化
 //=============================================================================
-HRESULT CKeyboard::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
+HRESULT Keyboard::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
 {
 
 	HRESULT hr;
@@ -60,7 +60,7 @@ HRESULT CKeyboard::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
 	return S_OK;
 }
 
-void CKeyboard::Uninit(void)
+void Keyboard::Uninit(void)
 {
 	delete Self;
 	Self = nullptr;
@@ -69,7 +69,7 @@ void CKeyboard::Uninit(void)
 //=============================================================================
 // 更新
 //=============================================================================
-void CKeyboard::Update(void)
+void Keyboard::Update(void)
 {
 	BYTE CurrentKeyState[256] ={0};
 	if(SUCCEEDED(InputDevice->GetDeviceState(sizeof(CurrentKeyState),&CurrentKeyState[0])))
@@ -110,7 +110,7 @@ void CKeyboard::Update(void)
 //=============================================================================
 // キーボードのプレス状態を取得
 //=============================================================================
-bool CKeyboard::Press(int nKey)
+bool Keyboard::Press(int nKey)
 {
 	return KeyState[nKey] ? true:false;
 }
@@ -118,21 +118,21 @@ bool CKeyboard::Press(int nKey)
 //=============================================================================
 // キーボードのトリガー状態を取得
 //=============================================================================
-bool CKeyboard::Trigger(int nKey)
+bool Keyboard::Trigger(int nKey)
 {
 	return TriggerKeyState[nKey] ? true:false;
 }
 //=============================================================================
 // キーボードのリリ－ス状態を取得
 //=============================================================================
-bool CKeyboard::Release(int nKey)
+bool Keyboard::Release(int nKey)
 {
 	return ReleaseKeyState[nKey] ? true:false;
 }
 //=============================================================================
 // キーボードのリピート状態を取得
 //=============================================================================
-bool CKeyboard::Repeat(int nKey)
+bool Keyboard::Repeat(int nKey)
 {
 	return RepeateKeyState[nKey] ? true:false;
 }

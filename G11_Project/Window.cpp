@@ -1,7 +1,8 @@
 #include "main.h"
 #include "Manager.h"
+#include "Input/VC.h"
 #include "Input/Keyboard.h"
-
+#include "resource.h"
 #include<time.h>
 const char* Window::ClassName = "AppClass";
 const char* Window::WindowName = "Shooting";
@@ -30,7 +31,7 @@ int Window::Initialize(HINSTANCE hInstance,int cmdShow)
 	
 	// ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
-	
+	//DialogBox(hInstance,MAKEINTRESOURCE(IDD_DIALOG1),NULL,(DLGPROC)InitializeDialog);
 	_hWnd = CreateWindowEx(0,
 		ClassName,
 		WindowName,
@@ -103,6 +104,15 @@ int Window::Run(void)
 	FPSLastTime = timeGetTime();
 	CurrentTime =
 	FrameCount = 0;
+	double updateTime = 0,drawTime = 0;
+
+#ifdef _DEBUG
+	LARGE_INTEGER sys,start,now;
+	if (!QueryPerformanceFrequency(&sys))
+	{
+		return -1;
+	}
+#endif
 
 	MSG msg;
 	// メッセージループ
@@ -138,18 +148,34 @@ int Window::Run(void)
 			if ((CurrentTime - ExecLastTime) >= (1000 / FPSLimit))
 			{
 #ifdef _DEBUG
-				if (VC::Instance()->Keyboard()->Trigger(DIK_F))
+				if (VC::Instance()->keyboard()->Trigger(DIK_F))
 				{
 					(FPSLimit != 60) ? FPSLimit = 60 : FPSLimit = 1000;
 				}
 #endif
 				ExecLastTime = CurrentTime;
-
+#ifdef _DEBUG
+				QueryPerformanceCounter(&start);
 				_Manager->Update();
-
+				QueryPerformanceCounter(&now);
+				updateTime = (double)(now.QuadPart - start.QuadPart) / (double)sys.QuadPart;
+				
+			
 				// 描画処理
+				QueryPerformanceCounter(&start);
 				_Manager->Draw();
-				DebugProc::Print("FPS:%d\n",FPS);
+				QueryPerformanceCounter(&now);
+				drawTime = (double)(now.QuadPart - start.QuadPart)*1000 / (double)sys.QuadPart;
+
+				//CDebugProc::SetUpdaeTime(updateTime,drawTime);
+				CDebugProc::Print("FPS:%d\n",FPS);
+				CDebugProc::Print("Update:%fms\n",updateTime);
+				CDebugProc::Print("Draw:%fms\n",drawTime);
+				CDebugProc::Print("UD:%fms\n",drawTime+updateTime);
+#else
+				_Manager->Update();
+				_Manager->Draw();
+#endif
 				FrameCount++;
 			}
 		}
@@ -191,11 +217,22 @@ LRESULT CALLBACK Window::WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam
 LRESULT CALLBACK Window::InitializeDialog(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 	int num = 0;
-	/*switch (uMsg)
+	switch (uMsg)
 	{
 	case WM_INITDIALOG:
-		CheckRadioButton(hWnd,IDC_RADIO1,IDC_RADIO3,IDC_RADIO2);
-
+	{
+		int windowY = GetSystemMetrics(SM_CYSCREEN);
+		int check = IDC_RADIO1;
+		if (windowY < 768.0f)
+		{
+			check = IDC_RADIO3;
+		}
+		else if (windowY < 960.0f)
+		{
+			check = IDC_RADIO2;
+		}
+		CheckRadioButton(hWnd,IDC_RADIO1,IDC_RADIO3,check);
+	}
 		break;
 	case WM_COMMAND:
 		switch (wParam)
@@ -231,7 +268,7 @@ LRESULT CALLBACK Window::InitializeDialog(HWND hWnd,UINT uMsg,WPARAM wParam,LPAR
 	}
 
 
-	*/
+
 	return 0;
 }
 

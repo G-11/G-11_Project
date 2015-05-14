@@ -10,7 +10,8 @@ public:
 	static bool Quad(const D3DXVECTOR3 pos1,const D3DXVECTOR3* quadPoint1,UINT num1,const D3DXVECTOR3 pos2,const D3DXVECTOR3* quadPoint2,UINT num2);
 	static bool DotQuad(const D3DXVECTOR3& pos,const D3DXVECTOR3* quad,UINT num);
 	static bool CircleQuad(const D3DXVECTOR3& circle,float radius,const D3DXVECTOR3* quad,UINT num);
-	static bool Line(const D3DXVECTOR2& point1,const D3DXVECTOR2& vec1,const D3DXVECTOR2& point2,const D3DXVECTOR2& vec2);
+	static bool CircleQuad(const D3DXVECTOR3& circle,float radius,const D3DXVECTOR3* quad,UINT num,const D3DXVECTOR3& speed,D3DXVECTOR3* reflectVec = nullptr);
+	static bool Line(const D3DXVECTOR2& point1,const D3DXVECTOR2& vec1,const D3DXVECTOR2& point2,const D3DXVECTOR2& vec2,D3DXVECTOR3* reflectVec = nullptr);
 	static bool Cube(const D3DXVECTOR3& aPos,const D3DXVECTOR3& aSize,const D3DXVECTOR3& bPos,const D3DXVECTOR3& bSize);
 	static bool Circle(float ax,float ay,float ar,float bx,float by,float br);
 	static bool Circle(const D3DXVECTOR3& aPos,float ar,const D3DXVECTOR3& bPos,float br,bool xz=false);
@@ -21,6 +22,9 @@ public:
 	static bool LineCircle(const D3DXVECTOR3& line_start,const D3DXVECTOR3& line_end,const D3DXVECTOR3& circle,float radius);
 	static bool LineCircle2(const D3DXVECTOR3& line_head,const D3DXVECTOR3& line_tail,float width,float angle,const D3DXVECTOR3& obj_pos,float r);
 	static bool LineLineXZ(const D3DXVECTOR3& pos0St,const D3DXVECTOR3& pos0Ed,const D3DXVECTOR3& pos1St,const D3DXVECTOR3& pos1Ed,D3DXVECTOR3* OutPosCross,float* OutRate,D3DXVECTOR3* OutVecReflect);
+
+private:
+	static D3DXVECTOR3 CreateReflectVec(const D3DXVECTOR3& point1Start,const D3DXVECTOR3& point1End,const D3DXVECTOR3& point2Start,const D3DXVECTOR3& point2End);
 };
 
 //=======================================================================================
@@ -307,7 +311,7 @@ inline bool Collision::Quad(const D3DXVECTOR3 pos1,const D3DXVECTOR3* quadPoint1
 	return false;
 }
 
-inline bool Collision::Line(const D3DXVECTOR2& point1,const D3DXVECTOR2& vec1,const D3DXVECTOR2& point2,const D3DXVECTOR2& vec2)
+inline bool Collision::Line(const D3DXVECTOR2& point1,const D3DXVECTOR2& vec1,const D3DXVECTOR2& point2,const D3DXVECTOR2& vec2,D3DXVECTOR3* reflectVec)
 {
 	D3DXVECTOR2 vec = point2 - point1;
 	float Cross_v1_v2 = D3DXVec2CCW(&vec1,&vec2);
@@ -329,6 +333,14 @@ inline bool Collision::Line(const D3DXVECTOR2& point1,const D3DXVECTOR2& vec1,co
 	}
 	else
 	{
+		if (reflectVec != nullptr)
+		{
+			D3DXVECTOR3 point1Start(point1.x,point1.y,0);
+			D3DXVECTOR3 point2Start(point2.x,point2.y,0);
+			D3DXVECTOR3 point1End = point1Start + D3DXVECTOR3(vec1.x,vec1.y,0);
+			D3DXVECTOR3 point2End = point2Start + D3DXVECTOR3(vec2.x,vec2.y,0);
+			*reflectVec = CreateReflectVec(point1Start,point1End,point2Start,point2End);
+		}
 		return true;
 	}
 }
@@ -375,5 +387,55 @@ inline bool Collision::CircleQuad(const D3DXVECTOR3& circle,float radius,const D
 
 	return false;
 }
+
+inline bool Collision::CircleQuad(const D3DXVECTOR3& circle,float radius,const D3DXVECTOR3* quad,UINT num,const D3DXVECTOR3& speed,D3DXVECTOR3* reflectVec)
+{
+	D3DXVECTOR3 reflect(0,0,0);
+	for (UINT cnt = 0;cnt < num;cnt++)
+	{
+		if (CircleDot(circle,radius,quad[cnt]))
+		{
+			if (reflectVec != nullptr){ *reflectVec = -speed; }
+			return true;
+		}
+	}
+	for (UINT cnt = 0;cnt < num;cnt++)
+	{
+		if (LineCircle(quad[(cnt + 1) % num],quad[cnt],circle,radius))
+		{
+			reflect = CreateReflectVec(quad[(cnt + 1) % num],quad[cnt],circle,circle+(speed*2.0f));
+			*reflectVec = reflect;
+			return true;
+		}
+	}
+
+	if (DotQuad(circle,quad,num))
+	{
+		if (reflectVec != nullptr){ *reflectVec = reflect; }
+		return true;
+	}
+
+	return false;
+}
+
+inline D3DXVECTOR3 Collision::CreateReflectVec(const D3DXVECTOR3& point1Start,const D3DXVECTOR3& point1End,const D3DXVECTOR3& point2Start,const D3DXVECTOR3& point2End)
+{
+	D3DXVECTOR3 vec0,vec1,vec2;
+
+	vec0 = point1End - point1Start;//vecLine
+	vec1 = point2End - point2Start;//vecMove
+	vec2 = point1Start - point2Start;
+
+	float dotProduct = vec0.x * vec1.x + vec1.y*vec0.y;
+	float valueMove = sqrt(vec1.x*vec1.x + vec1.y*vec1.y);
+	float valueLine = sqrt(vec0.x*vec0.x + vec0.y*vec0.y);
+	float angle = -acosf(dotProduct / (valueMove*valueLine));
+	D3DXVECTOR3 reflect(cosf(angle)*vec0.x - sinf(angle)*vec0.y,cosf(angle)*vec0.y+sinf(angle)*vec0.x,0);
+	D3DXVec3Normalize(&reflect,&reflect);
+	//reflect.y *= -1;
+	return reflect;
+}
+
+
 
 #endif

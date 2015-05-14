@@ -9,7 +9,7 @@
 //===========================================================
 #include "main.h"
 
-class Shader2D;
+class CShader2D;
 //===========================================================
 //2Dポリゴンクラス
 //===========================================================
@@ -28,7 +28,7 @@ protected:
 	static int _Num;
 	LPDIRECT3DTEXTURE9 Texture;
 	static bool PauseFlag;
-	static Shader2D* _Shader;
+	static CShader2D* _Shader;
 
 	void LinkList(void);		//自身をリストに追加
 	void UnlinkList(void);		//自身をリストから削除
@@ -54,10 +54,10 @@ public:
 
 
 	//Getter&Stter
-	static ShimmerParticle2D* Top(void){ return ShimmerParticle2D::_Top; }
-	static ShimmerParticle2D* Cur(void){ return ShimmerParticle2D::_Cur; }
-	ShimmerParticle2D* Prev(void)const{ return _Prev; }
-	ShimmerParticle2D* Next(void)const{ return _Next; }
+	static ShimmerParticle2D* Top(void){ return ShimmerParticle2D::Top_; }
+	static ShimmerParticle2D* Cur(void){ return ShimmerParticle2D::Cur_; }
+	ShimmerParticle2D* Prev(void)const{ return Prev_; }
+	ShimmerParticle2D* Next(void)const{ return Next_; }
 
 	D3DXCOLOR Color(void)const{ return _Color; }
 	D3DXVECTOR3 Pos(void)const{ return _Pos; }
@@ -66,8 +66,8 @@ public:
 	D3DXVECTOR3 Size(void)const{ return _Size; }
 	static int Num(void){ return _Num; }
 
-	static void SetTop(ShimmerParticle2D* top){ _Top = top; }
-	static void SetCur(ShimmerParticle2D* cur){ _Cur = cur; }
+	static void SetTop(ShimmerParticle2D* top){ Top_ = top; }
+	static void SetCur(ShimmerParticle2D* cur){ Cur_ = cur; }
 	static void SetPause(bool flag){ PauseFlag = flag; }
 	void SetPos(const D3DXVECTOR3 &pos){ _Pos = pos; }
 	void SetRot(const D3DXVECTOR3 &rot){ _Rot = rot; }
@@ -77,8 +77,8 @@ public:
 	void SetSpeed(const float base,float radian);
 	void SetTexture(LPDIRECT3DTEXTURE9 tex){ Texture = tex; }
 	void SetUV(int UNum = 0,int VNum = 0,int DivideUNum = 1,int DivideVNum = 1);
-	void SetNext(ShimmerParticle2D* next){ _Next = next; }
-	void SetPrev(ShimmerParticle2D* prev){ _Prev = prev; }
+	void SetNext(ShimmerParticle2D* next){ Next_ = next; }
+	void SetPrev(ShimmerParticle2D* prev){ Prev_ = prev; }
 	void SetRelease(void){ ReleaseFlag = true; }
 
 	void AddPos(const D3DXVECTOR3 &pos){ _Pos += pos; }
@@ -90,11 +90,11 @@ public:
 	//---------------------------
 
 private:
-	ShimmerParticle2D* _Prev;
-	ShimmerParticle2D* _Next;
+	ShimmerParticle2D* Prev_;
+	ShimmerParticle2D* Next_;
 
-	static ShimmerParticle2D* _Top;
-	static ShimmerParticle2D* _Cur;
+	static ShimmerParticle2D* Top_;
+	static ShimmerParticle2D* Cur_;
 
 
 

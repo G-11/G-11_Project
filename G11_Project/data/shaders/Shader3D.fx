@@ -171,7 +171,7 @@ float4 PS_NoLight(VS_OUT Input) : COLOR0
 //=========================================================
 //テクニック
 //=========================================================
-technique CPolygon3D
+technique Polygon3D
 {
 	//通常
 	pass Normal

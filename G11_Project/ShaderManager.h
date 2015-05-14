@@ -3,10 +3,16 @@
 
 #include "main.h"
 
-class Shader2D;
-class Shader3D;
-class Shimmer;
-class Blur;
+//===================================================
+//シェーダーマネージャークラス
+// シングルトン
+//===================================================
+
+class CShader2D;
+class CShader3D;
+class CShimmer;
+class CBlurFilter;
+class LightScreen;
 
 class ShaderManager
 {
@@ -16,12 +22,20 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 
-	Shader2D* shader2D(void){ return _Shader2D; }
-	Shader3D* shader3D(void){ return _Shader3D; }
-	Shimmer* shimmer(void){ return _Shimmer; }
-	Blur* BlurFilter(void){ return _BlurFilter; }
+	CShader2D* Shader2D(void){ return _Shader2D; }
+	CShader3D* Shader3D(void){ return _Shader3D; }
+	CShimmer* Shimmer(void){ return _Shimmer; }
+	CBlurFilter* BlurFilter(void){ return _BlurFilter; }
+	LightScreen* lightScreen(void){ return _LightScreen; }
 
-	static ShaderManager* Instance(void){return Self;}
+	static ShaderManager* Instance(void)
+	{
+		if (Self == nullptr)
+		{
+			Self = new ShaderManager;
+		}
+		return Self;
+	}
 
 private:
 	ShaderManager();
@@ -29,10 +43,11 @@ private:
 	ShaderManager &operator=(const ShaderManager& other){};
 
 	static ShaderManager* Self;
-	Shader2D* _Shader2D;
-	Shader3D* _Shader3D;
-	Shimmer* _Shimmer;
-	Blur* _BlurFilter;
+	CShader2D* _Shader2D;
+	CShader3D* _Shader3D;
+	CShimmer* _Shimmer;
+	CBlurFilter* _BlurFilter;
+	LightScreen* _LightScreen;
 
 };
 

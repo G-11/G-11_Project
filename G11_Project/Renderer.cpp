@@ -10,11 +10,12 @@
 #include "Shader2D.h"
 #include "Shader3D.h"
 #include "Shimmer.h"
+#include "Light2D.h"
 
 #include "Sprite.h"
-#include "Polygon.h"
 #include "Shaim3DEffect.h"
 #include "ShimmerParticle2D.h"
+#include "LightParticle.h"
 #include "Orbit2D.h"
 #include "Font.h"
 
@@ -27,30 +28,30 @@
 //=============================================================================
 // グローバル変数
 //=============================================================================
-LPDIRECT3D9				CRenderer::g_D3D = NULL;
-LPDIRECT3DDEVICE9		CRenderer::Device = NULL;
-ShaderManager*			CRenderer::_ShaderManager = nullptr;
-LPDIRECT3DVERTEXBUFFER9 CRenderer::VtxBuff[2] = { nullptr };
-CFade*					CRenderer::Fade = nullptr;
-ScreenRender*			CRenderer::Screen = nullptr;
+LPDIRECT3D9				Renderer::g_D3D = NULL;
+LPDIRECT3DDEVICE9		Renderer::Device = NULL;
+ShaderManager*			Renderer::_ShaderManager = nullptr;
+LPDIRECT3DVERTEXBUFFER9 Renderer::VtxBuff[2] = { nullptr };
+Fade*					Renderer::Fade = nullptr;
+CScreenRender*			Renderer::Screen = nullptr;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CRenderer::CRenderer()
+Renderer::Renderer()
 {
 
 }
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CRenderer::~CRenderer()
+Renderer::~Renderer()
 {
 	
 }
 //=============================================================================
 // 初期化
 //=============================================================================
-HRESULT CRenderer::Init(HWND hWnd,BOOL bWindow)
+HRESULT Renderer::Init(HWND hWnd,BOOL bWindow)
 {
 	D3DPRESENT_PARAMETERS d3dpp;
     D3DDISPLAYMODE d3ddm;
@@ -160,10 +161,9 @@ HRESULT CRenderer::Init(HWND hWnd,BOOL bWindow)
 
 
 	window->InitVD();
-	CCamera* camera = CCamera::Create(D3DXVECTOR3(0,300.0f,-500.0f),D3DXVECTOR3(0,0,0));
-	camera->SetSize(D3DXVECTOR2(THREE_D_AREA_WIDTH,THREE_D_AREA_HEIGHT));
+	Camera3D* camera = Camera3D::Create(D3DXVECTOR3(0,300.0f,-500.0f),D3DXVECTOR3(0,0,0));
 
-	CCamera2D* camera2D = CCamera2D::Create(D3DXVECTOR3(0.0f,0.0f,0));
+	Camera2D* camera2D = Camera2D::Create(D3DXVECTOR3(0.0f,0.0f,0));
 
 	if (FAILED(Device->CreateVertexBuffer(sizeof(CUSTOM_VTX)* 4 * 2,D3DUSAGE_WRITEONLY,FVF_CUSTOM,D3DPOOL_MANAGED,&VtxBuff[0],NULL)))
 	{
@@ -180,27 +180,25 @@ HRESULT CRenderer::Init(HWND hWnd,BOOL bWindow)
 	Init3D();
 	Init2D();
 
-	GetDevice()->CreateTexture((UINT)window->WindowSize().x,(UINT)window->WindowSize().y,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&Texture[0],NULL);
-	Texture[0]->GetSurfaceLevel(0,&Surface[0]);
+	for (int cnt = 0;cnt < SURFACE_NUM;cnt++)
+	{
+		GetDevice()->CreateTexture((UINT)window->WindowSize().x,(UINT)window->WindowSize().y,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&Texture[cnt],NULL);
+		Texture[cnt]->GetSurfaceLevel(0,&Surface[cnt]);
+	}
 
-	GetDevice()->CreateTexture((UINT)window->WindowSize().x,(UINT)window->WindowSize().y,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&Texture[1],NULL);
-	Texture[1]->GetSurfaceLevel(0,&Surface[1]);
-
-
-
-	Screen = new ScreenRender;
+	Screen = new CScreenRender;
 	Screen->Init();
-	Loading::SetRenderer(Screen);
+	CLoading::SetRenderer(Screen);
 
 	String::Initialize();
 
-	Fade = CFade::Instance();
+	Fade = Fade::Instance();
 	Fade->Init();
 
 	return S_OK;
 }
 
-void CRenderer::Init2D(void)
+void Renderer::Init2D(void)
 {
 	Shaim3DEffect::Initialize();
 	VERTEX_2D* Vtx2;
@@ -227,21 +225,21 @@ void CRenderer::Init2D(void)
 //=============================================================================
 //3Dオブジェクトの初期化
 //=============================================================================
-void CRenderer::Init3D(void)
+void Renderer::Init3D(void)
 {
 	Window* window = Window::Instance();
 	D3DXMATRIX Mtx;
 	D3DXMatrixIdentity(&WorldMtx);
-	D3DXMatrixScaling(&Mtx,THREE_D_AREA_WIDTH,THREE_D_AREA_HEIGHT,1.0f);
+	D3DXMatrixScaling(&Mtx,SCREEN_WIDTH,SCREEN_HEIGHT,1.0f);
 	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&Mtx);
-	D3DXMatrixTranslation(&Mtx,THREE_D_AREA_WIDTH/2.0f,THREE_D_AREA_HEIGHT/2.0f,0);
+	D3DXMatrixTranslation(&Mtx,SCREEN_WIDTH / 2.0f,SCREEN_HEIGHT / 2.0f,0);
 	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&Mtx);
 
 	D3DXVECTOR4 vec = -D3DXVECTOR4(0.15f,-0.8f,0.05f,0.0f);
 	D3DXVec4Normalize(&vec,&vec);
 
-	Shader3D::Instance()->SetFloatArray(Shader3D::LIGHT_VEC,vec,4);
-	Shader3D::Instance()->SetFloatArray(Shader3D::LIGHT_COLOR,D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),4);
+	CShader3D::Instance()->SetFloatArray(CShader3D::LIGHT_VEC,vec,4);
+	CShader3D::Instance()->SetFloatArray(CShader3D::LIGHT_COLOR,D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),4);
 	CUSTOM_VTX* Vtx;
 	VtxBuff[0]->Lock(0,0,(void**)&Vtx,0);
 
@@ -268,30 +266,31 @@ void CRenderer::Init3D(void)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CRenderer::Uninit(void)
+void Renderer::Uninit(void)
 {
-	String		::ReleaseAll();
-	Sprite		::ReleaseAll();
-	CPolygon	::ReleaseAll();
+	String	::ReleaseAll();
+	Sprite	::ReleaseAll();
 	Shaim3DEffect::ReleaseAll();
 	Orbit2D	::ReleaseAll();
-	
+	LightParticle::ReleaseAll();
 	//CModel::ReleaseAll();
 
-	CFade::Finalize();
+	Fade::Finalize();
 	_ShaderManager->Uninit();
 	_ShaderManager = nullptr;
 	SafeDelete(Screen);
 	SafeRelease(VtxBuff[0]);
 	SafeRelease(VtxBuff[1]);
 	
-	SafeRelease(Surface[0]);
-	SafeRelease(Surface[1]);
 	SafeRelease(Surface3D);
 	SafeRelease(Surface2D);
 	
-	SafeRelease(Texture[0]);
-	SafeRelease(Texture[1]);
+	for (int cnt = 0;cnt < SURFACE_NUM;cnt++)
+	{
+		SafeRelease(Surface[cnt]);
+		SafeRelease(Texture[cnt]);
+	}
+
 	SafeRelease(Texture3D);
 	SafeRelease(Texture2D);
 
@@ -302,13 +301,13 @@ void CRenderer::Uninit(void)
 //=============================================================================
 // 更新
 //=============================================================================
-void CRenderer::Update(void)
+void Renderer::Update(void)
 {
-	String		::UpdateAll();
-	Sprite		::UpdateAll();
-	CPolygon	::UpdateAll();
+	String	::UpdateAll();
+	Sprite	::UpdateAll();
 	Shaim3DEffect::UpdateAll();
 	ShimmerParticle2D::UpdateAll();//陽炎パーティクルを更新する
+	LightParticle::UpdateAll();
 	Orbit2D	::UpdateAll();
 
 	Fade->Update();
@@ -318,7 +317,7 @@ void CRenderer::Update(void)
 //=============================================================================
 // 描画
 //=============================================================================
-void CRenderer::Draw(void)
+void Renderer::Draw(void)
 {
 #ifdef _DEBUG
 	static float AVtime = 0;
@@ -330,34 +329,54 @@ void CRenderer::Draw(void)
 	if(SUCCEEDED(Device->BeginScene()))	//描画開始
 	{
 		//カメラをセット
-		CCamera::Set(0);
-		CCamera2D::Set(0);
-
-		Render3D();
-		Render2D();
+		Camera3D::Set(0);
+		Camera2D::Set(0);
+		/*Render3D();
+		Render2D();*/
+		RenderAffect();
 		
 		//レンダリングモードを適用してスクリーンを描画
-		Device->SetRenderTarget(0,Surface[0]);
-		Draw3DScreen(Texture3D);
 		Device->SetRenderTarget(0,Surface[1]);
+		//Draw3DScreen(Texture[0]);
+		//Device->SetRenderTarget(0,Surface[2]);
 
 		if (ShimmerParticle2D::Num() > 0)
 		{
-			LPDIRECT3DTEXTURE9 tex = Shimmer::Instance()->Render(Texture[0]);
-			Screen->RenderScreen(tex);
+			LPDIRECT3DTEXTURE9 tex = CShimmer::Instance()->Render(Texture[0]);
+			Screen->RenderWindow(tex);
 		}
 		else
 		{
-			Screen->RenderScreen(Texture[0]);
+			Screen->RenderWindow(Texture[0]);
 		}
-		Screen->RenderScreen(Texture2D,2,false);
+
+		Device->SetRenderTarget(0,Surface[2]);
+
+		if (LightParticle::Num() > 0)
+		{
+			LPDIRECT3DTEXTURE9 tex = LightScreen::Instance()->Render(Texture[1]);
+			Screen->RenderWindow(tex);
+		}
+		else
+		{
+			Screen->RenderWindow(Texture[1]);
+		}
+		Device->SetRenderTarget(0,Surface[3]);
+		Screen->RenderScreen(Texture[2]);
+		Fade->Draw(1);//3D描画のみのフェード描画
+
+		for (int cnt = Sprite::LAYER_3;cnt < Sprite::LAYER_INTERFACE;cnt++)
+		{
+			Sprite::DrawAll(cnt);
+		}
+		//Screen->RenderScreen(Texture2D,2,false);
 		
 		//レンダリングモードを適用しないものはこっちで描く
 		Sprite::DrawAll(Sprite::LAYER_INTERFACE);
 		Fade->Draw();
 
 #ifdef _DEBUG
-		DebugProc::Draw();
+		CDebugProc::Draw();
 #endif
 
 		//最後にまとめたものを描画する
@@ -365,22 +384,20 @@ void CRenderer::Draw(void)
 
 		SafeRelease(OldSurface);
 
-		Screen->RenderWindow(Texture[1]);
+		Screen->RenderWindow(Texture[3]);
+
+		//CDebugProc::DrawFPSGraph();
 		Device->EndScene();	//描画終了
 	}
 	// バックバッファとフロントバッファの入れ替え
 	Device->Present(NULL,NULL,NULL,NULL);
-
-#ifdef _DEBUG
-	
-#endif
 
 }
 
 //=============================================================================
 //3Dポリゴンを描く準備
 //=============================================================================
-void CRenderer::SetStream3D(void)
+void Renderer::SetStream3D(void)
 {
 	Device->SetStreamSource(0,VtxBuff[0],0,sizeof(CUSTOM_VTX));
 	Window::Instance()->SetVtxDecl(VTX_DECL_CUSTOM);
@@ -389,7 +406,7 @@ void CRenderer::SetStream3D(void)
 //=============================================================================
 //2Dポリゴンを描く準備
 //=============================================================================
-void CRenderer::SetStream2D(void)
+void Renderer::SetStream2D(void)
 {
 	Device->SetStreamSource(0,VtxBuff[1],0,sizeof(VERTEX_2D));
 	Window::Instance()->SetVtxDecl(VTX_DECL_2D);
@@ -398,39 +415,36 @@ void CRenderer::SetStream2D(void)
 //=============================================================================
 //3Dオブジェクトを描画
 //=============================================================================
-void CRenderer::Render3D(void)
+void Renderer::Render3D(void)
 {
 	Device->SetRenderTarget(0,Surface3D);
 	Device->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(255,255,255,0),1.0f,0);
 
-	SetStream3D();
-	CPolygon::DrawAll();;
 }
 
-void CRenderer::Draw3DScreen(LPDIRECT3DTEXTURE9 tex)
+void Renderer::Draw3DScreen(LPDIRECT3DTEXTURE9 tex)
 {
 	Device->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(255,255,255,0),1.0f,0);
-	Shader2D* shader = Shader2D::Instance();
+	CShader2D* shader = CShader2D::Instance();
 	if (tex != nullptr)
 	{
 		shader->SetTexture(tex);
 	}
 	SetStream2D();
-	shader->SetFloatArray(Shader2D::SIZE,D3DXVECTOR3(THREE_D_AREA_WIDTH,THREE_D_AREA_HEIGHT,1.0f),3);
-	shader->SetMatrix(Shader2D::WORLD_MTX,WorldMtx);
+	shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
 	
-	shader->SetFloatArray(Shader2D::DIFFUSE,WHITE(1.0f),4);
+	shader->SetFloatArray(CShader2D::DIFFUSE,WHITE(1.0f),4);
 	
 	shader->DrawBegin();
 
-	shader->Draw(Shader2D::NORMAL,D3DPT_TRIANGLESTRIP);
+	shader->Draw(CShader2D::NORMAL,D3DPT_TRIANGLESTRIP);
 
 	shader->DrawEnd();
 }
 //=============================================================================
 //2Dオブジェクトを描画
 //=============================================================================
-void CRenderer::Render2D(void)
+void Renderer::Render2D(void)
 {
 	Device->SetRenderTarget(0,Surface2D);
 	Device->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(0,0,0,0),1.0f,0);
@@ -443,13 +457,28 @@ void CRenderer::Render2D(void)
 		Sprite::DrawAll(cnt);
 	}
 
-	Shader2D::Instance()->SetFloatArray(Shader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
+	CShader2D::Instance()->SetFloatArray(CShader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
 }
 
+void Renderer::RenderAffect(void)
+{
+	Device->SetRenderTarget(0,Surface[0]);
+	Device->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(0,0,0,0),1.0f,0);
+
+	SetStream2D();
+	Shaim3DEffect::DrawAll();
+	Orbit2D::DrawAll();
+	for (int cnt = 0;cnt < Sprite::LAYER_3;cnt++)
+	{
+		Sprite::DrawAll(cnt);
+	}
+
+	CShader2D::Instance()->SetFloatArray(CShader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
+}
 //=============================================================================
 //フェードを設定
 //=============================================================================
-bool CRenderer::SetFade(float frame,CFade::FADE mode,D3DXCOLOR color)
+bool Renderer::SetFade(float frame,Fade::FADE mode,D3DXCOLOR color)
 {
 	if (Fade)
 	{
@@ -464,7 +493,7 @@ bool CRenderer::SetFade(float frame,CFade::FADE mode,D3DXCOLOR color)
 //=============================================================================
 //レンダリングモードを変更
 //=============================================================================
-void CRenderer::SetRenderMode(short num)
+void Renderer::SetRenderMode(short num)
 {
 	Screen->SetMode((int)num);
 }
@@ -472,7 +501,7 @@ void CRenderer::SetRenderMode(short num)
 // FPS描画
 //=============================================================================
 #ifdef _DEBUG
-void CRenderer::DrawFPS(void)
+void Renderer::DrawFPS(void)
 {
 
 }

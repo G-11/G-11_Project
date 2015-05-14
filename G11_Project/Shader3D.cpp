@@ -1,8 +1,8 @@
 #include "Shader3D.h"
 
-Shader3D* Shader3D::Self = new Shader3D;
+CShader3D* CShader3D::Self = new CShader3D;
 
-const LPSTR Shader3D::ParamName[Shader3D::STATE_MAX] =
+const LPSTR CShader3D::ParamName[CShader3D::STATE_MAX] =
 {
 	"Projection",
 	"ViewPort",
@@ -21,11 +21,11 @@ const LPSTR Shader3D::ParamName[Shader3D::STATE_MAX] =
 	"MaskMap",
 };
 
-Shader3D::Shader3D()
+CShader3D::CShader3D()
 {
 	Effect = nullptr;
 }
-HRESULT Shader3D::Init(void)
+HRESULT CShader3D::Init(void)
 {
 	LPD3DXBUFFER Error = NULL;
 #ifdef _DEBUG
@@ -61,12 +61,12 @@ HRESULT Shader3D::Init(void)
 	D3DXMATRIX scl;
 	D3DXMatrixScaling(&scl,1.0f,1.0f,1.0f);
 	Effect->SetMatrix(State[SCL_MTX],&scl);
-	Effect->SetTechnique("CPolygon3D");
+	Effect->SetTechnique("Polygon3D");
 
 	return S_OK;
 }
 
-void Shader3D::Uninit(void)
+void CShader3D::Uninit(void)
 {
 	SafeRelease(Effect);
 
@@ -74,7 +74,7 @@ void Shader3D::Uninit(void)
 	delete this;
 }
 
-void Shader3D::Draw(PASS pass,_D3DPRIMITIVETYPE pt,int PrimitiveNum,int offset)
+void CShader3D::Draw(PASS pass,_D3DPRIMITIVETYPE pt,int PrimitiveNum,int offset)
 {
 	Effect->BeginPass(pass);
 	Window::Instance()->Device()->DrawPrimitive(pt,offset,PrimitiveNum);

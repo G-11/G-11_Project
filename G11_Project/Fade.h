@@ -2,13 +2,13 @@
 #define _FADE_H_
 #include "main.h"
 
-class Shader2D;
+class CShader2D;
 
-class CFade
+class Fade
 {
 public:
 	
-	~CFade(){ Uninit(); }
+	~Fade(){ Uninit(); }
 	typedef enum
 	{
 		FADE_NONE = 0,
@@ -22,30 +22,30 @@ public:
 	void Init(void);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void);
-	void Start(float frame,FADE mode,const D3DXCOLOR &color = D3DXCOLOR(0,0,0,0.0f));
-	FADE Mode(void){ return _Mode; }
-	bool Active(void){ return Fading; }
+	void Draw(int layer = 0);
+	void Start(float frame,FADE mode,const D3DXCOLOR &color = D3DXCOLOR(0,0,0,0.0f),int layer = 0);
+	FADE Mode(int layer = 0){ return _Mode[layer]; }
+	bool Active(int layer = 0){ return Fading[layer]; }
 
-	static CFade* Instance(void){return Self;}
+	static Fade* Instance(void){ return Self; }
 	//static void Start(int frame,FADE mode,D3DXCOLOR color = D3DXCOLOR(0,0,0,1.0f));
 private:
-	CFade(){ Init(); }
-	CFade(const CFade& other){};
-	CFade &operator= (const CFade& other){};
-	static CFade* Self;
+	Fade(){ Init(); }
+	Fade(const Fade& other){};
+	Fade &operator= (const Fade& other){};
+	static Fade* Self;
 	void SetVertex(void);
 	D3DXVECTOR3 Size;
-	D3DXCOLOR Color;
-	D3DXCOLOR DestColor;
-	D3DXCOLOR SubColor;
+	D3DXCOLOR Color[2];
+	D3DXCOLOR DestColor[2];
+	D3DXCOLOR SubColor[2];
 	D3DXMATRIX WorldMtx;
 	D3DXVECTOR4 uv;//x=left,y=top,z=width,w=heightとして扱う
 	LPDIRECT3DVERTEXBUFFER9 VertexBuffer;	//頂点バッファ
 	LPDIRECT3DTEXTURE9 Texture;
-	FADE _Mode;
-	bool Fading;
-	Shader2D* _Shader;
+	FADE _Mode[2];
+	bool Fading[2];
+	CShader2D* _Shader;
 
 };
 

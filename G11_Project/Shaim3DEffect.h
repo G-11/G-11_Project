@@ -2,9 +2,9 @@
 #define _SHAIM_3D_EFFECT_H_
 #include "main.h"
 
-class Shader3D;
-class Shader2D;
-class CCamera;
+class CShader3D;
+class CShader2D;
+class Camera3D;
 class Shaim3DParts;
 
 class Shaim3DEffect
@@ -21,7 +21,7 @@ public:
 	static void UpdateAll(void);
 	static void DrawAll(void);
 	static void ReleaseAll(void);
-	static int Num(void){return _Num;}
+	static int Num(void){return Num_;}
 
 	D3DXVECTOR3 Pos(void)const{return _Pos;}
 	D3DXVECTOR3 Size(void)const{return _Size;}
@@ -58,14 +58,14 @@ private:
 	void LinkList(void);
 	void UnlinkList(void);
 
-	static int _Num;
-	static Shader3D* _Shader3D;
-	static Shader2D* _Shader2D;
-	static CCamera* Camera;
-	static Shaim3DEffect* _Top;
-	static Shaim3DEffect* _Cur;
-	Shaim3DEffect* _Next;
-	Shaim3DEffect* _Prev;
+	static int Num_;
+	static CShader3D* _Shader3D;
+	static CShader2D* _Shader2D;
+	static Camera3D* Camera;
+	static Shaim3DEffect* Top_;
+	static Shaim3DEffect* Cur_;
+	Shaim3DEffect* Next_;
+	Shaim3DEffect* Prev_;
 	
 };
 

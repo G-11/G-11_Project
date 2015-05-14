@@ -2,10 +2,10 @@
 #define _SCENE_H_
 #include "main.h"
 
-class CScene
+class Scene
 {
 public:
-	CScene(){frame=0;}
+	Scene(){frame=0;}
 	virtual void Init(void){};
 	virtual void Uninit(void){};
 	virtual void Update(void){};

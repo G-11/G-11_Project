@@ -2,11 +2,11 @@
 #define _SCREEN_RENDER_H_
 #include "main.h"
 
-class ScreenRender
+class CScreenRender
 {
 public:
-	ScreenRender();
-	~ScreenRender();
+	CScreenRender();
+	~CScreenRender();
 
 	virtual LPDIRECT3DTEXTURE9 RenderScreen(LPDIRECT3DTEXTURE9 tex,int draeNum = 1,bool clear = true);
 	virtual LPDIRECT3DTEXTURE9 RenderWindow(LPDIRECT3DTEXTURE9 tex);

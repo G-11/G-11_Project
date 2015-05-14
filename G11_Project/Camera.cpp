@@ -12,16 +12,16 @@
 //======================================================
 //グローバル変数
 //======================================================
-int CCamera::CameraNum = 0;
-CCamera* CCamera::Top = NULL;
-CCamera* CCamera::Cur = NULL;
+int Camera3D::CameraNum = 0;
+Camera3D* Camera3D::Top = NULL;
+Camera3D* Camera3D::Cur = NULL;
 
 //======================================================
 //コンストラクタ
 //引数：LUPos 描画開始点(左上の座標)
 //		Size (描画する大きさ)
 //======================================================
-CCamera::CCamera(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
+Camera3D::Camera3D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 {
 	if(size.x <0)
 	{
@@ -46,18 +46,18 @@ CCamera::CCamera(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 //======================================================
 //デストラクタ
 //======================================================
-CCamera::~CCamera()
+Camera3D::~Camera3D()
 {
 	CameraNum--;
 }
 //=============================================================================
 //自身をリストに追加
 //=============================================================================
-void CCamera::LinkList(void)
+void Camera3D::LinkList(void)
 {
 	if(Top != NULL)//二つ目以降の処理
 	{
-		CCamera* pCamera = Cur;
+		Camera3D* pCamera = Cur;
 		pCamera->Next = this;
 		Prev = pCamera;
 		Next = NULL;
@@ -75,7 +75,7 @@ void CCamera::LinkList(void)
 //=============================================================================
 //自身をリストから削除
 //=============================================================================
-void CCamera::UnlinkList(void)
+void Camera3D::UnlinkList(void)
 {
 	if(Prev == NULL)//先頭
 	{
@@ -116,23 +116,23 @@ void CCamera::UnlinkList(void)
 //=============================================================================
 //全消去
 //=============================================================================
-void CCamera::ReleaseAll(void)
+void Camera3D::ReleaseAll(void)
 {
-	CCamera* pCamera = Top;
-	CCamera* CameraNext;
+	Camera3D* pCamera = Top;
+	Camera3D* CameraNext;
 	while(pCamera)
 	{
 		CameraNext = pCamera->Next;
 		delete pCamera;
 		pCamera = CameraNext;
 	}
-	CCamera::Clear();
+	Camera3D::Clear();
 	
 }
 //=============================================================================
 //先頭と終端をNULLに
 //=============================================================================
-void CCamera::Clear(void)
+void Camera3D::Clear(void)
 {
 	Top = NULL;
 	Cur = NULL;
@@ -141,7 +141,7 @@ void CCamera::Clear(void)
 //=============================================================================
 //自殺関数
 //=============================================================================
-void CCamera::Destroy(void)
+void Camera3D::Destroy(void)
 {
 	UnlinkList();
 	
@@ -158,10 +158,10 @@ void CCamera::Destroy(void)
 //=============================================================================
 //作成
 //=============================================================================
-CCamera* CCamera::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos)
+Camera3D* Camera3D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos)
 {
-	CCamera* pCamera = NULL;
-	pCamera = new CCamera();
+	Camera3D* pCamera = NULL;
+	pCamera = new Camera3D();
 	pCamera->PosCameraP = PPos;
 	pCamera->DestPosCameraP = PPos;
 	pCamera->PosCameraR = RPos;
@@ -177,10 +177,10 @@ CCamera* CCamera::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos)
 //=============================================================================
 //作成(ビューポートも設定)
 //=============================================================================
-CCamera* CCamera::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
+Camera3D* Camera3D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 {
-	CCamera* pCamera = NULL;
-	pCamera = new CCamera(LUPos,size);
+	Camera3D* pCamera = NULL;
+	pCamera = new Camera3D(LUPos,size);
 	pCamera->PosCameraP = PPos;
 	pCamera->PosCameraR = RPos;
 	pCamera->DestPosCameraP = PPos;
@@ -198,29 +198,29 @@ CCamera* CCamera::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos,const D
 //======================================================
 //更新
 //======================================================
-void CCamera::Update(void)
+void Camera3D::Update(void)
 {
 }
 //======================================================
 //適用
 //======================================================
-void CCamera::Set(void)
+void Camera3D::Set(void)
 {
-	Shader3D* shader = Shader3D::Instance();
+	CShader3D* shader = CShader3D::Instance();
 	
 
 	//ビューマトリックスの初期化
 	D3DXMatrixIdentity(&ViewMatrix);
 	//ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&ViewMatrix,&PosCameraP,&PosCameraR,&VecCameraU);
-	shader->SetMatrix(Shader3D::VIEW_MTX,ViewMatrix);
+	shader->SetMatrix(CShader3D::VIEW_MTX,ViewMatrix);
 	D3DXMATRIX Inverce;
 	D3DXMatrixIdentity(&Inverce);
 	D3DXMatrixInverse(&Inverce,NULL,&ViewMatrix);
 	Inverce._41 = 0;
 	Inverce._42 = 0;
 	Inverce._43 = 0;
-	shader->SetMatrix(Shader3D::INV_VIEW_MTX,Inverce);
+	shader->SetMatrix(CShader3D::INV_VIEW_MTX,Inverce);
 	
 	D3DXMATRIX view;
 
@@ -233,16 +233,16 @@ void CCamera::Set(void)
 													3000.0f);	//視界限界最長距離
 
 
-	shader->SetMatrix(Shader3D::PROJECTION,Projection);
+	shader->SetMatrix(CShader3D::PROJECTION,Projection);
 
 }
 //======================================================
 //全部更新
 //======================================================
-void CCamera::UpdateAll(void)
+void Camera3D::UpdateAll(void)
 {
-	CCamera* pCamera = Top;
-	CCamera* Next = NULL;
+	Camera3D* pCamera = Top;
+	Camera3D* Next = NULL;
 	while(pCamera)
 	{
 		Next = pCamera->Next;
@@ -253,14 +253,14 @@ void CCamera::UpdateAll(void)
 //======================================================
 //Index番目のカメラを適用
 //======================================================
-void CCamera::Set(int Index)
+void Camera3D::Set(int Index)
 {
 	
 	if(Index < CameraNum && Index >= 0)
 	{
 		
-		CCamera* pCamera = Top;
-		CCamera* Next = NULL;
+		Camera3D* pCamera = Top;
+		Camera3D* Next = NULL;
 		int num=0;
 		while(pCamera)
 		{
@@ -278,10 +278,10 @@ void CCamera::Set(int Index)
 //======================================================
 //Index番目のカメラのポインタを取得
 //======================================================
-CCamera* CCamera::GetCamera(int Index)
+Camera3D* Camera3D::GetCamera(int Index)
 {
-	CCamera* pCamera = Top;
-	CCamera* Next = NULL;
+	Camera3D* pCamera = Top;
+	Camera3D* Next = NULL;
 	int num=0;
 	while(pCamera)
 	{
@@ -296,7 +296,7 @@ CCamera* CCamera::GetCamera(int Index)
 	return NULL;
 }
 
-void CCamera::CreateViewPortMtx(D3DXMATRIX* pViewPort,const UINT width,const UINT height)
+void Camera3D::CreateViewPortMtx(D3DXMATRIX* pViewPort,const UINT width,const UINT height)
 {
 	float Width = (float)width / 2;
 	float Height = (float)height / 2;

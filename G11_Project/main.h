@@ -1,14 +1,14 @@
 //=============================================================================
 //
 // プリミティブ表示処理 [main.h]
-// Author : AKIRA TANAKA
+// Author : Arai Yuhki
 //
 //=============================================================================
 #ifndef _MAIN_H_
 #define _MAIN_H_
+#define DIRECTINPUT_VERSION (0x0800)    // 警告対策用
 #define _CRT_SECURE_NO_WARNINGS	//警告対策
-#define DIRECTINPUT_VERSION (0x0800)// 警告対策用
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 //*****************************************************************************
 // インクルードファイル
 //*****************************************************************************
@@ -33,9 +33,9 @@
 // マクロ定義
 //*****************************************************************************
 #define SCREEN_WIDTH (1280.0f)
-#define SCREEN_HEIGHT (960.0f)
+#define SCREEN_HEIGHT (720.0f)
 #define WINDOW_WIDTH (1280.0f)
-#define WINDOW_HEIGHT (960.0f)
+#define WINDOW_HEIGHT (720.0f)
 #define FVF_VERTEX_2D (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)	//2D用頂点フォーマット
 #define FVF_POINT_SPRITE (D3DFVF_XYZW | D3DFVF_PSIZE | D3DFVF_DIFFUSE)
 #define FVF_CUSTOM	(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1)
@@ -64,6 +64,13 @@ typedef struct
 	D3DXVECTOR2 tex;	//テクスチャの座標
 }VERTEX_2D;
 
+typedef struct
+{
+	D3DXVECTOR3 vtx;	//頂点座標
+	D3DCOLOR diffuse;
+	D3DXVECTOR2 tex;	//テクスチャの座標
+}VERTEX;
+
 //ポイントスプライト
 typedef struct
 {
@@ -80,7 +87,5 @@ typedef struct
 	D3DXVECTOR2 tex;
 
 }CUSTOM_VTX;
-
-
 
 #endif

@@ -1,5 +1,7 @@
+#pragma once
 #ifndef _GAME_PAD_H_
 #define _GAME_PAD_H_
+#include "../main.h"
 
 typedef enum
 {
@@ -23,52 +25,46 @@ typedef enum
 enum
 {
 	LEFT = 0,
-	RIGHT
+	RIGHT,
+	LR
 };
 
-class CGamePad
+class GamePad
 {
 public:
-	void Init(void);
-	static void Uninit(void);
-	void Update(void);
+	static GamePad* Initialize(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd);
+	virtual bool Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd) = 0;
+	virtual void Uninit(void);
+	virtual void Update(void) = 0;
 
-	bool Press(short num){ return PressKey[num]; }
-	bool Trigger(short num){ return TriggerKey[num]; }
-	bool Release(short num){ return ReleaseKey[num]; }
-	bool Repeate(short num){ return RepeateKey[num]; }
+	virtual bool Press(char num)const = 0;
+	virtual bool Trigger(char num)const = 0;
+	virtual bool Release(char num)const = 0;
+	virtual bool Repeat(char num)const = 0;
+	virtual float StickX(char direction)const = 0;
+	virtual float StickY(char direction)const = 0;
+	virtual float Shoulder(char direction)const = 0;
 
-	float StickX(short direction){ return ThumbX[direction]; }
-	float StickY(short direction){ return ThumbY[direction]; }
-	float LRTrigger(short direction){ return _Trigger[direction]; }
+	virtual void SetVibration(float left,int frameL,float right,int frameR){}
+	virtual void SetVibrationL(float left,int frameL){}
+	virtual void SetVibrationR(float right,int frameR){}
 
-	void SetVibration(float left,int frameL,float right,int frameR);
-	void SetVibrationL(float left,int frameL);
-	void SetVibrationR(float right,int frameR);
+	static GamePad* Instance(void){ return Self; }
 
-	static CGamePad* Instance(void){ return Self; }
+protected:
+	static const int REPEAT_FRAME = 15;
+	static GamePad* Self;
 
-private:
-	CGamePad();
-	CGamePad(const CGamePad &other){};
-	CGamePad &operator=(const CGamePad& other){};
-	
-	static CGamePad* Self;
-
-	short ConnectedId;
-
-	bool OldKey[GAMEPAD_MAX];
-	bool PressKey[GAMEPAD_MAX];
-	bool TriggerKey[GAMEPAD_MAX];
-	bool ReleaseKey[GAMEPAD_MAX];
-	bool RepeateKey[GAMEPAD_MAX];
-	int RepeateFrame[GAMEPAD_MAX];
-	float ThumbX[2];
-	float ThumbY[2];
-	float _Trigger[2];
-
-	float VibrationState[2];
-	int VibrationFrame[2];
+	bool Old[GAMEPAD_MAX];
+	bool _Press[GAMEPAD_MAX];
+	bool _Trigger[GAMEPAD_MAX];
+	bool _Release[GAMEPAD_MAX];
+	bool _Repeat[GAMEPAD_MAX];
+	int RepeatFrame[GAMEPAD_MAX];
+	float _StickX[2];
+	float _StickY[2];
+	float _Shoulder[2];
 };
+
 
 #endif

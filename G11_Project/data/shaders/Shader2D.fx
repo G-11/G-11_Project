@@ -5,7 +5,7 @@ float4x4 ViewPort;
 float4x4 Scl;
 float4x4 Rot;
 float4x4 Pos;
-float3 Size;
+float2 Offset;
 float4 Diffuse;
 float4 MaskColor;
 float4 UV;
@@ -58,10 +58,11 @@ struct VS_OUT
 VS_OUT VS(VS_IN Input)
 {
 	VS_OUT Out;
-	//Input.pos.x *= Size.x;
-	//Input.pos.y *= Size.y;
+	float4 pos = float4(Input.pos,1.0f);
+	pos.x += Offset.x;
+	pos.y += Offset.y;
 
-	float4 output = mul(float4(Input.pos,1.0f),WorldMtx);
+	float4 output = mul(pos,WorldMtx);
 	output = mul(output,Projection);
 
 	Out.pos = output;
@@ -122,7 +123,7 @@ float4 PS_NegaMask(VS_OUT Input) :COLOR
 //=========================================================
 //テクニック
 //=========================================================
-technique CPolygon2D
+technique Polygon2D
 {
 	pass Normal
 	{

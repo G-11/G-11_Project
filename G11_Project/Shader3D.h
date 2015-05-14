@@ -2,8 +2,11 @@
 #define _SHADER_3D_H_
 
 #include "main.h"
-
-class Shader3D
+//===================================================
+//3Dシェーダークラス
+// シングルトン
+//===================================================
+class CShader3D
 {
 public:
 
@@ -57,16 +60,17 @@ public:
 	void SetTexture(LPDIRECT3DTEXTURE9 tex)			{ Effect->SetTexture(State[TEXTURE],tex); }
 	void SetMask(LPDIRECT3DTEXTURE9 tex)			{ Effect->SetTexture(State[MASK],tex); }
 
-	static Shader3D* Instance(void){ return Self; }
+	static CShader3D* Instance(void){ return Self; }
+
 private:
 
 	const static LPSTR ParamName[];
 
-	Shader3D();
-	Shader3D(const Shader3D& other){};
-	Shader3D &operator=(const Shader3D& other){};
+	CShader3D();
+	CShader3D(const CShader3D& other){};
+	CShader3D &operator=(const CShader3D& other){};
 
-	static Shader3D* Self;
+	static CShader3D* Self;
 	D3DXHANDLE State[STATE_MAX];
 	D3DXHANDLE Technique[TEX_MAX];
 	LPD3DXEFFECT Effect;

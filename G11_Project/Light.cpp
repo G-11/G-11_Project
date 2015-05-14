@@ -1,16 +1,16 @@
 #include "Light.h"
 
-Light* Light::Top=NULL;
-Light* Light::Cur=NULL;
-int Light::LightNum = 0;
+CLight* CLight::Top=NULL;
+CLight* CLight::Cur=NULL;
+int CLight::LightNum = 0;
 //=============================================================================
 //自身をリストに追加
 //=============================================================================
-void Light::LinkList(void)
+void CLight::LinkList(void)
 {
 	if(Top != NULL)//二つ目以降の処理
 	{
-		Light* pLight = Cur;
+		CLight* pLight = Cur;
 		pLight->Next = this;
 		Prev = pLight;
 		Next = NULL;
@@ -27,7 +27,7 @@ void Light::LinkList(void)
 //=============================================================================
 //自身をリストから削除
 //=============================================================================
-void Light::UnlinkList(void)
+void CLight::UnlinkList(void)
 {
 	if(Prev == NULL)//先頭
 	{
@@ -67,10 +67,10 @@ void Light::UnlinkList(void)
 //=============================================================================
 //すべて削除
 //=============================================================================
-void Light::ReleaseAll(void)
+void CLight::ReleaseAll(void)
 {
-	Light* pLight = Top;
-	Light* Next = NULL;
+	CLight* pLight = Top;
+	CLight* Next = NULL;
 	while(pLight)
 	{
 		Next = pLight->Next;
@@ -82,10 +82,10 @@ void Light::ReleaseAll(void)
 //=============================================================================
 //自身を削除
 //=============================================================================
-void Light::Release(int index)
+void CLight::Release(int index)
 {
-	Light* pLight = Top;
-	Light* Next = NULL;
+	CLight* pLight = Top;
+	CLight* Next = NULL;
 	int num=0;
 	while(pLight)
 	{
@@ -112,19 +112,19 @@ void Light::Release(int index)
 //		Color 色
 //Create○○は作成したライトのポインタが返ってくる
 //=============================================================================
-Light* Light::CreateDirectional(D3DXVECTOR3 Vec,D3DXCOLOR color)
+CLight* CLight::CreateDirectional(D3DXVECTOR3 Vec,D3DXCOLOR color)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = new Light;
+	CLight* pLight = new CLight;
 
-	ZeroMemory(&pLight->_Light,sizeof(D3DLIGHT9));
+	ZeroMemory(&pLight->Light,sizeof(D3DLIGHT9));
 
-	pLight->_Light.Type = D3DLIGHT_DIRECTIONAL;
-	pLight->_Light.Diffuse = color;
+	pLight->Light.Type = D3DLIGHT_DIRECTIONAL;
+	pLight->Light.Diffuse = color;
 	pLight->Vector = Vec;
 
-	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->_Light.Direction,&pLight->Vector);
-	Device->SetLight(LightNum,&pLight->_Light);
+	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->Light.Direction,&pLight->Vector);
+	Device->SetLight(LightNum,&pLight->Light);
 	Device->LightEnable(LightNum,TRUE);
 	LightNum++;
 
@@ -137,25 +137,25 @@ Light* Light::CreateDirectional(D3DXVECTOR3 Vec,D3DXCOLOR color)
 //		float		Attenuation	減衰係数	(0.0f～1.0f 1,0fで減衰なし)
 //		D3DXCOLOR	diffuse		 色
 //=============================================================================
-Light* Light::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLOR diffuse)
+CLight* CLight::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLOR diffuse)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = new Light;
+	CLight* pLight = new CLight;
 
-	ZeroMemory(&pLight->_Light,sizeof(D3DLIGHT9));
+	ZeroMemory(&pLight->Light,sizeof(D3DLIGHT9));
 
-	pLight->_Light.Type = D3DLIGHT_POINT;
-	pLight->_Light.Diffuse = diffuse;
-	pLight->_Light.Ambient = diffuse;
-	pLight->_Light.Specular = diffuse;
-	pLight->_Light.Position = Pos;
-	pLight->_Light.Range = Range;
-	pLight->_Light.Attenuation0 = Attenuation;//定常減衰係数
-	pLight->_Light.Attenuation1 = 0.0f;		//線形減衰係数	AttenuationNは組み合わせ次第でいろいろ変化するらしい
-	pLight->_Light.Attenuation2 = 0.0f;		//平方減衰係数
+	pLight->Light.Type = D3DLIGHT_POINT;
+	pLight->Light.Diffuse = diffuse;
+	pLight->Light.Ambient = diffuse;
+	pLight->Light.Specular = diffuse;
+	pLight->Light.Position = Pos;
+	pLight->Light.Range = Range;
+	pLight->Light.Attenuation0 = Attenuation;//定常減衰係数
+	pLight->Light.Attenuation1 = 0.0f;		//線形減衰係数	AttenuationNは組み合わせ次第でいろいろ変化するらしい
+	pLight->Light.Attenuation2 = 0.0f;		//平方減衰係数
 
-	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->_Light.Direction,&pLight->Vector);
-	Device->SetLight(LightNum,&pLight->_Light);
+	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->Light.Direction,&pLight->Vector);
+	Device->SetLight(LightNum,&pLight->Light);
 	Device->LightEnable(LightNum,TRUE);
 	LightNum++;
 
@@ -170,25 +170,25 @@ Light* Light::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLO
 //		D3DXCOLOR	Specular	 鏡面反射光色
 //		D3DXCOLOR	Ambient		 環境光色
 //=============================================================================
-Light* Light::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLOR diffuse,D3DXCOLOR Specular,D3DXCOLOR Ambient)
+CLight* CLight::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLOR diffuse,D3DXCOLOR Specular,D3DXCOLOR Ambient)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = new Light;
+	CLight* pLight = new CLight;
 
-	ZeroMemory(&pLight->_Light,sizeof(D3DLIGHT9));
+	ZeroMemory(&pLight->Light,sizeof(D3DLIGHT9));
 
-	pLight->_Light.Type = D3DLIGHT_POINT;
-	pLight->_Light.Diffuse = diffuse;
-	pLight->_Light.Ambient = Ambient;
-	pLight->_Light.Specular = Specular;
-	pLight->_Light.Position = Pos;
-	pLight->_Light.Range = Range;
-	pLight->_Light.Attenuation0 = Attenuation;
-	pLight->_Light.Attenuation1 = 0.0f;
-	pLight->_Light.Attenuation2 = 0.0f;
+	pLight->Light.Type = D3DLIGHT_POINT;
+	pLight->Light.Diffuse = diffuse;
+	pLight->Light.Ambient = Ambient;
+	pLight->Light.Specular = Specular;
+	pLight->Light.Position = Pos;
+	pLight->Light.Range = Range;
+	pLight->Light.Attenuation0 = Attenuation;
+	pLight->Light.Attenuation1 = 0.0f;
+	pLight->Light.Attenuation2 = 0.0f;
 
-	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->_Light.Direction,&pLight->Vector);
-	Device->SetLight(LightNum,&pLight->_Light);
+	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->Light.Direction,&pLight->Vector);
+	Device->SetLight(LightNum,&pLight->Light);
 	Device->LightEnable(LightNum,TRUE);
 	LightNum++;
 
@@ -206,31 +206,31 @@ Light* Light::CreatePoint(D3DXVECTOR3 Pos,float Range,float Attenuation,D3DXCOLO
 //		D3DXCOLOR	Specular	 鏡面反射光色
 //		D3DXCOLOR	Ambient		 環境光色
 //=============================================================================
-Light* Light::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Attenuation,float Theta,float Phi,float FallOff,D3DXCOLOR diffuse)
+CLight* CLight::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Attenuation,float Theta,float Phi,float FallOff,D3DXCOLOR diffuse)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = new Light;
+	CLight* pLight = new CLight;
 
-	ZeroMemory(&pLight->_Light,sizeof(D3DLIGHT9));
+	ZeroMemory(&pLight->Light,sizeof(D3DLIGHT9));
 
 	pLight->Vector = Vec;		//向き
-	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->_Light.Direction,&pLight->Vector);
+	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->Light.Direction,&pLight->Vector);
 
-	pLight->_Light.Type = D3DLIGHT_SPOT;
-	pLight->_Light.Diffuse = diffuse;
-	pLight->_Light.Ambient = diffuse;
-	pLight->_Light.Specular = diffuse;
-	pLight->_Light.Range = Range;
-	pLight->_Light.Attenuation0 = Attenuation;
-	pLight->_Light.Attenuation1 = 0.0f;
-	pLight->_Light.Attenuation2 = 0.0f;
-	pLight->_Light.Position = Pos;
+	pLight->Light.Type = D3DLIGHT_SPOT;
+	pLight->Light.Diffuse = diffuse;
+	pLight->Light.Ambient = diffuse;
+	pLight->Light.Specular = diffuse;
+	pLight->Light.Range = Range;
+	pLight->Light.Attenuation0 = Attenuation;
+	pLight->Light.Attenuation1 = 0.0f;
+	pLight->Light.Attenuation2 = 0.0f;
+	pLight->Light.Position = Pos;
 
-	pLight->_Light.Theta = Theta;//内側のコーンの角度
-	pLight->_Light.Phi = Phi;	//外側のコーンの角度
-	pLight->_Light.Falloff = FallOff;	//内側から外側に向かう際の減衰率
+	pLight->Light.Theta = Theta;//内側のコーンの角度
+	pLight->Light.Phi = Phi;	//外側のコーンの角度
+	pLight->Light.Falloff = FallOff;	//内側から外側に向かう際の減衰率
 	
-	Device->SetLight(LightNum,&pLight->_Light);
+	Device->SetLight(LightNum,&pLight->Light);
 	Device->LightEnable(LightNum,TRUE);
 	LightNum++;
 
@@ -249,30 +249,30 @@ Light* Light::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Atten
 //		D3DXCOLOR	Specular	 鏡面反射光色
 //		D3DXCOLOR	Ambient		 環境光色
 //=============================================================================
-Light* Light::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Attenuation,float Theta,float Phi,float FallOff,D3DXCOLOR diffuse,D3DXCOLOR Specular,D3DXCOLOR Ambient)
+CLight* CLight::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Attenuation,float Theta,float Phi,float FallOff,D3DXCOLOR diffuse,D3DXCOLOR Specular,D3DXCOLOR Ambient)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = new Light;
+	CLight* pLight = new CLight;
 
-	ZeroMemory(&pLight->_Light,sizeof(D3DLIGHT9));
+	ZeroMemory(&pLight->Light,sizeof(D3DLIGHT9));
 	
-	pLight->_Light.Type = D3DLIGHT_SPOT;
-	pLight->_Light.Diffuse = diffuse;
-	pLight->_Light.Ambient = Ambient;
-	pLight->_Light.Specular = Specular;
-	pLight->_Light.Range = Range;
-	pLight->_Light.Attenuation0 = Attenuation;
-	pLight->_Light.Attenuation1 = 0.0f;
-	pLight->_Light.Attenuation2 = 0.0f;
-	pLight->_Light.Position = Pos;
+	pLight->Light.Type = D3DLIGHT_SPOT;
+	pLight->Light.Diffuse = diffuse;
+	pLight->Light.Ambient = Ambient;
+	pLight->Light.Specular = Specular;
+	pLight->Light.Range = Range;
+	pLight->Light.Attenuation0 = Attenuation;
+	pLight->Light.Attenuation1 = 0.0f;
+	pLight->Light.Attenuation2 = 0.0f;
+	pLight->Light.Position = Pos;
 
-	pLight->_Light.Theta = Theta;//内側のコーンの角度
-	pLight->_Light.Phi = Phi;	//外側のコーンの角度
-	pLight->_Light.Falloff = FallOff;	//内側から外側に向かう際の減衰率
+	pLight->Light.Theta = Theta;//内側のコーンの角度
+	pLight->Light.Phi = Phi;	//外側のコーンの角度
+	pLight->Light.Falloff = FallOff;	//内側から外側に向かう際の減衰率
 	pLight->Vector = Vec;		//向き
 
-	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->_Light.Direction,&pLight->Vector);
-	Device->SetLight(LightNum,&pLight->_Light);
+	D3DXVec3Normalize((D3DXVECTOR3*)&pLight->Light.Direction,&pLight->Vector);
+	Device->SetLight(LightNum,&pLight->Light);
 	Device->LightEnable(LightNum,TRUE);
 	LightNum++;
 
@@ -282,10 +282,10 @@ Light* Light::CreateSpot(D3DXVECTOR3 Vec,D3DXVECTOR3 Pos,float Range,float Atten
 //=============================================================================
 //index番目のライトのスイッチを操作
 //=============================================================================
-void Light::Swicth(int index,bool flag)
+void CLight::Swicth(int index,bool flag)
 {
-	Light* pLight = Top;
-	Light* Next = NULL;
+	CLight* pLight = Top;
+	CLight* Next = NULL;
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
 	int num=0;
 	while(pLight)
@@ -311,10 +311,10 @@ void Light::Swicth(int index,bool flag)
 //=============================================================================
 //Index番目のライトのインスタンスを取得
 //=============================================================================
-Light* Light::GetLight(int Index)
+CLight* CLight::GetLight(int Index)
 {
-	Light* pLight = Top;
-	Light* Next = NULL;
+	CLight* pLight = Top;
+	CLight* Next = NULL;
 	int num=0;
 	while(pLight)
 	{
@@ -331,14 +331,14 @@ Light* Light::GetLight(int Index)
 //=============================================================================
 //再設定
 //=============================================================================
-void Light::Reset(void)
+void CLight::Reset(void)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = Top;
+	CLight* pLight = Top;
 	int num=0;
 	while(pLight)
 	{
-		Device->SetLight(num,&pLight->_Light);
+		Device->SetLight(num,&pLight->Light);
 		num++;
 		pLight = pLight->Next;
 	}
@@ -346,10 +346,10 @@ void Light::Reset(void)
 //=============================================================================
 //全部のライトを切る
 //=============================================================================
-void Light::AllOff(void)
+void CLight::AllOff(void)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-	Light* pLight = Top;
+	CLight* pLight = Top;
 	int num=0;
 	while(pLight)
 	{
@@ -362,11 +362,11 @@ void Light::AllOff(void)
 //光源位置を取得
 //指向性ライトの場合は全部0が帰る
 //=============================================================================
-D3DXVECTOR3 Light::GetPos(void)
+D3DXVECTOR3 CLight::GetPos(void)
 {
-	if(_Light.Type != D3DLIGHT_DIRECTIONAL)
+	if(Light.Type != D3DLIGHT_DIRECTIONAL)
 	{
-		return _Light.Position;
+		return Light.Position;
 	}
 	return D3DXVECTOR3(0,0,0);
 }
@@ -374,68 +374,68 @@ D3DXVECTOR3 Light::GetPos(void)
 //光の影響範囲の取得
 //指向性ライトの場合は-1が帰る
 //=============================================================================
-float Light::GetRange(void)
+float CLight::GetRange(void)
 {
-	if(_Light.Type != D3DLIGHT_DIRECTIONAL)
+	if(Light.Type != D3DLIGHT_DIRECTIONAL)
 	{
-		return _Light.Range;
+		return Light.Range;
 	}
 	return -1;
 }
 //=============================================================================
 //光の影響範囲の設定
 //=============================================================================
-void Light::SetRange(float range)
+void CLight::SetRange(float range)
 {
-	_Light.Range = range;
+	Light.Range = range;
 	Reset();
 }
 //=============================================================================
 //色をセット
 //=============================================================================
-void Light::SetColor(D3DXCOLOR color)
+void CLight::SetColor(D3DXCOLOR color)
 {
-	_Light.Diffuse = color;
+	Light.Diffuse = color;
 	Reset();
 
 }
 //=============================================================================
 //色を加算
 //=============================================================================
-void Light::AddColor(D3DXCOLOR color)
+void CLight::AddColor(D3DXCOLOR color)
 {
-	_Light.Diffuse.r += color.r;
-	_Light.Diffuse.g += color.g;
-	_Light.Diffuse.b += color.b;
-	_Light.Diffuse.a += color.a;
+	Light.Diffuse.r += color.r;
+	Light.Diffuse.g += color.g;
+	Light.Diffuse.b += color.b;
+	Light.Diffuse.a += color.a;
 	Reset();
 
 }
 //=============================================================================
 //方向をセット
 //=============================================================================
-void Light::SetVec(D3DXVECTOR3 Vec)
+void CLight::SetVec(D3DXVECTOR3 Vec)
 {
 	Vector = Vec;
-	D3DXVec3Normalize((D3DXVECTOR3*)&_Light.Direction,&Vector);
+	D3DXVec3Normalize((D3DXVECTOR3*)&Light.Direction,&Vector);
 	Reset();
 
 }
 //=============================================================================
 //光源位置をセット
 //=============================================================================
-void Light::SetPos(D3DXVECTOR3 Pos)
+void CLight::SetPos(D3DXVECTOR3 Pos)
 {
-	_Light.Position = Pos;
+	Light.Position = Pos;
 	Reset();
 }
 //=============================================================================
 //光源位置を加算
 //=============================================================================
-void Light::AddPos(D3DXVECTOR3 Pos)
+void CLight::AddPos(D3DXVECTOR3 Pos)
 {
-	_Light.Position.x += Pos.x;
-	_Light.Position.y += Pos.y;
-	_Light.Position.z += Pos.z;
+	Light.Position.x += Pos.x;
+	Light.Position.y += Pos.y;
+	Light.Position.z += Pos.z;
 	Reset();
 }

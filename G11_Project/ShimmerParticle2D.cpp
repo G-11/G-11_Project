@@ -8,10 +8,10 @@
 //グローバル変数
 //=============================================================================
 int ShimmerParticle2D::_Num = 0;
-ShimmerParticle2D* ShimmerParticle2D::_Top = NULL;
-ShimmerParticle2D* ShimmerParticle2D::_Cur = NULL;
+ShimmerParticle2D* ShimmerParticle2D::Top_ = NULL;
+ShimmerParticle2D* ShimmerParticle2D::Cur_ = NULL;
 bool ShimmerParticle2D::PauseFlag = false;
-Shader2D* ShimmerParticle2D::_Shader = nullptr;
+CShader2D* ShimmerParticle2D::_Shader = nullptr;
 //=============================================================================
 //コンストラクタ
 //=============================================================================
@@ -38,20 +38,20 @@ ShimmerParticle2D::ShimmerParticle2D(void)
 //=============================================================================
 void ShimmerParticle2D::LinkList(void)
 {
-	if (_Top != NULL)//二つ目以降の処理
+	if (Top_ != NULL)//二つ目以降の処理
 	{
-		ShimmerParticle2D* CPolygon = _Cur;
-		CPolygon->_Next = this;
-		_Prev = CPolygon;
-		_Next = NULL;
-		_Cur = this;
+		ShimmerParticle2D* Polygon = Cur_;
+		Polygon->Next_ = this;
+		Prev_ = Polygon;
+		Next_ = NULL;
+		Cur_ = this;
 	}
 	else//最初の一つの時の処理
 	{
-		_Top = this;
-		_Cur = this;
-		_Prev = NULL;
-		_Next = NULL;
+		Top_ = this;
+		Cur_ = this;
+		Prev_ = NULL;
+		Next_ = NULL;
 	}
 }
 //=============================================================================
@@ -59,40 +59,40 @@ void ShimmerParticle2D::LinkList(void)
 //=============================================================================
 void ShimmerParticle2D::UnlinkList(void)
 {
-	if (_Prev == NULL)//先頭
+	if (Prev_ == NULL)//先頭
 	{
-		if (_Next != NULL)//次がある
+		if (Next_ != NULL)//次がある
 		{
-			_Next->_Prev = NULL;
-			_Top = _Next;
+			Next_->Prev_ = NULL;
+			Top_ = Next_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
-	else if (_Next == NULL)//終端
+	else if (Next_ == NULL)//終端
 	{
-		if (_Prev != NULL)//前がある
+		if (Prev_ != NULL)//前がある
 		{
-			_Prev->_Next = NULL;
-			_Cur = _Prev;
+			Prev_->Next_ = NULL;
+			Cur_ = Prev_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
 	else//前後にデータがあるとき
 	{
-		_Prev->_Next = _Next;
-		_Next->_Prev = _Prev;
+		Prev_->Next_ = Next_;
+		Next_->Prev_ = Prev_;
 	}
 
-	_Prev = NULL;
-	_Next = NULL;
+	Prev_ = NULL;
+	Next_ = NULL;
 	_Num--;
 }
 //=============================================================================
@@ -115,13 +115,13 @@ void ShimmerParticle2D::Release(void)
 //=============================================================================
 void ShimmerParticle2D::ReleaseAll(void)
 {
-	ShimmerParticle2D* CPolygon = _Top;
-	ShimmerParticle2D* CPolygonNext;
-	while (CPolygon)
+	ShimmerParticle2D* Polygon = Top_;
+	ShimmerParticle2D* PolygonNext;
+	while (Polygon)
 	{
-		CPolygonNext = CPolygon->_Next;
-		CPolygon->Release();
-		CPolygon = CPolygonNext;
+		PolygonNext = Polygon->Next_;
+		Polygon->Release();
+		Polygon = PolygonNext;
 	}
 	ShimmerParticle2D::Clear();
 
@@ -131,8 +131,8 @@ void ShimmerParticle2D::ReleaseAll(void)
 //=============================================================================
 void ShimmerParticle2D::Clear(void)
 {
-	_Top = nullptr;
-	_Cur = nullptr;
+	Top_ = nullptr;
+	Cur_ = nullptr;
 }
 
 //=============================================================================
@@ -140,12 +140,12 @@ void ShimmerParticle2D::Clear(void)
 //=============================================================================
 ShimmerParticle2D* ShimmerParticle2D::Create(const D3DXVECTOR3 &pos,const D3DXVECTOR2 &size,const D3DXCOLOR &color)
 {
-	ShimmerParticle2D* CPolygon = new ShimmerParticle2D;
-	CPolygon->_Pos = pos;
-	CPolygon->_Size = D3DXVECTOR3(size.x,size.y,0);
-	CPolygon->_Color = color;
+	ShimmerParticle2D* Polygon = new ShimmerParticle2D;
+	Polygon->_Pos = pos;
+	Polygon->_Size = D3DXVECTOR3(size.x,size.y,0);
+	Polygon->_Color = color;
 
-	return CPolygon;
+	return Polygon;
 }
 //=============================================================================
 //更新
@@ -178,21 +178,21 @@ void ShimmerParticle2D::Pause(void)
 //=============================================================================
 void ShimmerParticle2D::UpdateAll(void)
 {
-	ShimmerParticle2D* CPolygon = _Top;
+	ShimmerParticle2D* Polygon = Top_;
 	ShimmerParticle2D* Next = NULL;
-	while (CPolygon)
+	while (Polygon)
 	{
-		Next = CPolygon->_Next;
+		Next = Polygon->Next_;
 		if (PauseFlag)
 		{
-			CPolygon->Pause();
+			Polygon->Pause();
 		}
 		else
 		{
-			CPolygon->Update();
+			Polygon->Update();
 		}
 
-		CPolygon = Next;
+		Polygon = Next;
 	}
 }
 //=============================================================================
@@ -217,20 +217,20 @@ void ShimmerParticle2D::Draw(void)
 		D3DXMatrixTranslation(&MtxTrans,_Pos.x,_Pos.y,_Pos.z);
 		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
 
-		_Shader->SetMatrix(Shader2D::WORLD_MTX,WorldMtx);
+		_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
 		/*
-		_Shader->SetFloatArray(Shader2D::SIZE,_Size,3);
-		_Shader->SetMatrix(Shader2D::ROT_MTX,MtxRot);
-		_Shader->SetMatrix(Shader2D::POS_MTX,MtxTrans);
+		_Shader->SetFloatArray(CShader2D::SIZE,_Size,3);
+		_Shader->SetMatrix(CShader2D::ROT_MTX,MtxRot);
+		_Shader->SetMatrix(CShader2D::POS_MTX,MtxTrans);
 		*/
 
-		_Shader->SetFloatArray(Shader2D::DIFFUSE,_Color,4);
-		_Shader->SetFloatArray(Shader2D::UV,uv,4);
+		_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
+		_Shader->SetFloatArray(CShader2D::UV,uv,4);
 		//テクスチャの設定
 		_Shader->SetTexture(Texture);
 
 		//ポリゴンを描画
-		_Shader->Draw(Shader2D::ADD,D3DPT_TRIANGLESTRIP);
+		_Shader->Draw(CShader2D::ADD,D3DPT_TRIANGLESTRIP);
 	}
 }
 //=============================================================================
@@ -238,15 +238,15 @@ void ShimmerParticle2D::Draw(void)
 //=============================================================================
 void ShimmerParticle2D::DrawAll(void)
 {
-	if (_Shader == nullptr){ _Shader = Shader2D::Instance(); }
+	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
 
-	ShimmerParticle2D* CPolygon = _Top;
+	ShimmerParticle2D* Polygon = Top_;
 
 	_Shader->DrawBegin();
-	while (CPolygon)
+	while (Polygon)
 	{
-		CPolygon->Draw();
-		CPolygon = CPolygon->_Next;
+		Polygon->Draw();
+		Polygon = Polygon->Next_;
 	}
 
 	_Shader->DrawEnd();

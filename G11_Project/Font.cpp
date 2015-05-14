@@ -393,9 +393,9 @@ void String::LinkList(void)
 {
 	if (Top != NULL)//“ñ‚Â–ÚˆÈ~‚Ìˆ—
 	{
-		String* CPolygon = Cur;
-		CPolygon->Next = this;
-		Prev = CPolygon;
+		String* Polygon = Cur;
+		Polygon->Next = this;
+		Prev = Polygon;
 		Next = NULL;
 		Cur = this;
 	}

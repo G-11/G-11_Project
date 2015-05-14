@@ -11,17 +11,23 @@
 #include "main.h"
 #include "Window.h"
 #include "Manager.h"
+#include "Input/Keyboard.h"
 #include "Renderer.h"
+#include<time.h>
+#include "resource.h"
 
 //#include "Mouse.h"
 
-#include<time.h>
 #ifdef _DEBUG
-#ifndef DBG_NEW
-#define DBG_NEW					new(_NORMAL_BLOCK,__FILE__,__LINE__)
-#define new DBG_NEW
+	#if CUSTOM_ALLOCAT_ENABLE
+	#else
+		#ifndef DBG_NEW
+			#define DBG_NEW					new(_NORMAL_BLOCK,__FILE__,__LINE__)
+			#define new DBG_NEW
+		#endif
+	#endif
 #endif
-#endif
+//#endif
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -41,9 +47,10 @@
 //=============================================================================
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
-	_CrtSetBreakAlloc(0);
-
+	_CrtSetBreakAlloc(72);
+	
 	UNREFERENCED_PARAMETER(hPrevInstance);	// 無くても良いけど、警告が出る（未使用宣言）
 	UNREFERENCED_PARAMETER(lpCmdLine);		// 無くても良いけど、警告が出る（未使用宣言）
 	Window* window = Window::Instance();

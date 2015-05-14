@@ -4,20 +4,20 @@
 #include "Shader2D.h"
 #include "Camera2D.h"
 
-Loading* Loading::Self = new Loading;
-ScreenRender* Loading::_ScreenRender = nullptr;
+CLoading* CLoading::Self = new CLoading;
+CScreenRender* CLoading::ScreenRender = nullptr;
 
-Loading::Loading()
+CLoading::CLoading()
 {
 	Texture = nullptr;
 }
 
-Loading::~Loading()
+CLoading::~CLoading()
 {
 
 }
 
-void Loading::Init(void)
+void CLoading::Init(void)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
 	if (FAILED(D3DXCreateTextureFromFile(Device,"data/texture/LoadGear.png",&Texture)))
@@ -40,27 +40,27 @@ void Loading::Init(void)
 	mutex = Mutex::Instance();
 }
 
-void Loading::Uninit(void)
+void CLoading::Uninit(void)
 {
 	SafeRelease(Texture);
 }
 
-void Loading::Finalize(void)
+void CLoading::Finalize(void)
 {
 	Self->Uninit();
 
 	SafeDelete(Self);
 }
 
-void Loading::Update(void)
+void CLoading::Update(void)
 {
-	if (_ScreenRender != nullptr)
+	if (ScreenRender != nullptr)
 	{
 		LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
-		CCamera2D::Set(0);
-		Shader2D* shader = Shader2D::Instance();
+		Camera2D::GetCamera(0)->SetNoMove();
+		CShader2D* shader = CShader2D::Instance();
 		CastMatrix();
-		CRenderer::SetStream2D();
+		Renderer::SetStream2D();
 
 		_Rot[0] += DEG2RAD(0.1f);
 		_Rot[1] -= DEG2RAD(0.1f);
@@ -70,13 +70,13 @@ void Loading::Update(void)
 		{
 			Device->Clear(0L,nullptr,D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,0x0,1.0f,0L);
 			shader->SetTexture(Texture);
-			shader->SetFloatArray(Shader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
-			shader->SetFloatArray(Shader2D::DIFFUSE,D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),4);
+			shader->SetFloatArray(CShader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
+			shader->SetFloatArray(CShader2D::DIFFUSE,D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),4);
 			shader->DrawBegin();
 			for (int cnt = 0;cnt < 2;cnt++)
 			{
-				shader->SetMatrix(Shader2D::WORLD_MTX,WorldMatrix[cnt]);
-				shader->Draw(Shader2D::NORMAL,D3DPT_TRIANGLESTRIP);
+				shader->SetMatrix(CShader2D::WORLD_MTX,WorldMatrix[cnt]);
+				shader->Draw(CShader2D::NORMAL,D3DPT_TRIANGLESTRIP);
 			}
 			shader->DrawEnd();
 			//ScreenRender->RenderWindow(Texture);
@@ -87,14 +87,14 @@ void Loading::Update(void)
 	}
 }
 
-void Loading::SetRenderer(ScreenRender* sr)
+void CLoading::SetRenderer(CScreenRender* sr)
 {
-	_ScreenRender = sr;
+	ScreenRender = sr;
 }
 
-void Loading::CastMatrix(void)
+void CLoading::CastMatrix(void)
 {
-	Shader2D* shader = Shader2D::Instance();
+	CShader2D* shader = CShader2D::Instance();
 	WorldMatrix[0] = WorldMatrix[1] = shader->Identity();
 	D3DXMATRIX SclMtx,RotMtx,TransMtx;
 

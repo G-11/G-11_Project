@@ -1,16 +1,16 @@
 #include"Shimmer.h"
 #include "ShimmerParticle2D.h"
 
-Shimmer* Shimmer::Self = new Shimmer;
+CShimmer* CShimmer::Self = new CShimmer;
 
-const char* Shimmer::ParamName[Shimmer::PARAM_MAX] = 
+const char* CShimmer::ParamName[CShimmer::PARAM_MAX] = 
 {
 	"Fluctuation",
 	"shimmerMap",
 	"DiffuseMap",
 };
 
-Shimmer::Shimmer()
+CShimmer::CShimmer()
 {
 	Surface = nullptr;
 	Blur[0] = nullptr;
@@ -24,8 +24,9 @@ Shimmer::Shimmer()
 	_BlurFlag = false;
 }
 
-Shimmer::~Shimmer()
+CShimmer::~CShimmer()
 {
+	SafeRelease(Effect);
 	if (Surface != nullptr)
 	{
 		Surface->Release();
@@ -63,13 +64,13 @@ Shimmer::~Shimmer()
 		}
 	}
 }
-void Shimmer::Finalize(void)
+void CShimmer::Finalize(void)
 {
 	delete Self;
 	Self = nullptr;
 }
 
-HRESULT Shimmer::Init(void)
+HRESULT CShimmer::Init(void)
 {
 	Window* window = Window::Instance();
 	LPDIRECT3DDEVICE9 Device = window->Device();
@@ -126,7 +127,7 @@ HRESULT Shimmer::Init(void)
 	return S_OK;
 }
 
-LPDIRECT3DTEXTURE9 Shimmer::Render(LPDIRECT3DTEXTURE9 tex)
+LPDIRECT3DTEXTURE9 CShimmer::Render(LPDIRECT3DTEXTURE9 tex)
 {
 	LPDIRECT3DSURFACE9 OldSurface = nullptr;
 	LPDIRECT3DSURFACE9 OldDepth = nullptr;
@@ -183,7 +184,7 @@ LPDIRECT3DTEXTURE9 Shimmer::Render(LPDIRECT3DTEXTURE9 tex)
 	return Result;
 }
 
-void Shimmer::ConductBlur(void)
+void CShimmer::ConductBlur(void)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
 

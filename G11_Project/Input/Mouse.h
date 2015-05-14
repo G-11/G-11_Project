@@ -2,7 +2,7 @@
 #define _MOUSE_H_
 
 #include"VC.h"
-class CMouse
+class Mouse
 {
 public:
 	enum
@@ -34,13 +34,13 @@ public:
 	bool Release(int nKey);	//リリース情報
 	static void SetHWND(HWND hWnd){m_phWnd = hWnd;}
 
-	static CMouse* Instance(void){return Self;}
+	static Mouse* Instance(void){return Self;}
 private:
-	CMouse(){};
-	~CMouse();
-	CMouse(const CMouse& other){};
-	CMouse &operator= (const CMouse& other){};
-	static CMouse* Self;
+	Mouse(){};
+	~Mouse();
+	Mouse(const Mouse& other){};
+	Mouse &operator= (const Mouse& other){};
+	static Mouse* Self;
 
 	LPDIRECTINPUTDEVICE8 InputDevice;
 	DIMOUSESTATE2 MouseStatus;				//マウスのステータス保存用

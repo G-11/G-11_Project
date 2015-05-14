@@ -12,16 +12,16 @@
 //======================================================
 //グローバル変数
 //======================================================
-int CCamera2D::CameraNum = 0;
-CCamera2D* CCamera2D::Top = NULL;
-CCamera2D* CCamera2D::Cur = NULL;
-Shader2D* CCamera2D::_Shader = nullptr;
+int Camera2D::CameraNum = 0;
+Camera2D* Camera2D::Top = NULL;
+Camera2D* Camera2D::Cur = NULL;
+CShader2D* Camera2D::_Shader = nullptr;
 //======================================================
 //コンストラクタ
 //引数：LUPos 描画開始点(左上の座標)
 //		Size (描画する大きさ)
 //======================================================
-CCamera2D::CCamera2D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
+Camera2D::Camera2D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 {
 	if (size.x <0)
 	{
@@ -46,18 +46,18 @@ CCamera2D::CCamera2D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 //======================================================
 //デストラクタ
 //======================================================
-CCamera2D::~CCamera2D()
+Camera2D::~Camera2D()
 {
 	CameraNum--;
 }
 //=============================================================================
 //自身をリストに追加
 //=============================================================================
-void CCamera2D::LinkList(void)
+void Camera2D::LinkList(void)
 {
 	if (Top != NULL)//二つ目以降の処理
 	{
-		CCamera2D* pCamera = Cur;
+		Camera2D* pCamera = Cur;
 		pCamera->Next = this;
 		Prev = pCamera;
 		Next = NULL;
@@ -75,7 +75,7 @@ void CCamera2D::LinkList(void)
 //=============================================================================
 //自身をリストから削除
 //=============================================================================
-void CCamera2D::UnlinkList(void)
+void Camera2D::UnlinkList(void)
 {
 	if (Prev == NULL)//先頭
 	{
@@ -116,23 +116,23 @@ void CCamera2D::UnlinkList(void)
 //=============================================================================
 //全消去
 //=============================================================================
-void CCamera2D::ReleaseAll(void)
+void Camera2D::ReleaseAll(void)
 {
-	CCamera2D* pCamera = Top;
-	CCamera2D* CameraNext;
+	Camera2D* pCamera = Top;
+	Camera2D* CameraNext;
 	while (pCamera)
 	{
 		CameraNext = pCamera->Next;
 		delete pCamera;
 		pCamera = CameraNext;
 	}
-	CCamera2D::Clear();
+	Camera2D::Clear();
 
 }
 //=============================================================================
 //先頭と終端をNULLに
 //=============================================================================
-void CCamera2D::Clear(void)
+void Camera2D::Clear(void)
 {
 	Top = NULL;
 	Cur = NULL;
@@ -141,7 +141,7 @@ void CCamera2D::Clear(void)
 //=============================================================================
 //自殺関数
 //=============================================================================
-void CCamera2D::Destroy(void)
+void Camera2D::Destroy(void)
 {
 	UnlinkList();
 
@@ -156,10 +156,10 @@ void CCamera2D::Destroy(void)
 //=============================================================================
 //作成
 //=============================================================================
-CCamera2D* CCamera2D::Create(const D3DXVECTOR3 &PPos)
+Camera2D* Camera2D::Create(const D3DXVECTOR3 &PPos)
 {
-	CCamera2D* pCamera = NULL;
-	pCamera = new CCamera2D();
+	Camera2D* pCamera = NULL;
+	pCamera = new Camera2D();
 	pCamera->Pos = PPos;
 	pCamera->DestPos = PPos;
 	pCamera->Projection2D = D3DXMATRIX(
@@ -172,10 +172,10 @@ CCamera2D* CCamera2D::Create(const D3DXVECTOR3 &PPos)
 //=============================================================================
 //作成(ビューポートも設定)
 //=============================================================================
-CCamera2D* CCamera2D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
+Camera2D* Camera2D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 {
-	CCamera2D* pCamera = NULL;
-	pCamera = new CCamera2D(LUPos,size);
+	Camera2D* pCamera = NULL;
+	pCamera = new Camera2D(LUPos,size);
 	pCamera->Pos = PPos;
 	pCamera->DestPos = PPos;
 	pCamera->Speed.x = 0;
@@ -191,29 +191,39 @@ CCamera2D* CCamera2D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR2 &LUPos,D3
 //======================================================
 //更新
 //======================================================
-void CCamera2D::Update(void)
+void Camera2D::Update(void)
 {
 }
 //======================================================
 //適用
 //======================================================
-void CCamera2D::Set(void)
+void Camera2D::Set(void)
 {
 	
-	if (_Shader == nullptr){ _Shader = Shader2D::Instance(); }
+	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
 
-	Projection2D._41 = -1.0f - Pos.x / (SCREEN_WIDTH*2.0f);
-	Projection2D._42 = 1.0f - Pos.y / (SCREEN_HEIGHT*2.0f);
+	Projection2D._41 = -1.0f - Pos.x / (SCREEN_WIDTH*0.5f);
+	Projection2D._42 = 1.0f - Pos.y / (SCREEN_HEIGHT*0.5f);
 	
-	_Shader->SetMatrix(Shader2D::PROJECTION,Projection2D);
+	_Shader->SetMatrix(CShader2D::PROJECTION,Projection2D);
+}
+
+void Camera2D::SetNoMove(void)
+{
+	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
+
+	Projection2D._41 = -1.0f;
+	Projection2D._42 = 1.0f;
+
+	_Shader->SetMatrix(CShader2D::PROJECTION,Projection2D);
 }
 //======================================================
 //全部更新
 //======================================================
-void CCamera2D::UpdateAll(void)
+void Camera2D::UpdateAll(void)
 {
-	CCamera2D* pCamera = Top;
-	CCamera2D* Next = NULL;
+	Camera2D* pCamera = Top;
+	Camera2D* Next = NULL;
 	while (pCamera)
 	{
 		Next = pCamera->Next;
@@ -224,14 +234,14 @@ void CCamera2D::UpdateAll(void)
 //======================================================
 //Index番目のカメラを適用
 //======================================================
-void CCamera2D::Set(int Index)
+void Camera2D::Set(int Index)
 {
 
 	if (Index < CameraNum && Index >= 0)
 	{
 
-		CCamera2D* pCamera = Top;
-		CCamera2D* Next = NULL;
+		Camera2D* pCamera = Top;
+		Camera2D* Next = NULL;
 		int num = 0;
 		while (pCamera)
 		{
@@ -249,10 +259,10 @@ void CCamera2D::Set(int Index)
 //======================================================
 //Index番目のカメラのポインタを取得
 //======================================================
-CCamera2D* CCamera2D::GetCamera(int Index)
+Camera2D* Camera2D::GetCamera(int Index)
 {
-	CCamera2D* pCamera = Top;
-	CCamera2D* Next = NULL;
+	Camera2D* pCamera = Top;
+	Camera2D* Next = NULL;
 	int num = 0;
 	while (pCamera)
 	{

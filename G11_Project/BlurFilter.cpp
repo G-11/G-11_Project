@@ -1,8 +1,8 @@
 #include "BlurFilter.h"
 
-Blur* Blur::Self = new Blur;
+CBlurFilter* CBlurFilter::Self = new CBlurFilter;
 
-Blur::Blur()
+CBlurFilter::CBlurFilter()
 {
 	for (int cnt = 0;cnt < 2;cnt++)
 	{
@@ -12,8 +12,9 @@ Blur::Blur()
 	}
 }
 
-Blur::~Blur()
+CBlurFilter::~CBlurFilter()
 {
+	SafeRelease(Effect);
 	for (int cnt = 0;cnt < 2;cnt++)
 	{
 		if (Texture[cnt] != nullptr)
@@ -30,7 +31,7 @@ Blur::~Blur()
 	}
 }
 
-void Blur::Init(void)
+void CBlurFilter::Init(void)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
 	
@@ -83,7 +84,7 @@ void Blur::Init(void)
 	}
 }
 
-void Blur::Finalize(void)
+void CBlurFilter::Finalize(void)
 {
 	if (Self != nullptr)
 	{
@@ -93,7 +94,7 @@ void Blur::Finalize(void)
 }
 
 
-LPDIRECT3DTEXTURE9 Blur::Render(LPDIRECT3DTEXTURE9 tex)
+LPDIRECT3DTEXTURE9 CBlurFilter::Render(LPDIRECT3DTEXTURE9 tex)
 {
 	LPDIRECT3DSURFACE9 OldSurface = nullptr;
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();

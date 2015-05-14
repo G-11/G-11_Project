@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="00.SYSTEM">
+      <UniqueIdentifier>{30d3980b-f326-4806-9e1b-63b8f317e851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Camera">
+      <UniqueIdentifier>{38c1b780-88e0-4d4b-8777-d60990a46450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Camera\3DCamera">
+      <UniqueIdentifier>{852216fb-3379-45cf-bb4c-26872f59da59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Camera\2DCamera">
+      <UniqueIdentifier>{e87ad666-33e5-42e3-b746-84ad6398357e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Light">
+      <UniqueIdentifier>{08c998d4-66be-4761-95fd-fac46388093a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Manager">
+      <UniqueIdentifier>{29bedf54-2bd8-4a12-8ac6-393a6b8cdcfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Math">
+      <UniqueIdentifier>{e2dd28f9-ec45-4dbf-927b-62b295dd6256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Debug">
+      <UniqueIdentifier>{492fc633-3da5-418c-8101-2c7faea8016a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Fade">
+      <UniqueIdentifier>{f6a0e3da-6c42-4236-b0b9-567388b814ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Font">
+      <UniqueIdentifier>{72054464-0032-48e7-8998-9ea58dfd6c81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Renderer">
+      <UniqueIdentifier>{8c885d7d-8f70-4efd-9af4-8951780fb76c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader">
+      <UniqueIdentifier>{f52be5bd-45ba-4f46-9ac0-aba2973a9c17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Texture">
+      <UniqueIdentifier>{4bf38f83-0f37-4e52-a758-065c6fc88c14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input">
+      <UniqueIdentifier>{a8b93812-9f48-464a-bcfc-1bd366a8d41e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE">
+      <UniqueIdentifier>{1e66711d-6f12-4591-8f03-836a5f7a07e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\RenderTarget">
+      <UniqueIdentifier>{84f56028-f628-469b-9b79-f68fb103cad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\BlurFilter">
+      <UniqueIdentifier>{d00c905f-13c3-4b00-95eb-70498fb8ae2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\2DOrbit">
+      <UniqueIdentifier>{69097ff4-b7a8-4836-8694-062483b1e772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Main">
+      <UniqueIdentifier>{f4fc3011-c2fc-4411-a465-8f785bc8e127}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shaim3DEffect">
+      <UniqueIdentifier>{acaf97dc-26b7-47d0-9c49-4999bbc2fb5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shaim3DEffect\3DParts">
+      <UniqueIdentifier>{da32f85b-14c2-4ba9-bc77-65bc86e2512c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Collision">
+      <UniqueIdentifier>{68e14539-daa1-4cdd-b4d8-69ade02c1d2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME">
+      <UniqueIdentifier>{b0bfe7b8-d91b-4301-b8fd-d90e3aae0172}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\Manager">
+      <UniqueIdentifier>{0d0592d5-07ca-48da-85c0-71241cec76e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\2D">
+      <UniqueIdentifier>{8a2417b2-fa3d-40dd-9394-cc5fb30684bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\3D">
+      <UniqueIdentifier>{cdd5af7a-c08e-4ad1-ad8f-2897c4ae760a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Font\Menu">
+      <UniqueIdentifier>{b3ef3a7a-e5a1-450c-b16a-370b6fc8d2aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\Shimmer">
+      <UniqueIdentifier>{b389f59c-9f5d-49f2-a6fc-c8ff3de6237b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\Shimmer\Particle">
+      <UniqueIdentifier>{689f72ae-5125-4b9f-842d-156e0400be0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Window">
+      <UniqueIdentifier>{48430f40-0165-4692-8a2e-6f53d1493c27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Number">
+      <UniqueIdentifier>{6fa93c51-79f2-48c0-a973-750a0a0124de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\MultiThread">
+      <UniqueIdentifier>{2ccd7127-99fb-4285-90f6-5b2e162c47cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\MultiThread\Mutex">
+      <UniqueIdentifier>{3bba7425-e2a1-4fe0-9dc9-a832eceba010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\MultiThread\Loading">
+      <UniqueIdentifier>{61dd6bb0-938e-45f6-b404-94677a7c366c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_PAUSE">
+      <UniqueIdentifier>{d54a058d-0363-4321-be97-43aaf448f19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input\GamePad">
+      <UniqueIdentifier>{e8c31abd-9aa8-4357-a0a0-4fe7f2a1c418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input\GamePad\XInput">
+      <UniqueIdentifier>{dd013c67-7970-4663-9336-4f6dbc4842a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input\GamePad\DInput">
+      <UniqueIdentifier>{aa5b3117-3472-4734-8546-e18264c975d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input\Keyboard">
+      <UniqueIdentifier>{baffcdf5-7116-48cf-9a34-e884d92fe939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Input\Mouse">
+      <UniqueIdentifier>{6beaf248-1f2b-423b-91ba-ea6b88e566e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\Light2D">
+      <UniqueIdentifier>{c845a765-ea04-43dc-ba7c-f899f9523c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Shader\Light2D\LightParticle">
+      <UniqueIdentifier>{996f14ec-0030-42f9-ad1a-365654cf0f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Sprite">
+      <UniqueIdentifier>{7f6acde8-08ad-4458-a3b7-9ff6cf399d11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\インターフェイスパーツ">
+      <UniqueIdentifier>{ff6ed382-c509-4e4e-aa5f-9c3d9ee94682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\インターフェイスパーツ\CircleGage">
+      <UniqueIdentifier>{d382ca49-b5b5-4e60-9d64-fe660eb862ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\インターフェイスパーツ\Gage">
+      <UniqueIdentifier>{8e87a8a1-e30a-4b8f-8893-b9c151380d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Gimmick">
+      <UniqueIdentifier>{4539244c-e3fa-4244-b3d0-b0c537d0d744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Gimmick\StartDevice">
+      <UniqueIdentifier>{97f76ae4-4bec-4baa-b83f-f680b124b292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Player">
+      <UniqueIdentifier>{34979923-abd3-4265-9578-64faa8f55739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\01_TITLE">
+      <UniqueIdentifier>{590eb587-96ee-41d1-bf5a-06678d96596e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\03_RESULT">
+      <UniqueIdentifier>{e178919c-2ca9-4e75-a68f-1cdf196eb3a9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp">
+      <Filter>00.SYSTEM\Camera\3DCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera2D.cpp">
+      <Filter>00.SYSTEM\Camera\2DCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>00.SYSTEM\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="MathTable.cpp">
+      <Filter>00.SYSTEM\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>00.SYSTEM\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager.cpp">
+      <Filter>00.SYSTEM\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>00.SYSTEM\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>00.SYSTEM\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>00.SYSTEM\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>00.SYSTEM\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>00.SYSTEM\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>01.SCENE\02_GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenRender.cpp">
+      <Filter>00.SYSTEM\Shader\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurFilter.cpp">
+      <Filter>00.SYSTEM\Shader\BlurFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="Orbit2D.cpp">
+      <Filter>00.SYSTEM\2DOrbit</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaim3DEffect.cpp">
+      <Filter>00.SYSTEM\Shaim3DEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaim3DParts.cpp">
+      <Filter>00.SYSTEM\Shaim3DEffect\3DParts</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>00.SYSTEM\Shader\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader2D.cpp">
+      <Filter>00.SYSTEM\Shader\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader3D.cpp">
+      <Filter>00.SYSTEM\Shader\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>00.SYSTEM\Font\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Shimmer.cpp">
+      <Filter>00.SYSTEM\Shader\Shimmer</Filter>
+    </ClCompile>
+    <ClCompile Include="ShimmerParticle2D.cpp">
+      <Filter>00.SYSTEM\Shader\Shimmer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>00.SYSTEM\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Number.cpp">
+      <Filter>00.SYSTEM\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="Mutex.cpp">
+      <Filter>00.SYSTEM\MultiThread\Mutex</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading.cpp">
+      <Filter>00.SYSTEM\MultiThread\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>01.SCENE\02_PAUSE</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\VC.cpp">
+      <Filter>00.SYSTEM\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\GamePad.cpp">
+      <Filter>00.SYSTEM\Input\GamePad</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\GPXInput.cpp">
+      <Filter>00.SYSTEM\Input\GamePad\XInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\GPDInput.cpp">
+      <Filter>00.SYSTEM\Input\GamePad\DInput</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Keyboard.cpp">
+      <Filter>00.SYSTEM\Input\Keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Mouse.cpp">
+      <Filter>00.SYSTEM\Input\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="Light2D.cpp">
+      <Filter>00.SYSTEM\Shader\Light2D</Filter>
+    </ClCompile>
+    <ClCompile Include="LightParticle.cpp">
+      <Filter>00.SYSTEM\Shader\Light2D\LightParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>00.SYSTEM\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleGauge.cpp">
+      <Filter>00.SYSTEM\インターフェイスパーツ\CircleGage</Filter>
+    </ClCompile>
+    <ClCompile Include="Gauge.cpp">
+      <Filter>00.SYSTEM\インターフェイスパーツ\Gage</Filter>
+    </ClCompile>
+    <ClCompile Include="Gimmick.cpp">
+      <Filter>01.SCENE\02_GAME\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="StartDevice.cpp">
+      <Filter>01.SCENE\02_GAME\Gimmick\StartDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>01.SCENE\01_TITLE</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>01.SCENE\03_RESULT</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>00.SYSTEM\Camera\3DCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera2D.h">
+      <Filter>00.SYSTEM\Camera\2DCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>00.SYSTEM\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="MathTable.h">
+      <Filter>00.SYSTEM\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>00.SYSTEM\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
+      <Filter>00.SYSTEM\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>00.SYSTEM\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>00.SYSTEM\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>00.SYSTEM\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>00.SYSTEM\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>00.SYSTEM\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>01.SCENE\02_GAME</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>01.SCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="List.hpp">
+      <Filter>00.SYSTEM</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenRender.h">
+      <Filter>00.SYSTEM\Shader\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurFilter.h">
+      <Filter>00.SYSTEM\Shader\BlurFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Orbit2D.h">
+      <Filter>00.SYSTEM\2DOrbit</Filter>
+    </ClInclude>
+    <ClInclude Include="Shaim3DEffect.h">
+      <Filter>00.SYSTEM\Shaim3DEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Shaim3DParts.h">
+      <Filter>00.SYSTEM\Shaim3DEffect\3DParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>00.SYSTEM\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ShaderManager.h">
+      <Filter>00.SYSTEM\Shader\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader2D.h">
+      <Filter>00.SYSTEM\Shader\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader3D.h">
+      <Filter>00.SYSTEM\Shader\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>00.SYSTEM\Font\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Shimmer.h">
+      <Filter>00.SYSTEM\Shader\Shimmer</Filter>
+    </ClInclude>
+    <ClInclude Include="ShimmerParticle2D.h">
+      <Filter>00.SYSTEM\Shader\Shimmer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>00.SYSTEM\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
+      <Filter>00.SYSTEM\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="Mutex.h">
+      <Filter>00.SYSTEM\MultiThread\Mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading.h">
+      <Filter>00.SYSTEM\MultiThread\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>01.SCENE\02_PAUSE</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\VC.h">
+      <Filter>00.SYSTEM\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\GamePad.h">
+      <Filter>00.SYSTEM\Input\GamePad</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\GPXInput.h">
+      <Filter>00.SYSTEM\Input\GamePad\XInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\GPDInput.h">
+      <Filter>00.SYSTEM\Input\GamePad\DInput</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Keyboard.h">
+      <Filter>00.SYSTEM\Input\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Mouse.h">
+      <Filter>00.SYSTEM\Input\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Light2D.h">
+      <Filter>00.SYSTEM\Shader\Light2D</Filter>
+    </ClInclude>
+    <ClInclude Include="LightParticle.h">
+      <Filter>00.SYSTEM\Shader\Light2D\LightParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>00.SYSTEM\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleGauge.h">
+      <Filter>00.SYSTEM\インターフェイスパーツ\CircleGage</Filter>
+    </ClInclude>
+    <ClInclude Include="Gauge.h">
+      <Filter>00.SYSTEM\インターフェイスパーツ\Gage</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Gimmick.h">
+      <Filter>01.SCENE\02_GAME\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="StartDevice.h">
+      <Filter>01.SCENE\02_GAME\Gimmick\StartDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>01.SCENE\01_TITLE</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>01.SCENE\03_RESULT</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="data\shaders\ShimmerShader.fx">
+      <Filter>00.SYSTEM\Shader\Shimmer</Filter>
+    </FxCompile>
+    <FxCompile Include="data\shaders\Shader2D.fx">
+      <Filter>00.SYSTEM\Shader\2D</Filter>
+    </FxCompile>
+    <FxCompile Include="data\shaders\Blur.fx">
+      <Filter>00.SYSTEM\Shader\BlurFilter</Filter>
+    </FxCompile>
+    <FxCompile Include="data\shaders\ScreenShade.fx">
+      <Filter>00.SYSTEM\Shader\RenderTarget</Filter>
+    </FxCompile>
+    <FxCompile Include="data\shaders\Shader3D.fx">
+      <Filter>00.SYSTEM\Shader\3D</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Shooting.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

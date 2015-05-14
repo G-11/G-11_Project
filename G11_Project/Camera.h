@@ -11,13 +11,13 @@
 //======================================================
 //カメラクラス
 //======================================================
-class CCamera
+class Camera3D
 {
 protected:
-	static CCamera* Top;
-	static CCamera* Cur;
-	CCamera* Prev;
-	CCamera* Next;
+	static Camera3D* Top;
+	static Camera3D* Cur;
+	Camera3D* Prev;
+	Camera3D* Next;
 	virtual void Update(void);
 	void LinkList(void);
 	void UnlinkList(void);
@@ -41,17 +41,17 @@ protected:
 	int frame;
 
 public:
-	CCamera(const D3DXVECTOR2 &LUPos=D3DXVECTOR2(0,0),D3DXVECTOR2 &size=D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT));//コストラクタ
-	virtual ~CCamera();//デストラクタ
-	static CCamera* Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos);//作成(メインカメラ用、複数も可)
-	static CCamera* Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size);//作成(ビューポートも同時に設定)
+	Camera3D(const D3DXVECTOR2 &LUPos=D3DXVECTOR2(0,0),D3DXVECTOR2 &size=D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT));//コストラクタ
+	virtual ~Camera3D();//デストラクタ
+	static Camera3D* Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos);//作成(メインカメラ用、複数も可)
+	static Camera3D* Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR3 &RPos,const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size);//作成(ビューポートも同時に設定)
 	static void UpdateAll(void);//全部更新
 	virtual void Set(void);
 /*
 	DirectXDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
-	for(int cnt=0;cnt<CCamera::GetCameraNum();cnt++)
+	for(int cnt=0;cnt<Camera3D::GetCameraNum();cnt++)
 	{
-		CCamera::Set(cnt);
+		Camera3D::Set(cnt);
 		描画
 	}
 	で描ける。
@@ -83,7 +83,7 @@ public:
 	void AddViewPortPos(D3DXVECTOR2 Pos)	{ViewPort.X += (DWORD)Pos.x; ViewPort.Y += (DWORD)Pos.y;}
 	void AddViewPortSize(D3DXVECTOR2 Size)	{ViewPort.Width += (DWORD)Size.x;ViewPort.Height += (DWORD)Size.y;}
 	
-	static CCamera* GetCamera(int Index);				//Index番目のカメラのポインタを取得
+	static Camera3D* GetCamera(int Index);				//Index番目のカメラのポインタを取得
 
 };
 

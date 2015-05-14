@@ -1,27 +1,29 @@
 #ifndef _SHIMMER_H_
 #define _SHIMMER_H_
 #include "main.h"
+//===================================================
+//陽炎クラス
+// シングルトン
+//===================================================
 
-class Shimmer
+class CShimmer
 {
 public:
-
-	
 
 	HRESULT Init(void);
 	LPDIRECT3DTEXTURE9 Render(LPDIRECT3DTEXTURE9 tex);
 	static void Finalize(void);
 	void SetFluctuation(float param){ Effect->SetFloat(Param[FLUCTUATION],param); }
 
-	static Shimmer* Instance(void){ return Self; }
+	static CShimmer* Instance(void){ return Self; }
 	void SetBlur(bool flag){ _BlurFlag = flag; }
 	bool BlurFlag(void)const{ return _BlurFlag; }
 
 private:
-	Shimmer();
-	~Shimmer();
-	Shimmer(const Shimmer& other){};
-	Shimmer &operator= (const Shimmer& other){};
+	CShimmer();
+	~CShimmer();
+	CShimmer(const CShimmer& other){};
+	CShimmer &operator= (const CShimmer& other){};
 
 	void ConductBlur(void);
 
@@ -35,7 +37,7 @@ private:
 
 	const static char* ParamName[PARAM_MAX];
 
-	static Shimmer* Self;
+	static CShimmer* Self;
 
 	D3DXHANDLE Param[PARAM_MAX];
 

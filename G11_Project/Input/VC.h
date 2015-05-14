@@ -17,18 +17,27 @@ enum
 	COMMAND_B,
 	COMMAND_X,
 	COMMAND_Y,
+	COMMAND_UP,
+	COMMAND_RIGHT,
+	COMMAND_DOWN,
+	COMMAND_LEFT,
 	COMMAND_MAX
 };
 //=================================================================
 //前方宣言
 //=================================================================
-class CGamePad;
-class CKeyboard;
-class CMouse;
+class GamePad;
+class Keyboard;
+class Mouse;
 
 //クラス定義
 class VC
 {
+private:
+	GamePad		*_GamePad;
+	Keyboard	*_Keyboard;
+	Mouse		*_Mouse;
+
 public:
 
 	HRESULT Init(HWND hWnd);
@@ -40,14 +49,20 @@ public:
 	void SetVibrationR(float right,int frameR);
 
 
-	CGamePad* GamePad(void);
-	CKeyboard* Keyboard(void);
-	CMouse* Mouse(void);
+	GamePad* gamePad(void);
+	Keyboard* keyboard(void);
+	Mouse* mouse(void);
 
 	bool Press(int command){ return _Press[command]; }
 	bool Trigger(int command){ return _Trigger[command]; }
 	bool Release(int command){ return _Release[command]; }
 	bool Repeat(int command){ return _Repeat[command]; }
+
+	float LStickX(void){ return LAxisX; }
+	float LStickY(void){ return -LAxisY; }
+
+	float RStickX(void){ return RAxisX; }
+	float RStickY(void){ return -RAxisY; }
 
 	static VC* Instance(void){return Self;}
 private:
@@ -59,9 +74,6 @@ private:
 
 	static VC* Self;
 
-	CGamePad	*_GamePad;
-	CKeyboard	*_Keyboard;
-	CMouse		*_Mouse;
 	LPDIRECTINPUT8 DInput;
 
 	bool _Press[COMMAND_MAX];

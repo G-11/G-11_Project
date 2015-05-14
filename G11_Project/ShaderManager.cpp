@@ -3,26 +3,30 @@
 #include "Shader3D.h"
 #include "Shimmer.h"
 #include "BlurFilter.h"
+#include "Light2D.h"
 
 ShaderManager* ShaderManager::Self = new ShaderManager;
 
 ShaderManager::ShaderManager()
 {
 	_Shader2D = nullptr;
+	_Shader3D = nullptr;
+	_Shimmer = nullptr;
+	_LightScreen = nullptr;
 }
 HRESULT ShaderManager::Init(void)
 {
 
-	_BlurFilter = Blur::Instance();
+	_BlurFilter = CBlurFilter::Instance();
 	_BlurFilter->Init();
 
-	_Shader2D = Shader2D::Instance();
+	_Shader2D = CShader2D::Instance();
 	if (FAILED(_Shader2D->Init()))
 	{
 		return E_FAIL;
 
 	}
-	_Shader3D = Shader3D::Instance();
+	_Shader3D = CShader3D::Instance();
 
 	if (FAILED(_Shader3D->Init()))
 	{
@@ -30,13 +34,15 @@ HRESULT ShaderManager::Init(void)
 		return E_FAIL;
 	}
 
-	_Shimmer = Shimmer::Instance();
+	_Shimmer = CShimmer::Instance();
 	if (FAILED(_Shimmer->Init()))
 	{
 		Uninit();
 		return E_FAIL;
 	}
 	
+	_LightScreen = LightScreen::Instance();
+	_LightScreen->Init();
 
 	return S_OK;
 }
@@ -65,6 +71,12 @@ void ShaderManager::Uninit(void)
 	{
 		_BlurFilter->Finalize();
 		_BlurFilter = nullptr;
+	}
+
+	if (_LightScreen != nullptr)
+	{
+		_LightScreen->Finalize();
+		_LightScreen = nullptr;
 	}
 
 	Self = nullptr;

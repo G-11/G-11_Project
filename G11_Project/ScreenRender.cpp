@@ -1,12 +1,12 @@
 #include "ScreenRender.h"
 
-ScreenRender::ScreenRender()
+CScreenRender::CScreenRender()
 {
 	Effect = nullptr;
 	ColorMode_ = 0;
 }
 
-ScreenRender::~ScreenRender()
+CScreenRender::~CScreenRender()
 {
 
 	if (Effect != nullptr)
@@ -16,7 +16,7 @@ ScreenRender::~ScreenRender()
 	}
 }
 
-void ScreenRender::Init(void)
+void CScreenRender::Init(void)
 {
 	LPD3DXBUFFER pError = NULL;
 
@@ -52,7 +52,7 @@ void ScreenRender::Init(void)
 	Effect->SetTechnique("Screen");
 }
 
-LPDIRECT3DTEXTURE9 ScreenRender::RenderScreen(LPDIRECT3DTEXTURE9 tex,int drawNum,bool clear)
+LPDIRECT3DTEXTURE9 CScreenRender::RenderScreen(LPDIRECT3DTEXTURE9 tex,int drawNum,bool clear)
 {
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();
 
@@ -82,7 +82,7 @@ LPDIRECT3DTEXTURE9 ScreenRender::RenderScreen(LPDIRECT3DTEXTURE9 tex,int drawNum
 	return nullptr;
 }
 
-LPDIRECT3DTEXTURE9 ScreenRender::RenderWindow(LPDIRECT3DTEXTURE9 tex)
+LPDIRECT3DTEXTURE9 CScreenRender::RenderWindow(LPDIRECT3DTEXTURE9 tex)
 {
 	LPDIRECT3DSURFACE9 OldSurface = nullptr;
 	LPDIRECT3DDEVICE9 Device = Window::Instance()->Device();

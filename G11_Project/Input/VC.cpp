@@ -28,6 +28,10 @@ const COMMAND Command[COMMAND_MAX]=
 	{ { DIK_E,-1,-1,-1,-1 },{ GAMEPAD_B,-1,-1,-1,-1 } },
 	{ { DIK_A,-1,-1,-1,-1 },{ GAMEPAD_X,-1,-1,-1,-1 } },
 	{ { DIK_S,-1,-1,-1,-1 },{ GAMEPAD_Y,-1,-1,-1,-1 } },
+	{ { DIK_UP,-1,-1,-1,-1 },{ GAMEPAD_DPAD_UP,-1,-1,-1,-1} },
+	{ { DIK_RIGHT,-1,-1,-1,-1 },{ GAMEPAD_DPAD_RIGHT,-1,-1,-1,-1 } },
+	{ { DIK_DOWN,-1,-1,-1,-1 },{ GAMEPAD_DPAD_DOWN,-1,-1,-1,-1 } },
+	{ { DIK_LEFT,-1,-1,-1,-1 },{ GAMEPAD_DPAD_LEFT,-1,-1,-1,-1 } },
 };
 
 typedef struct KEY_BUFF
@@ -56,9 +60,6 @@ HRESULT VC::Init(HWND hWnd)
 {
 	HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWnd,GWL_HINSTANCE);
 
-	_GamePad = CGamePad::Instance();
-	_GamePad->Init();
-
 	HRESULT hr;
 	if (DInput == NULL)
 	{
@@ -70,17 +71,16 @@ HRESULT VC::Init(HWND hWnd)
 			return hr;
 		}
 	}
+	_GamePad = GamePad::Initialize(DInput,hInstance,hWnd);
 
-	
-
-	_Keyboard = CKeyboard::Instance();
+	_Keyboard = Keyboard::Instance();
 	if (FAILED(_Keyboard->Init(DInput,hInstance,hWnd)))
 	{
 		MessageBox(nullptr,"キーボードの初期化に失敗しました","ERROR!",MB_OK|MB_ICONERROR);
 		return E_FAIL;
 	}
 
-	_Mouse = CMouse::Instance();
+	_Mouse = Mouse::Instance();
 	if (FAILED(_Mouse->Init(DInput,hInstance,hWnd)))
 	{
 		MessageBox(nullptr,"マウスの初期化に失敗しました","ERROR!",MB_OK | MB_ICONERROR);
@@ -161,27 +161,36 @@ void VC::Update(void)
 				buff.Release |= _Keyboard->Release(Command[cnt].Key[num]);
 				buff.Repeat	 |= _Keyboard->Repeat(Command[cnt].Key[num]);
 			}
-			if (Command[cnt].Pad[num] != -1)
+			if (_GamePad != nullptr)
 			{
-				buff.Press |= _GamePad->Press(Command[cnt].Pad[num]);
-				buff.Trigger |= _GamePad->Trigger(Command[cnt].Pad[num]);
-				buff.Release |= _GamePad->Release(Command[cnt].Pad[num]);
-				buff.Repeat |= _GamePad->Repeate(Command[cnt].Pad[num]);
+				if (Command[cnt].Pad[num] != -1)
+				{
+					buff.Press |= _GamePad->Press(Command[cnt].Pad[num]);
+					buff.Trigger |= _GamePad->Trigger(Command[cnt].Pad[num]);
+					buff.Release |= _GamePad->Release(Command[cnt].Pad[num]);
+					buff.Repeat |= _GamePad->Repeat(Command[cnt].Pad[num]);
+				}
 			}
-
 			_Press[cnt] = buff.Press;
 			_Trigger[cnt] = buff.Trigger;
 			_Release[cnt] = buff.Release;
 			_Repeat[cnt] = buff.Repeat;
 		}
 	}
-
-	LAxisX = _GamePad->StickX(LEFT);
-	RAxisX = _GamePad->StickX(RIGHT);
-	LAxisY = _GamePad->StickY(LEFT);
-	RAxisY = _GamePad->StickY(RIGHT);
-
-	
+	if (_GamePad != nullptr)
+	{
+		LAxisX = _GamePad->StickX(LEFT);
+		RAxisX = _GamePad->StickX(RIGHT);
+		LAxisY = _GamePad->StickY(LEFT);
+		RAxisY = _GamePad->StickY(RIGHT);
+	}
+	else
+	{
+		LAxisX = 0;
+		RAxisX = 0;
+		LAxisY = 0;
+		RAxisY = 0;
+	}
 
 	if (LAxisX == 0 && _Keyboard->Press(DIK_A))
 	{
@@ -237,15 +246,15 @@ void VC::ClearBuffer(void)
 //=================================================================
 //ゲッター
 //=================================================================
-CGamePad* VC::GamePad(void)
+GamePad* VC::gamePad(void)
 {
 	return _GamePad;
 }
-CKeyboard* VC::Keyboard(void)
+Keyboard* VC::keyboard(void)
 {
 	return _Keyboard;
 }
-CMouse* VC::Mouse(void)
+Mouse* VC::mouse(void)
 {
 	return _Mouse;
 }

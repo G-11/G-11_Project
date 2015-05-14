@@ -11,6 +11,8 @@
 //===========================================================
 #include "MathTable.h"
 
+std::mt19937 CMath::MTRand;
+
 CMath math;
 //===========================================================
 //コンストラクタ
@@ -39,8 +41,10 @@ CMath::CMath()
 	float num = 256.0f;
 	for (int cnt = 0;cnt <= 512;cnt++,num--)
 	{
-		_tatan[cnt] = atan2(num,256);
+		_tatan[cnt] = (float)atan2(num,256);
 	}
+	std::random_device randDevice;
+	MTRand = std::mt19937(randDevice());
 }
 
 
@@ -131,6 +135,18 @@ float CMath::tTan_rad(float rad)
 	int deg = RadOptimize(rad);
 
 	return _ttan[deg];
+}
+
+float CMath::RandomF(float min,float max)
+{
+	std::uniform_real<float> dist(min,max);
+	return dist(MTRand);
+}
+
+int CMath::RandomI(int min,int max)
+{
+	std::uniform_int<int> dist(min,max);
+	return dist(MTRand);
 }
 
 float Sin_Rad(float rad)

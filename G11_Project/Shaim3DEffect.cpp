@@ -6,12 +6,12 @@
 #include "Renderer.h"
 #include "Mutex.h"
 
-int Shaim3DEffect::_Num = 0;
-CCamera* Shaim3DEffect::Camera = nullptr;
-Shader3D* Shaim3DEffect::_Shader3D = nullptr;
-Shader2D* Shaim3DEffect::_Shader2D = nullptr;
-Shaim3DEffect* Shaim3DEffect::_Top = nullptr;
-Shaim3DEffect* Shaim3DEffect::_Cur = nullptr;
+int Shaim3DEffect::Num_ = 0;
+Camera3D* Shaim3DEffect::Camera = nullptr;
+CShader3D* Shaim3DEffect::_Shader3D = nullptr;
+CShader2D* Shaim3DEffect::_Shader2D = nullptr;
+Shaim3DEffect* Shaim3DEffect::Top_ = nullptr;
+Shaim3DEffect* Shaim3DEffect::Cur_ = nullptr;
 bool Shaim3DEffect::PauseFlag = false;
 
 Shaim3DEffect::Shaim3DEffect()
@@ -20,7 +20,7 @@ Shaim3DEffect::Shaim3DEffect()
 	_Speed = D3DXVECTOR3(0,0,0);
 	_Size = D3DXVECTOR3(1.0f,1.0f,1.0f);
 	LinkList();
-	_Num++;
+	Num_++;
 }
 
 Shaim3DEffect::~Shaim3DEffect()
@@ -30,67 +30,67 @@ Shaim3DEffect::~Shaim3DEffect()
 
 void Shaim3DEffect::LinkList(void)
 {
-	if (_Top != NULL)//二つ目以降の処理
+	if (Top_ != NULL)//二つ目以降の処理
 	{
-		Shaim3DEffect* Polygon = _Cur;
-		Polygon->_Next = this;
-		_Prev = Polygon;
-		_Next = NULL;
-		_Cur = this;
+		Shaim3DEffect* Polygon = Cur_;
+		Polygon->Next_ = this;
+		Prev_ = Polygon;
+		Next_ = NULL;
+		Cur_ = this;
 	}
 	else//最初の一つの時の処理
 	{
-		_Top = this;
-		_Cur = this;
-		_Prev = NULL;
-		_Next = NULL;
+		Top_ = this;
+		Cur_ = this;
+		Prev_ = NULL;
+		Next_ = NULL;
 	}
 }
 
 void Shaim3DEffect::UnlinkList(void)
 {
-	if (_Prev == NULL)//先頭
+	if (Prev_ == NULL)//先頭
 	{
-		if (_Next != NULL)//次がある
+		if (Next_ != NULL)//次がある
 		{
-			_Next->_Prev = NULL;
-			_Top = _Next;
+			Next_->Prev_ = NULL;
+			Top_ = Next_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
-	else if (_Next == NULL)//終端
+	else if (Next_ == NULL)//終端
 	{
-		if (_Prev != NULL)//前がある
+		if (Prev_ != NULL)//前がある
 		{
-			_Prev->_Next = NULL;
-			_Cur = _Prev;
+			Prev_->Next_ = NULL;
+			Cur_ = Prev_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
 	else//前後にデータがあるとき
 	{
-		_Prev->_Next = _Next;
-		_Next->_Prev = _Prev;
+		Prev_->Next_ = Next_;
+		Next_->Prev_ = Prev_;
 	}
 
-	_Prev = NULL;
-	_Next = NULL;
+	Prev_ = NULL;
+	Next_ = NULL;
 
-	_Num--;
+	Num_--;
 
 }
 
 void Shaim3DEffect::Initialize(void)
 {
-	Camera = CCamera::Create(D3DXVECTOR3(0,0,-200.0f),D3DXVECTOR3(0,0,0));
+	Camera = Camera3D::Create(D3DXVECTOR3(0,0,-200.0f),D3DXVECTOR3(0,0,0));
 }
 
 void Shaim3DEffect::Init(const D3DXVECTOR2& size)
@@ -125,12 +125,12 @@ Shaim3DEffect* Shaim3DEffect::Create(const D3DXVECTOR3& pos,const D3DXVECTOR3& s
 
 void Shaim3DEffect::UpdateAll(void)
 {
-	Shaim3DEffect* effect = _Top;
+	Shaim3DEffect* effect = Top_;
 	Shaim3DEffect* next = nullptr;
 
 	while (effect)
 	{
-		next = effect->_Next;
+		next = effect->Next_;
 		if (PauseFlag)
 		{
 			effect -> Pause();
@@ -145,23 +145,23 @@ void Shaim3DEffect::UpdateAll(void)
 
 void Shaim3DEffect::DrawAll(void)
 {
-	DebugProc::Print("PartsNum:%d\nEffectNum:%d\n",Shaim3DParts::Num(),_Num);
-	Shaim3DEffect* effect = _Top;
+	CDebugProc::Print("PartsNum:%d\nEffectNum:%d\n",Shaim3DParts::Num(),Num_);
+	Shaim3DEffect* effect = Top_;
 	Shaim3DEffect* next = nullptr;
 	LPDIRECT3DSURFACE9 OldSurface;
 
-	if (_Shader3D == nullptr){ _Shader3D = Shader3D::Instance(); Shaim3DParts::SetShader(Shader3D::Instance()); }
-	if (_Shader2D == nullptr){ _Shader2D = Shader2D::Instance(); }
+	if (_Shader3D == nullptr){ _Shader3D = CShader3D::Instance(); Shaim3DParts::SetShader(CShader3D::Instance()); }
+	if (_Shader2D == nullptr){ _Shader2D = CShader2D::Instance(); }
 
 	Window::Instance()->Device()->GetRenderTarget(0,&OldSurface);
 	Camera->Set();
 
 
-	CRenderer::SetStream3D();
+	Renderer::SetStream3D();
 	_Shader3D->DrawBegin();
 	while (effect)
 	{
-		next = effect->_Next;
+		next = effect->Next_;
 		effect->DrawParts();
 		effect = next;
 	}
@@ -174,42 +174,42 @@ void Shaim3DEffect::DrawAll(void)
 		OldSurface = nullptr;
 	}
 
-	CRenderer::SetStream2D();
+	Renderer::SetStream2D();
 
 	D3DXCOLOR color(WHITE(1.0f));
-	_Shader2D->SetFloatArray(Shader2D::DIFFUSE,color,4);
+	_Shader2D->SetFloatArray(CShader2D::DIFFUSE,color,4);
 	
 	D3DXVECTOR4 uv(0,0,1.0f,1.0f);
-	_Shader2D->SetFloatArray(Shader2D::UV,uv,4);
+	_Shader2D->SetFloatArray(CShader2D::UV,uv,4);
 
 	//回転を反映
 	D3DXMATRIX MtxRot;
 	D3DXMatrixRotationYawPitchRoll(&MtxRot,0,0,0);
-	_Shader2D->SetMatrix(Shader2D::ROT_MTX,MtxRot);
+	_Shader2D->SetMatrix(CShader2D::ROT_MTX,MtxRot);
 
 
-	effect = _Top;
+	effect = Top_;
 	next = nullptr;
 	_Shader2D->DrawBegin();
 	while (effect)
 	{
-		next = effect->_Next;
+		next = effect->Next_;
 		effect->Draw();
 		effect = next;
 	}
 	_Shader2D->DrawEnd();
 
-	CCamera::Set(0);
+	Camera3D::Set(0);
 }
 
 void Shaim3DEffect::ReleaseAll(void)
 {
-	Shaim3DEffect* effect = _Top;
+	Shaim3DEffect* effect = Top_;
 	Shaim3DEffect* next = nullptr;
 
 	while (effect)
 	{
-		next = effect->_Next;
+		next = effect->Next_;
 		effect->Release();
 		effect = next;
 	}
@@ -266,15 +266,15 @@ void Shaim3DEffect::Draw(void)
 	D3DXMatrixTranslation(&MtxTrans,_Pos.x,_Pos.y,_Pos.z);
 	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
 
-	_Shader2D->SetMatrix(Shader2D::WORLD_MTX,WorldMtx);
+	_Shader2D->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
 	/*
-	_Shader->SetFloatArray(Shader2D::SIZE,_Size,3);
-	_Shader->SetMatrix(Shader2D::ROT_MTX,MtxRot);
-	_Shader->SetMatrix(Shader2D::POS_MTX,MtxTrans);
+	_Shader->SetFloatArray(CShader2D::SIZE,_Size,3);
+	_Shader->SetMatrix(CShader2D::ROT_MTX,MtxRot);
+	_Shader->SetMatrix(CShader2D::POS_MTX,MtxTrans);
 	*/
 	//テクスチャの設定
 	_Shader2D->SetTexture(Texture);
 
 	//ポリゴンを描画
-	_Shader2D->Draw(Shader2D::NORMAL,D3DPT_TRIANGLESTRIP);
+	_Shader2D->Draw(CShader2D::NORMAL,D3DPT_TRIANGLESTRIP);
 }

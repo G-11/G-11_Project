@@ -8,29 +8,31 @@
 #include<process.h>
 
 #include "Input\VC.h"
-
 #include "Manager.h"
 #include "Light.h"
 #include "Camera.h"
 #include "Camera2D.h"
 #include "Renderer.h"
-#include "Polygon.h"
 #include "Orbit2D.h"
 #include "Sprite.h"
 #include "Font.h"
 #include "Shaim3DEffect.h"
 #include "ShimmerParticle2D.h"
+#include "LightParticle.h"
 #include "Mutex.h"
 #include "Loading.h"
 //#include "Model.h"
 
 #include "Scene.h"
+#include "Title.h"
+#include "Game.h"
+#include "Result.h"
 //=============================================================================
 // ƒOƒ[ƒoƒ‹•Ï”
 //=============================================================================
-CRenderer* CManager::Render = nullptr;
+Renderer* CManager::_Render = nullptr;
 CSound*		CManager::Sound = nullptr;
-DebugProc* CManager::Debug = nullptr;
+CDebugProc* CManager::Debug = nullptr;
 #ifdef _DEBUG
 bool ScreenShotMode = false;
 
@@ -42,7 +44,7 @@ bool GetScreenShotMode(void);
 //=============================================================================
 CManager::CManager()
 {
-	Render = nullptr;
+	_Render = nullptr;
 	Sound = nullptr;
 }
 //=============================================================================
@@ -57,9 +59,13 @@ CManager::~CManager()
 //=============================================================================
 HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 {
+	_Render = new Renderer;
+	if (_Render == nullptr)
+	{
+		return E_FAIL;
+	}
 
-	Render = new CRenderer;
-	if (FAILED(Render->Init(hWnd,bWindow)))
+	if (FAILED(_Render->Init(hWnd,bWindow)))
 	{
 		return E_FAIL;
 	}
@@ -67,25 +73,20 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 	{
 		return E_FAIL;
 	}
-	if(Render == nullptr)
-	{
-		return E_FAIL;
-	}
 
-
-	Debug = new DebugProc;
+	Debug = new CDebugProc;
 	Debug->Init();
-	Loading::Instance()->Init();
+	CLoading::Instance()->Init();
 
-	Loading::Instance()->Update();
+	CLoading::Instance()->Update();
 	
-	Scene = nullptr;
+	Scene = new Game;
 
 	HANDLE handle = (HANDLE)_beginthreadex(NULL,0,Thread,InitTexture,0,NULL);
 	DWORD code;
 	while (true)
 	{
-		Loading::Instance()->Update();
+		CLoading::Instance()->Update();
 		GetExitCodeThread(handle,&code);
 		if (code != STILL_ACTIVE)
 		{
@@ -97,7 +98,7 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 	handle = (HANDLE)_beginthreadex(NULL,0,SceneInit,this,0,NULL);
 	while (true)
 	{
-		Loading::Instance()->Update();
+		CLoading::Instance()->Update();
 		GetExitCodeThread(handle,&code);
 		if (code != STILL_ACTIVE)
 		{
@@ -105,11 +106,10 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 			break;
 		}
 	}
-
 	//CModel::Init();
 	
-	CRenderer::SetFade(60,CFade::FADE_IN,D3DXCOLOR(0,0,0,0));
-	Current = Next = SCENE_WEAPON_SELECT;
+	Renderer::SetFade(60,Fade::FADE_IN,D3DXCOLOR(0,0,0,0));
+	Current = Next = SCENE_GAME;
 	SceneChangeFlag = false;
 	
 	return S_OK;
@@ -132,21 +132,19 @@ void CManager::Uninit(void)
 		Scene = nullptr;
 	}
 	ReleaseObject();
-	CCamera::ReleaseAll();
-	CCamera2D::ReleaseAll();
-	Light::ReleaseAll();
+	VC::Instance()->Uninit();
+	Camera3D::ReleaseAll();
+	Camera2D::ReleaseAll();
+	CLight::ReleaseAll();
 	UninitTexture();
 	
-	Loading::Finalize();
+	CLoading::Finalize();
 	Mutex::Finalize();
-	VC::Instance()->Uninit();
-	//CModel::ReleaseAll();
-	//CModel::Uninit();
-	if(Render != nullptr)
+	if(_Render != nullptr)
 	{
-		Render->Uninit();
-		delete Render;
-		Render = nullptr;
+		_Render->Uninit();
+		delete _Render;
+		_Render = nullptr;
 	}
 
 #ifdef _DEBUG
@@ -159,13 +157,13 @@ void CManager::Uninit(void)
 void CManager::Update(void)
 {
 	VC::Instance()->Update();
-	CCamera::UpdateAll();
-	CCamera2D::UpdateAll();
+	Camera3D::UpdateAll();
+	Camera2D::UpdateAll();
 	if (Scene!=nullptr)
 	{
 		Scene->Update();
 	}
-	Render->Update();
+	_Render->Update();
 
 
 	ChangeScene();
@@ -177,8 +175,7 @@ void CManager::Update(void)
 //=============================================================================
 void CManager::Draw(void)
 {
-
-	Render->Draw();
+	_Render->Draw();
 
 }
 
@@ -189,7 +186,7 @@ void CManager::Control(void)
 
 void CManager::ChangeScene(void)
 {
-	CFade* Fade = CFade::Instance();
+	Fade* Fade = Fade::Instance();
 	if (SceneChangeFlag && Fade->Active()==false)
 	{
 		if (Scene != nullptr)
@@ -199,14 +196,20 @@ void CManager::ChangeScene(void)
 			Scene = nullptr;
 		}
 
-		/*
 		switch (Next)
 		{
-
+		case SCENE_TITLE:
+			Scene = new Title;
+			break;
+		case SCENE_GAME:
+			Scene = new Game;
+			break;
+		case SCENE_RESULT:
+			Scene = new Result;
+			break;
 		default:
 			break;
 		}
-		*/
 
 		if (Scene != nullptr)
 		{
@@ -214,7 +217,7 @@ void CManager::ChangeScene(void)
 			DWORD code;
 			while (true)
 			{
-				Loading::Instance()->Update();
+				CLoading::Instance()->Update();
 				GetExitCodeThread(handle,&code);
 				if (code != STILL_ACTIVE)
 				{
@@ -222,7 +225,7 @@ void CManager::ChangeScene(void)
 					break;
 				}
 			}
-			Fade->Start(30,CFade::FADE_IN,BLACK(0.0f));
+			Fade->Start(30,Fade::FADE_IN,BLACK(0.0f));
 			SceneChangeFlag = false;
 		}
 	}
@@ -232,7 +235,7 @@ void CManager::SetScene(SCENE scene)
 {
 
 	Next = scene;
-	CFade::Instance()->Start(30,CFade::FADE_OUT,BLACK(1.0f));
+	Fade::Instance()->Start(30,Fade::FADE_OUT,BLACK(1.0f));
 	SceneChangeFlag = true;
 
 }
@@ -240,9 +243,9 @@ void CManager::ReleaseObject(void)
 {
 	String::ReleaseAll();
 	Sprite::ReleaseAll();
-	CPolygon::ReleaseAll();
 	Shaim3DEffect::ReleaseAll();
 	ShimmerParticle2D::ReleaseAll();
+	LightParticle::ReleaseAll();
 }
 
 unsigned __stdcall CManager::Thread(void* func)
@@ -258,10 +261,8 @@ unsigned __stdcall CManager::Thread(void* func)
 unsigned __stdcall CManager::SceneInit(void* func)
 {
 	CManager* manager = (CManager*)func;
-	if (manager->Scene != nullptr)
-	{
-		manager->Scene->Init();
-	}
+	manager->Scene->Init();
+
 	_endthreadex(0);
 
 	return 0;
@@ -270,7 +271,6 @@ unsigned __stdcall CManager::SceneInit(void* func)
 void CManager::SetPause(bool flag)
 {
 	Sprite::SetPause(flag);
-	CPolygon::SetPause(flag);
 	Shaim3DEffect::SetPause(flag);
 	Orbit2D::SetPause(flag);
 	ShimmerParticle2D::SetPause(flag);

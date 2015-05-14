@@ -3,7 +3,12 @@
 
 #include "main.h"
 
-class Shader2D
+//===================================================
+//２Dシェーダークラス
+// シングルトン
+//===================================================
+
+class CShader2D
 {
 public:
 
@@ -16,7 +21,7 @@ public:
 		SCL_MTX,
 		ROT_MTX,
 		POS_MTX,
-		SIZE,
+		OFFSET,
 		DIFFUSE,
 		MASK_COLOR,
 		UV,
@@ -54,20 +59,20 @@ public:
 	void SetMatrix(STATE param,D3DXMATRIX mtx)		{ Effect->SetMatrix(State[param],&mtx); }
 	void SetTexture(LPDIRECT3DTEXTURE9 tex)			{ Effect->SetTexture(State[TEXTURE],tex); }
 	void SetMask(LPDIRECT3DTEXTURE9 tex)			{ Effect->SetTexture(State[MASK],tex); }
-	void SetIdentity(Shader2D::STATE state)		{ Effect->SetMatrix(State[state],&MtxIdentity); }
+	void SetIdentity(CShader2D::STATE state)		{ Effect->SetMatrix(State[state],&MtxIdentity); }
 
 	D3DXMATRIX Identity(void){ return MtxIdentity; }
+	static CShader2D* Instance(void){ return Self; }
 
-	static Shader2D* Instance(void){return Self;}
 private:
 
 	const static LPSTR ParamName[];
 
-	Shader2D();
-	Shader2D(const Shader2D& other){};
-	Shader2D &operator=(const Shader2D& other){};
+	CShader2D();
+	CShader2D(const CShader2D& other){};
+	CShader2D &operator=(const CShader2D& other){};
 
-	static Shader2D* Self;
+	static CShader2D* Self;
 	D3DXHANDLE State[STATE_MAX];
 	D3DXHANDLE Technique[TEX_MAX];
 	LPD3DXEFFECT Effect;

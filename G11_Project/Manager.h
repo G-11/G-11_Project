@@ -11,11 +11,11 @@
 //=============================================================================
 // ëOï˚êÈåæ
 //=============================================================================
-class CRenderer;
+class Renderer;
 class CSound;
 class CPlayer;
-class CScene;
-class DebugProc;
+class Scene;
+class CDebugProc;
 
 typedef void (*Function)(void);
 //=============================================================================
@@ -28,7 +28,6 @@ public:
 	typedef enum
 	{
 		SCENE_TITLE = 0,
-		SCENE_WEAPON_SELECT,
 		SCENE_GAME,
 		SCENE_RESULT,
 		SCENE_MAX
@@ -40,25 +39,25 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CRenderer* GetRenderer(void){return Render;}
+	static Renderer* GetRenderer(void){return _Render;}
 	void SetScene(SCENE scene);
 	static void ReleaseObject(void);
 	static void SetPause(bool flag);
 
 private:
-	static CRenderer* Render;
+	static Renderer* _Render;
 	static CSound* Sound;
 
 	void Control(void);
 	void ChangeScene(void);
 	
-	CScene* Scene;
+	Scene* Scene;
 
 	SCENE Current;
 	SCENE Next;
 	bool SceneChangeFlag;
 
-	static DebugProc* Debug;
+	static CDebugProc* Debug;
 
 	static unsigned __stdcall Thread(void*);
 	static unsigned __stdcall SceneInit(void*);

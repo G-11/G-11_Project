@@ -10,7 +10,14 @@ public:
 	
 	static void Finalize(void){ delete Self; }
 
-	static Mutex* Instance(void){ return Self; }
+	static Mutex* Instance(void)
+	{
+		if (Self == nullptr)
+		{
+			Self = new Mutex;
+		}
+		return Self;
+	}
 
 	void Enter(void){ WaitForSingleObject(Handle,INFINITE); }
 	void Leave(void){ ReleaseMutex(Handle); }

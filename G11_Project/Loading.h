@@ -6,7 +6,7 @@
 
 class Mutex;
 
-class Loading
+class CLoading
 {
 public:
 
@@ -16,21 +16,28 @@ public:
 
 	static void Finalize(void);
 
-	static Loading* Instance(void){ return Self; }
-	static void SetRenderer(ScreenRender* sr);
+	static CLoading* Instance(void)
+	{
+		if (Self == nullptr)
+		{
+			Self = new CLoading;
+		}
+		return Self; 
+	}
+	static void SetRenderer(CScreenRender* sr);
 
 private:
-	Loading();
-	~Loading();
-	Loading(const Loading& other){};
-	Loading& operator= (const Loading& other){};
+	CLoading();
+	~CLoading();
+	CLoading(const CLoading& other){};
+	CLoading& operator= (const CLoading& other){};
 
 	void CastMatrix(void);
 
-	static Loading* Self;
+	static CLoading* Self;
 
 	LPDIRECT3DTEXTURE9 Texture;
-	static ScreenRender* _ScreenRender;
+	static CScreenRender* ScreenRender;
 	Mutex* mutex;
 
 	D3DXMATRIX WorldMatrix[2];

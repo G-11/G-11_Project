@@ -1,10 +1,10 @@
 #include "Mouse.h"
 
 
-CMouse* CMouse::Self = new CMouse;
-HWND CMouse::m_phWnd;
+Mouse* Mouse::Self = new Mouse;
+HWND Mouse::m_phWnd;
 
-CMouse::~CMouse()
+Mouse::~Mouse()
 {
 	if (InputDevice != nullptr)
 	{
@@ -16,7 +16,7 @@ CMouse::~CMouse()
 //=============================================================================
 //初期化
 //=============================================================================
-HRESULT CMouse::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
+HRESULT Mouse::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
 {
 	DIPROPDWORD dipdw;
 	// 「DirectInputデバイス」オブジェクトの作成
@@ -62,7 +62,7 @@ HRESULT CMouse::Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd)
 	return S_OK;
 }
 
-void CMouse::Uninit(void)
+void Mouse::Uninit(void)
 {
 	delete Self;
 }
@@ -70,7 +70,7 @@ void CMouse::Uninit(void)
 //=============================================================================
 //更新
 //=============================================================================
-void CMouse::Update(void)
+void Mouse::Update(void)
 {
 	DIMOUSESTATE2 CurrentMouseStatus;
 	if(FAILED(InputDevice->GetDeviceState(sizeof(DIMOUSESTATE2),&CurrentMouseStatus)))
@@ -112,56 +112,56 @@ void CMouse::Update(void)
 //=============================================================================
 // マウスのX座標取得
 //=============================================================================
-float CMouse::PosX(void)
+float Mouse::PosX(void)
 {
 	return (float)MouseStatus.lX;
 }
 //=============================================================================
 // マウスのY座標取得
 //=============================================================================
-float CMouse::PosY(void)
+float Mouse::PosY(void)
 {
 	return (float)MouseStatus.lY;
 }
 //=============================================================================
 // マウスのウィールを取得
 //=============================================================================
-int CMouse::Wheel(void)
+int Mouse::Wheel(void)
 {
 	return WheelStatus;
 }
 //=============================================================================
 // マウスのプレス取得
 //=============================================================================
-bool CMouse::Press(int nKey)
+bool Mouse::Press(int nKey)
 {
 	return MouseStatus.rgbButtons[nKey] ? true:false;
 }
 //=============================================================================
 // マウスのトリガー取得
 //=============================================================================
-bool CMouse::Trigger(int nKey)
+bool Mouse::Trigger(int nKey)
 {
 	return TriggerMouse[nKey] ? true:false;
 }
 //=============================================================================
 // マウスのリリース取得
 //=============================================================================
-bool CMouse::Release(int nKey)
+bool Mouse::Release(int nKey)
 {
 	return ReleaseMouse[nKey] ? true:false;
 }
 //=============================================================================
 // マウスの水平方向の移動量取得
 //=============================================================================
-float CMouse::MoveX(void)
+float Mouse::MoveX(void)
 {
 	return _MoveX;
 }
 //=============================================================================
 // マウスの垂直方向の移動量取得
 //=============================================================================
-float CMouse::MoveY(void)
+float Mouse::MoveY(void)
 {
 	return _MoveY;
 }

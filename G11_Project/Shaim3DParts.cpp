@@ -1,7 +1,7 @@
 #include "Shaim3DParts.h"
 #include "Texture.h"
-int Shaim3DParts::_Num = 0;
-Shader3D* Shaim3DParts::_Shader = nullptr;
+int Shaim3DParts::Num_ = 0;
+CShader3D* Shaim3DParts::_Shader = nullptr;
 
 Shaim3DParts::Shaim3DParts()
 {
@@ -12,13 +12,13 @@ Shaim3DParts::Shaim3DParts()
 	uv = D3DXVECTOR4(0,0,1.0f,1.0f);
 	_Color = WHITE(1.0f);
 	Texture = GetTexture(TEX_NONE);
-	_Pass = Shader3D::ADD;
-	_Num++;
+	_Pass = CShader3D::ADD;
+	Num_++;
 }
 
 Shaim3DParts::~Shaim3DParts()
 {
-	_Num--;
+	Num_--;
 }
 
 Shaim3DParts* Shaim3DParts::Create(const D3DXVECTOR3& pos,float size,const D3DXVECTOR3& rot)
@@ -62,15 +62,15 @@ void Shaim3DParts::Update(void)
 
 void Shaim3DParts::Draw(void)
 {
-	_Shader->SetFloatArray(Shader3D::SIZE,_Size,3);
+	_Shader->SetFloatArray(CShader3D::SIZE,_Size,3);
 	D3DXMATRIX matrix;
 
 	D3DXMatrixRotationYawPitchRoll(&matrix,_Rot.y,_Rot.x,_Rot.z);
-	_Shader->SetMatrix(Shader3D::ROT_MTX,matrix);
+	_Shader->SetMatrix(CShader3D::ROT_MTX,matrix);
 	D3DXMatrixTranslation(&matrix,_Pos.x,_Pos.y,_Pos.z);
-	_Shader->SetMatrix(Shader3D::POS_MTX,matrix);
-	_Shader->SetFloatArray(Shader3D::DIFFUSE,_Color,4);
-	_Shader->SetFloatArray(Shader3D::UV,uv,4);
+	_Shader->SetMatrix(CShader3D::POS_MTX,matrix);
+	_Shader->SetFloatArray(CShader3D::DIFFUSE,_Color,4);
+	_Shader->SetFloatArray(CShader3D::UV,uv,4);
 
 	_Shader->SetTexture(Texture);
 	_Shader->Draw(_Pass,D3DPT_TRIANGLESTRIP);

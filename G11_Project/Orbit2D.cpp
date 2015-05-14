@@ -12,10 +12,10 @@
 //=============================================================================
 //グローバル変数
 //=============================================================================
-Orbit2D* Orbit2D::_Top = nullptr;
-Orbit2D* Orbit2D::_Cur = nullptr;
-int Orbit2D::_Num = 0;
-Shader2D* Orbit2D::_Shader = nullptr;
+Orbit2D* Orbit2D::Top_ = nullptr;
+Orbit2D* Orbit2D::Cur_ = nullptr;
+int Orbit2D::Num_ = 0;
+CShader2D* Orbit2D::_Shader = nullptr;
 bool Orbit2D::_PauseFlag = false;
 
 //=============================================================================
@@ -27,9 +27,9 @@ Orbit2D::Orbit2D()
 	Pos = D3DXVECTOR3(0,0,0);
 	VtxBuff = nullptr;
 	DivideNum = 0;
-	_Width = 0;
+	Width_ = 0;
 	_Color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
-	_ReleaseFlag = false;
+	ReleaseFlag_ = false;
 	frame = 0;
 
 	LinkList();
@@ -48,22 +48,22 @@ Orbit2D::~Orbit2D()
 //=============================================================================
 void Orbit2D::LinkList(void)
 {
-	if (_Top != NULL)//二つ目以降の処理
+	if (Top_ != NULL)//二つ目以降の処理
 	{
-		Orbit2D* CPolygon = _Cur;
-		CPolygon->_Next = this;
-		_Prev = CPolygon;
-		_Next = NULL;
-		_Cur = this;
+		Orbit2D* Polygon = Cur_;
+		Polygon->Next_ = this;
+		Prev_ = Polygon;
+		Next_ = NULL;
+		Cur_ = this;
 	}
 	else//最初の一つの時の処理
 	{
-		_Top = this;
-		_Cur = this;
-		_Prev = NULL;
-		_Next = NULL;
+		Top_ = this;
+		Cur_ = this;
+		Prev_ = NULL;
+		Next_ = NULL;
 	}
-	_Num++;
+	Num_++;
 }
 
 //=============================================================================
@@ -71,41 +71,41 @@ void Orbit2D::LinkList(void)
 //=============================================================================
 void Orbit2D::UnlinkList(void)
 {
-	if (_Prev == NULL)//先頭
+	if (Prev_ == NULL)//先頭
 	{
-		if (_Next != NULL)//次がある
+		if (Next_ != NULL)//次がある
 		{
-			_Next->_Prev = NULL;
-			_Top = _Next;
+			Next_->Prev_ = NULL;
+			Top_ = Next_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
-	else if (_Next == NULL)//終端
+	else if (Next_ == NULL)//終端
 	{
-		if (_Prev != NULL)//前がある
+		if (Prev_ != NULL)//前がある
 		{
-			_Prev->_Next = NULL;
-			_Cur = _Prev;
+			Prev_->Next_ = NULL;
+			Cur_ = Prev_;
 		}
 		else//最後の一つだった
 		{
-			_Top = NULL;
-			_Cur = NULL;
+			Top_ = NULL;
+			Cur_ = NULL;
 		}
 	}
 	else//前後にデータがあるとき
 	{
-		_Prev->_Next = _Next;
-		_Next->_Prev = _Prev;
+		Prev_->Next_ = Next_;
+		Next_->Prev_ = Prev_;
 	}
 
-	_Prev = NULL;
-	_Next = NULL;
-	_Num--;
+	Prev_ = NULL;
+	Next_ = NULL;
+	Num_--;
 }
 //=============================================================================
 //作成
@@ -122,7 +122,7 @@ Orbit2D* Orbit2D::Create(const D3DXVECTOR3& pos,int divide,float width,D3DXVECTO
 		return orbit;
 	}
 	orbit->DivideNum = divide;
-	orbit->_Width = width;
+	orbit->Width_ = width;
 	if (parent != nullptr && parent2 != nullptr)
 	{
 		orbit->Parent_Pos2[0] = parent;
@@ -159,7 +159,7 @@ void Orbit2D::Init(const D3DXVECTOR3& pos)
 	for (int cnt = 0;cnt < DivideNum * 2;cnt++)
 	{
 		vtx[cnt].vtx.x = Pos.x;
-		vtx[cnt].vtx.y = (cnt % 2 == 0) ? Pos.y + _Width / 2.0f : Pos.y - _Width / 2.0f;
+		vtx[cnt].vtx.y = (cnt % 2 == 0) ? Pos.y + Width_ / 2.0f : Pos.y - Width_ / 2.0f;
 		vtx[cnt].vtx.z = 0;
 
 		vtx[cnt].tex.x = (1.0f / DivideNum)*(cnt/2);
@@ -176,7 +176,7 @@ void Orbit2D::Update(void)
 	float angle = 0;
 	D3DXVECTOR2 dis = D3DXVECTOR2(0,0);
 
-	if (!_ReleaseFlag)
+	if (!ReleaseFlag_)
 	{
 		if (Parent_Pos != nullptr)
 		{
@@ -214,7 +214,7 @@ void Orbit2D::Update(void)
 	}
 	tailPos = vtx[DivideNum*2-1].vtx;
 	
-	if (!_ReleaseFlag)
+	if (!ReleaseFlag_)
 	{//頭の二点はコピー出来ないので計算し直す
 		if (Parent_Pos2[0] != nullptr && Parent_Pos2[1] != nullptr)
 		{
@@ -226,18 +226,18 @@ void Orbit2D::Update(void)
 		}
 		else
 		{
-			vtx[0].vtx.x = cosf(angle + PI)*_Width / 2.0f + Pos.x;
-			vtx[0].vtx.y = sinf(angle + PI)*_Width / 2.0f + Pos.y;
+			vtx[0].vtx.x = cosf(angle + PI)*Width_ / 2.0f + Pos.x;
+			vtx[0].vtx.y = sinf(angle + PI)*Width_ / 2.0f + Pos.y;
 
-			vtx[1].vtx.x = cosf(angle)*_Width / 2.0f + Pos.x;
-			vtx[1].vtx.y = sinf(angle)*_Width / 2.0f + Pos.y;
+			vtx[1].vtx.x = cosf(angle)*Width_ / 2.0f + Pos.x;
+			vtx[1].vtx.y = sinf(angle)*Width_ / 2.0f + Pos.y;
 		}
 	}
 
 	VtxBuff->Unlock();
 	
 	//開放フラグが立っているなら
-	if (_ReleaseFlag)
+	if (ReleaseFlag_)
 	{
 		CountDown--;
 		if (CountDown < 0)
@@ -261,10 +261,10 @@ void Orbit2D::Draw(void)
 {
 	Window::Instance()->Device()->SetStreamSource(0,VtxBuff,0,sizeof(VERTEX_2D));
 
-	_Shader->SetFloatArray(Shader2D::DIFFUSE,_Color,4);
+	_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
 	_Shader->SetTexture(Texture);
 
-	_Shader->Draw(Shader2D::ADD,D3DPT_TRIANGLESTRIP,(DivideNum - 1) * 2);
+	_Shader->Draw(CShader2D::ADD,D3DPT_TRIANGLESTRIP,(DivideNum - 1) * 2);
 }
 //=============================================================================
 //開放
@@ -279,12 +279,12 @@ void Orbit2D::Release(void)
 //=============================================================================
 void Orbit2D::UpdateAll(void)
 {
-	Orbit2D* orbit = _Top;
+	Orbit2D* orbit = Top_;
 	Orbit2D* next = nullptr;
 
 	while (orbit)
 	{
-		next = orbit->_Next;
+		next = orbit->Next_;
 
 		if (_PauseFlag)
 		{
@@ -306,22 +306,22 @@ void Orbit2D::DrawAll(void)
 	
 	D3DXVECTOR4 uv(0,0,1.0f,1.0f);
 
-	if (_Shader == nullptr){ _Shader = Shader2D::Instance(); }
+	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
 
-	_Shader->SetIdentity(Shader2D::WORLD_MTX);
+	_Shader->SetIdentity(CShader2D::WORLD_MTX);
 	Window::Instance()->SetVtxDecl(VTX_DECL_2D);
 
 	_Shader->DrawBegin();
-	Orbit2D* orbit = _Top;
+	Orbit2D* orbit = Top_;
 	while (orbit)
 	{
 		orbit->Draw();
 
-		orbit = orbit->_Next;
+		orbit = orbit->Next_;
 	}
 	_Shader->DrawEnd();
 
-	CRenderer::SetStream2D();
+	Renderer::SetStream2D();
 
 }
 //=============================================================================
@@ -329,12 +329,12 @@ void Orbit2D::DrawAll(void)
 //=============================================================================
 void Orbit2D::ReleaseAll(void)
 {
-	Orbit2D* orbit = _Top;
+	Orbit2D* orbit = Top_;
 	Orbit2D* next = nullptr;
 
 	while (orbit)
 	{
-		next = orbit->_Next;
+		next = orbit->Next_;
 
 		orbit->Release();
 

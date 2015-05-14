@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <random>
 
 // 角度の正規化(PI～-PI)
 #define REVISE_PI(radian) {if((radian) > PI){(radian) -= (2.0f * PI);}\
@@ -33,6 +34,8 @@ private:
 
 	CMath(const CMath &src);
 
+	static std::mt19937 MTRand;
+
 public:
 
 	CMath();//コンストラクタ
@@ -49,6 +52,9 @@ public:
 	float tTan_rad(float rad);
 	float tAtan2(float index){ return _tatan[(int)(index)]; }
 
+	static float RandomF(float min,float max);
+	static int RandomI(int min,int max);
+
 };
 
 //引数が(PI/180)をかけてある場合はこっち
@@ -62,5 +68,19 @@ float Cos_Deg(int deg);
 float Tan_Deg(int deg);
 float Atan2(float y,float x);
 float t_sqrtF(const float& x);
+
+template <class type>
+type Random(type min,type max)
+{
+	if (typeid(type) == typeid(int))
+	{
+		return CMath::RandomI(min,max);
+	}
+	else
+	{
+		return CMath::RandomF(min,max);
+	}
+}
+
 
 #endif

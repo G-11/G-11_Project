@@ -12,11 +12,11 @@
 //=============================================================================
 // クラス定義
 //=============================================================================
-class CKeyboard
+class Keyboard
 {
 public:
 	
-	~CKeyboard();
+	~Keyboard();
 	HRESULT Init(LPDIRECTINPUT8 DInput,HINSTANCE hInstance,HWND hWnd);
 	static void Uninit(void);
 	void Update(void);
@@ -26,14 +26,14 @@ public:
 	bool Release(int nKey);
 	bool Repeat(int nKey);
 
-	static CKeyboard* Instance(void){ return Self; }
+	static Keyboard* Instance(void){ return Self; }
 
 private:
-	CKeyboard(){}
-	CKeyboard(const CKeyboard& other){};
-	CKeyboard &operator=(const CKeyboard& other){};
+	Keyboard(){}
+	Keyboard(const Keyboard& other){};
+	Keyboard &operator=(const Keyboard& other){};
 
-	static CKeyboard* Self;
+	static Keyboard* Self;
 	BYTE KeyState[256];		//キー入力情報
 	BYTE TriggerKeyState[256];	//トリガーキー入力情報
 	BYTE ReleaseKeyState[256];	//リリースキー入力情報

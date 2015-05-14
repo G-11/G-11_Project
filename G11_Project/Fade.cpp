@@ -3,24 +3,27 @@
 #include "Shader2D.h"
 #include "Camera2D.h"
 
-CFade* CFade::Self = new CFade;
+Fade* Fade::Self = new Fade;
 
-void CFade::Init(void)
+void Fade::Init(void)
 {
-	Color =
-	DestColor =
-	SubColor = D3DXCOLOR(0,0,0,1.0f);
-	Texture = nullptr;
-	_Mode = FADE_NONE;
-	Fading = false;
+	for (int cnt = 0;cnt < 2;cnt++)
+	{
+		Color[cnt] =
+		DestColor[cnt] =
+		SubColor[cnt] = D3DXCOLOR(0,0,0,1.0f);
+		Texture = nullptr;
+		_Mode[cnt] = FADE_NONE;
+		Fading[cnt] = false;
+	}
 	Size = D3DXVECTOR3(SCREEN_WIDTH,SCREEN_HEIGHT,0);
 	uv = D3DXVECTOR4(0,0,1.0f,1.0f);
-	_Shader = Shader2D::Instance();
+	_Shader = CShader2D::Instance();
 	D3DXMatrixIdentity(&WorldMtx);
 
 }
 
-void CFade::Uninit(void)
+void Fade::Uninit(void)
 {
 	if (Texture != nullptr)
 	{
@@ -29,39 +32,42 @@ void CFade::Uninit(void)
 	}
 }
 
-void CFade::Finalize(void)
+void Fade::Finalize(void)
 {
 	delete Self;
 }
-void CFade::Update(void)
+void Fade::Update(void)
 {
-	if (_Mode == FADE_IN)
+	for (int cnt = 0;cnt < 2;cnt++)
 	{
-		if (Color.a <= DestColor.a)
+		if (_Mode[cnt] == FADE_IN)
 		{
-			_Mode = FADE_NONE;
-			Fading = false;
-			SubColor = D3DXCOLOR(0,0,0,0);
+			if (Color[cnt].a <= DestColor[cnt].a)
+			{
+				_Mode[cnt] = FADE_NONE;
+				Fading[cnt] = false;
+				SubColor[cnt] = D3DXCOLOR(0,0,0,0);
+			}
 		}
-	}
-	else if (_Mode != FADE_NONE)
-	{
-		if (Color.a >= DestColor.a)
+		else if (_Mode[cnt] != FADE_NONE)
 		{
-			(_Mode==FADE_INFINIT)? Fading = true :Fading = false;
-			_Mode = FADE_NONE;
-			SubColor = D3DXCOLOR(0,0,0,0);
+			if (Color[cnt].a >= DestColor[cnt].a)
+			{
+				(_Mode[cnt] == FADE_INFINIT) ? Fading[cnt] = true : Fading[cnt] = false;
+				_Mode[cnt] = FADE_NONE;
+				SubColor[cnt] = D3DXCOLOR(0,0,0,0);
+			}
 		}
+		Color[cnt] += SubColor[cnt];
 	}
-	Color += SubColor;
 }
 
-void CFade::Draw(void)
+void Fade::Draw(int layer)
 {
-	if (Fading)
+	if (Fading[layer])
 	{
-		CRenderer::SetStream2D();
-		CCamera2D* camera = CCamera2D::GetCamera(0);
+		Renderer::SetStream2D();
+		Camera2D* camera = Camera2D::GetCamera(0);
 		WorldMtx = _Shader->Identity();
 		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH / 2 + camera->GetPosP().x*0.265f,SCREEN_HEIGHT / 2 - camera->GetPosP().y*0.265f,0);
 		D3DXMATRIX MtxScl,MtxRot,MtxTrans;
@@ -71,37 +77,60 @@ void CFade::Draw(void)
 		D3DXMatrixTranslation(&MtxTrans,pos.x,pos.y,0);
 		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
 
-		_Shader->SetMatrix(Shader2D::WORLD_MTX,WorldMtx);
+		_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
 
-		//_Shader->SetMatrix(Shader2D::POS_MTX,MtxTrans);
-		//_Shader->SetFloatArray(Shader2D::SIZE,Size,3);
+		//_Shader->SetMatrix(CShader2D::POS_MTX,MtxTrans);
+		//_Shader->SetFloatArray(CShader2D::SIZE,Size,3);
 
 		//テクスチャの設定
 		_Shader->SetTexture(Texture);
-		_Shader->SetFloatArray(Shader2D::DIFFUSE,Color,4);
-		_Shader->SetFloatArray(Shader2D::UV,uv,4);
+		_Shader->SetFloatArray(CShader2D::DIFFUSE,Color[layer],4);
+		_Shader->SetFloatArray(CShader2D::UV,uv,4);
 		//ポリゴンを描画
 		_Shader->DrawBegin();
-		_Shader->Draw(Shader2D::NORMAL,D3DPT_TRIANGLESTRIP);
+		_Shader->Draw(CShader2D::NORMAL,D3DPT_TRIANGLESTRIP);
 		_Shader->DrawEnd();
 		
 	}
 }
 
-void CFade::Start(float frame,FADE mode,const D3DXCOLOR &color)
+void Fade::Start(float frame,FADE mode,const D3DXCOLOR &color,int layer)
 {
-	_Mode = mode;
-	DestColor = color;
-	if (mode == FADE_IN)
+	if (layer < 0 || layer > 1)
 	{
-		Color.a = 1.0f;
+		for (int cnt = 0;cnt < 2;cnt++)
+		{
+			_Mode[cnt] = mode;
+			DestColor[cnt] = color;
+			if (mode == FADE_IN)
+			{
+				Color[cnt].a = 1.0f;
+			}
+			else
+			{
+				Color[cnt].a = 0.0f;
+			}
+
+			SubColor[cnt] = (DestColor[cnt] - Color[cnt]);
+			SubColor[cnt] /= frame;
+			Fading[cnt] = true;
+		}
 	}
 	else
 	{
-		Color.a = 0.0f;
+		_Mode[layer] = mode;
+		DestColor[layer] = color;
+		if (mode == FADE_IN)
+		{
+			Color[layer].a = 1.0f;
+		}
+		else
+		{
+			Color[layer].a = 0.0f;
+		}
+
+		SubColor[layer] = (DestColor[layer] - Color[layer]);
+		SubColor[layer] /= frame;
+		Fading[layer] = true;
 	}
-	
-	SubColor = (DestColor-Color);
-	SubColor /= frame;
-	Fading = true;
 }

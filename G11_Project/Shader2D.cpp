@@ -1,8 +1,8 @@
 #include "Shader2D.h"
 
-Shader2D* Shader2D::Self = new Shader2D;
+CShader2D* CShader2D::Self = new CShader2D;
 
-const LPSTR Shader2D::ParamName[Shader2D::STATE_MAX] =
+const LPSTR CShader2D::ParamName[CShader2D::STATE_MAX] =
 {
 	"Projection",
 	"ViewMtx",
@@ -11,7 +11,7 @@ const LPSTR Shader2D::ParamName[Shader2D::STATE_MAX] =
 	"Scl",
 	"Rot",
 	"Pos",
-	"Size",
+	"Offset",
 	"Diffuse",
 	"MaskColor",
 	"UV",
@@ -20,11 +20,11 @@ const LPSTR Shader2D::ParamName[Shader2D::STATE_MAX] =
 	"Mask",
 };
 
-Shader2D::Shader2D()
+CShader2D::CShader2D()
 {
 	Effect = nullptr;
 }
-HRESULT Shader2D::Init(void)
+HRESULT CShader2D::Init(void)
 {
 	LPD3DXBUFFER Error = NULL;
 #ifdef _DEBUG
@@ -62,12 +62,12 @@ HRESULT Shader2D::Init(void)
 	D3DXMATRIX scl;
 	D3DXMatrixScaling(&scl,1.0f,1.0f,1.0f);
 	Effect->SetMatrix(State[SCL_MTX],&scl);
-	Effect->SetTechnique("CPolygon2D");
+	Effect->SetTechnique("Polygon2D");
 
 	return S_OK;
 }
 
-void Shader2D::Uninit(void)
+void CShader2D::Uninit(void)
 {
 	SafeRelease(Effect);
 
@@ -75,7 +75,7 @@ void Shader2D::Uninit(void)
 	delete this;
 }
 
-void Shader2D::Draw(PASS pass,_D3DPRIMITIVETYPE pt,int PrimitiveNum,int offset)
+void CShader2D::Draw(PASS pass,_D3DPRIMITIVETYPE pt,int PrimitiveNum,int offset)
 {
 	Effect->BeginPass(pass);
 	Window::Instance()->Device()->DrawPrimitive(pt,offset,PrimitiveNum);
