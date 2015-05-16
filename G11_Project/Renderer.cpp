@@ -331,14 +331,11 @@ void Renderer::Draw(void)
 		//カメラをセット
 		Camera3D::Set(0);
 		Camera2D::Set(0);
-		/*Render3D();
-		Render2D();*/
+		
 		RenderAffect();
 		
 		//レンダリングモードを適用してスクリーンを描画
 		Device->SetRenderTarget(0,Surface[1]);
-		//Draw3DScreen(Texture[0]);
-		//Device->SetRenderTarget(0,Surface[2]);
 
 		if (ShimmerParticle2D::Num() > 0)
 		{

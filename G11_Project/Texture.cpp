@@ -106,6 +106,12 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Interface/CursorUnderline.png",
 	"data/texture/BackGround.png",
 	"data/texture/Grid.png",
+
+	"data/texture/Char/eatan.png",
+	"data/texture/Item/usagi.png",
+	"data/texture/Item/neko.png",
+	"data/texture/Item/kuma.png",
+
 								};
 LPDIRECT3DTEXTURE9 Texture[TEXTURE_MAX];
 static D3DXIMAGE_INFO ImageInfo[TEXTURE_MAX];

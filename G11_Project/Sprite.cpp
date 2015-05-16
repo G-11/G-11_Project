@@ -257,7 +257,8 @@ void Sprite::DrawAll(int priority)
 	Sprite* Polygon = Top_[priority];
 	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
 	
-	if (priority == LAYER_INTERFACE){ Camera2D::GetCamera(0)->SetNoMove(); }
+	if (priority == LAYER_INTERFACE || priority == LAYER_BACKGROUND){ Camera2D::GetCamera(0)->SetNoMove(); }
+	else { Camera2D::Set(0); }
 	
 	_Shader->DrawBegin();
 	while (Polygon)

@@ -15,6 +15,16 @@
 class Player :public Sprite
 {
 public:
+	typedef enum
+	{
+		PLAYER_STATE_STOP = 0,		//何もしてない
+		PLAYER_STATE_MOVE,		//移動
+		PLAYER_STATE_EAT,		//食べる
+		PLAYER_STATE_GLAD,		//喜ぶ
+		PLAYER_STATE_MAX,
+		PLAYER_SATAE_NON,
+	}PLAYER_STATE;
+
 	static Player* Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3DXCOLOR &color, int priority = 0);
 
 	Player(int priority = 0);
@@ -23,21 +33,12 @@ public:
 	void Update();
 	void Draw();
 
-	void SetState(int State);
-	int State(){ return _State; }
+	void SetState(PLAYER_STATE State);
+	PLAYER_STATE State(){ return _State; }
 
 private:
-	typedef enum
-	{
-		PLAYER_STATE_STOP=0,		//何もしてない
-		PLAYER_STATE_MOVE,		//移動
-		PLAYER_STATE_EAT,		//食べる
-		PLAYER_STATE_GLAD,		//喜ぶ
-		PLAYER_STATE_MAX,
-		PLAYER_SATAE_NON,
-	}PLAYER_STATE;
-
 	PLAYER_STATE _State;
+	PLAYER_STATE OldState;
 
 	float AnimationCount;			//アニメーション用カウンター
 	short AnimationPartition[PLAYER_STATE_MAX];	//アニメーション分割数

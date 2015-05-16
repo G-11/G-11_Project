@@ -158,6 +158,12 @@
     <Filter Include="01.SCENE\03_RESULT">
       <UniqueIdentifier>{e178919c-2ca9-4e75-a68f-1cdf196eb3a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.SYSTEM\Sound">
+      <UniqueIdentifier>{a505819b-13c9-46fa-a055-b8d9cde25e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Item">
+      <UniqueIdentifier>{401606de-3b57-455f-85c1-951d28336049}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -291,6 +297,12 @@
     </ClCompile>
     <ClCompile Include="Result.cpp">
       <Filter>01.SCENE\03_RESULT</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>01.SCENE\02_GAME\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>00.SYSTEM\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,6 +448,12 @@
     </ClInclude>
     <ClInclude Include="Result.h">
       <Filter>01.SCENE\03_RESULT</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>00.SYSTEM\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>01.SCENE\02_GAME\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

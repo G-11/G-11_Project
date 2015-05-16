@@ -31,7 +31,6 @@
 // グローバル変数
 //=============================================================================
 Renderer* CManager::_Render = nullptr;
-CSound*		CManager::Sound = nullptr;
 CDebugProc* CManager::Debug = nullptr;
 #ifdef _DEBUG
 bool ScreenShotMode = false;
@@ -45,7 +44,6 @@ bool GetScreenShotMode(void);
 CManager::CManager()
 {
 	_Render = nullptr;
-	Sound = nullptr;
 }
 //=============================================================================
 // デストラクタ
@@ -81,9 +79,9 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 	CLoading::Instance()->Update();
 	
 	Scene = new Game;
-
+	Sound::Initialize();
 	HANDLE handle = (HANDLE)_beginthreadex(NULL,0,Thread,InitTexture,0,NULL);
-	DWORD code;
+	DWORD code = 0;
 	while (true)
 	{
 		CLoading::Instance()->Update();
@@ -95,6 +93,17 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 		}
 	}
 
+	/*handle = (HANDLE)_beginthreadex(NULL,0,Thread,InitSound,0,NULL);
+	while (true)
+	{
+		CLoading::Instance()->Update();
+		GetExitCodeThread(handle,&code);
+		if (code != STILL_ACTIVE)
+		{
+			CloseHandle(handle);
+			break;
+		}
+	}*/
 	handle = (HANDLE)_beginthreadex(NULL,0,SceneInit,this,0,NULL);
 	while (true)
 	{
@@ -106,6 +115,7 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 			break;
 		}
 	}
+	
 	//CModel::Init();
 	
 	Renderer::SetFade(60,Fade::FADE_IN,D3DXCOLOR(0,0,0,0));
@@ -131,11 +141,13 @@ void CManager::Uninit(void)
 		delete Scene;
 		Scene = nullptr;
 	}
+	Sound::Finalize();
 	ReleaseObject();
 	VC::Instance()->Uninit();
 	Camera3D::ReleaseAll();
 	Camera2D::ReleaseAll();
 	CLight::ReleaseAll();
+	
 	UninitTexture();
 	
 	CLoading::Finalize();
@@ -159,6 +171,7 @@ void CManager::Update(void)
 	VC::Instance()->Update();
 	Camera3D::UpdateAll();
 	Camera2D::UpdateAll();
+	Sound::Instance()->Update();
 	if (Scene!=nullptr)
 	{
 		Scene->Update();
@@ -214,7 +227,7 @@ void CManager::ChangeScene(void)
 		if (Scene != nullptr)
 		{
 			HANDLE handle = (HANDLE)_beginthreadex(NULL,0,SceneInit,this,0,NULL);
-			DWORD code;
+			DWORD code = 0;
 			while (true)
 			{
 				CLoading::Instance()->Update();

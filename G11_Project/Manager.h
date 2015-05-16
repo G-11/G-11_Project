@@ -12,7 +12,6 @@
 // ‘O•ûéŒ¾
 //=============================================================================
 class Renderer;
-class CSound;
 class CPlayer;
 class Scene;
 class CDebugProc;
@@ -46,7 +45,6 @@ public:
 
 private:
 	static Renderer* _Render;
-	static CSound* Sound;
 
 	void Control(void);
 	void ChangeScene(void);

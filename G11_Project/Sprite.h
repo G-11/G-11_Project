@@ -49,7 +49,8 @@ public:
 
 	typedef enum
 	{
-		LAYER_0 = 0,
+		LAYER_BACKGROUND = 0,
+		LAYER_0,
 		LAYER_1,
 		LAYER_2,
 		LAYER_3,
@@ -61,7 +62,7 @@ public:
 
 	Sprite(int priority = 0);
 	virtual ~Sprite(){}
-	static Sprite* Create(const D3DXVECTOR3 &pos,const D3DXVECTOR2 &size,const D3DXCOLOR &color,int priority = 0);
+	static Sprite* Create(const D3DXVECTOR3 &pos,const D3DXVECTOR2 &size,const D3DXCOLOR &color,int priority = LAYER_0);
 
 	static void UpdateAll(void);
 

@@ -32,6 +32,7 @@ void Game::Init(void)
 	sprite = Sprite::Create(D3DXVECTOR3(200.0f,200.0f,0),D3DXVECTOR2(100.0f,300.0f),WHITE(1.0f));
 	sprite->SetRot(DEG2RAD(45.0f));
 	player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 3.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(100.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_3);
+	Sound::Instance()->Play(BGM_TITLE);
 }
 
 void Game::Uninit(void)

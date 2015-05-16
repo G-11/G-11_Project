@@ -85,15 +85,14 @@ void Window::Finalize(void)
 
 void Window::Uninit(void)
 {
-	// ウィンドウクラスの登録を解除
-	UnregisterClass(ClassName,wcex.hInstance);
-
 	// 終了処理
 	if (_Manager != nullptr)
 	{
 		_Manager->Uninit();
 		delete _Manager;
 	}
+	// ウィンドウクラスの登録を解除
+	UnregisterClass(ClassName,wcex.hInstance);
 }
 
 int Window::Run(void)

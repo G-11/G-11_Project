@@ -108,6 +108,7 @@
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Input\VC.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Light2D.cpp" />
     <ClCompile Include="LightParticle.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ScreenRender.cpp" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Input\VC.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Light2D.h" />
     <ClInclude Include="LightParticle.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
