@@ -8,11 +8,15 @@
 
 Sound* Sound::Self = nullptr;
 
+float Sound::MasterVolumeBGM = 1.0f;
+float Sound::MasterVolumeSE = 1.0f;
+
 // 各音素材のパラメータ
 const PARAM Sound::Param[MAX_SOUND] =
 {
 	{ NULL,false }, //空データとして用意
 	{ "data/sound/BGM/星の破線.wav",true },
+	{ "data/sound/SE/Jingle.wav",false },
 
 };
 
@@ -25,7 +29,10 @@ Sound::Sound()
 		SourceVoice[cnt] = nullptr;
 		AudioData[cnt] = nullptr;
 		AudioSize[cnt] = 0;
+		CurrentVolume[cnt] = 1.0f;
 	}
+	MasterVolumeBGM = 1.0f;
+	MasterVolumeSE = 1.0f;
 }
 
 void Sound::Initialize(void)
@@ -267,6 +274,8 @@ HRESULT Sound::Play(SOUND_TYPE label)
 	//Volume[label] = ChangeVolume[label] = 1.0f;
 	// 再生
 	SourceVoice[label]->Start(0);
+	SourceVoice[label]->SetVolume((Param[label].Loop) ? MasterVolumeBGM : MasterVolumeSE);
+	
 
 	return S_OK;
 }
@@ -308,6 +317,8 @@ HRESULT Sound::Pause(SOUND_TYPE label)
 
 			// オーディオバッファの登録
 			SourceVoice[label]->SubmitSourceBuffer(&buffer);
+			SourceVoice[label]->SetVolume(MasterVolumeSE);
+			CurrentVolume[label] = 1.0f;
 		}
 		// 再生
 		SourceVoice[label]->Start(0);
@@ -461,36 +472,32 @@ void Sound::Update(void)
 
 		if (SourceVoice[cnt])
 		{
-			float CVolume = 0;//現在の音量の保存用
-			SourceVoice[cnt]->GetVolume(&CVolume);//現在の音量を保存
-
-			SourceVoice[cnt]->SetVolume(CVolume + ChangeVolume[cnt]);//音量を変更
-
-			if (CVolume + ChangeVolume[cnt] - Volume[cnt] <= 0.01f&&CVolume + ChangeVolume[cnt] - Volume[cnt] >= -0.01f)
+			if (FadeFlag[cnt])
 			{
-				ChangeVolume[cnt] = 0;
+				CurrentVolume[cnt] += ChangeVolume[cnt];
+
+				if (CurrentVolume[cnt] <= 0)
+				{//無音いかになったとき
+					SourceVoice[cnt]->SetVolume(0);//0に調整
+					CurrentVolume[cnt] = 0;
+					ChangeVolume[cnt] = 0;
+				}
+				else if (CurrentVolume[cnt] > 1)
+				{//100%以上になってしまったとき
+					ChangeVolume[cnt] = 0;
+					CurrentVolume[cnt] = 1.0f;
+					SourceVoice[cnt]->SetVolume(1.0f);
+				}//else if
+
+				if (CurrentVolume[cnt] <= 0.01f)
+				{
+					Stop((SOUND_TYPE)cnt);//音を停止
+					ChangeVolume[cnt] = 1;
+					FadeFlag[cnt] = false;//フェードのフラグをOFF
+				}
 			}
-
-			SourceVoice[cnt]->GetVolume(&CVolume);//現在の音量を保存
-
-
-			if (CVolume <= 0)
-			{//無音いかになったとき
-				SourceVoice[cnt]->SetVolume(0);//0に調整
-				ChangeVolume[cnt] = 1;
-			}
-			else if (CVolume + ChangeVolume[cnt] > 1)
-			{//100%以上になってしまったとき
-				ChangeVolume[cnt] = 0;
-				SourceVoice[cnt]->SetVolume(1.0f);
-			}//else if
-
-			if (CVolume <= 0.01f)
-			{
-				Stop((SOUND_TYPE)cnt);//音を停止
-				ChangeVolume[cnt] = 1;
-				FadeFlag[cnt] = false;//フェードのフラグをOFF
-			}
+			float volume = (Param[cnt].Loop) ? CurrentVolume[cnt] * MasterVolumeBGM : CurrentVolume[cnt] * MasterVolumeSE;
+			SourceVoice[cnt]->SetVolume(volume);//音量を変更
 		}
 	}//for
 }
@@ -507,12 +514,14 @@ void Sound::SetVolume(SOUND_TYPE label,float volume)
 	{
 		volume = 0;
 	}
-
+	
 	SourceVoice[label]->GetState(&state);
 
 	if (state.BuffersQueued != 0)
 	{// 再生中
-		SourceVoice[label]->SetVolume(volume);//音量を変更
+		CurrentVolume[label] = volume;
+		float vol = CurrentVolume[label] * (Param[label].Loop)? MasterVolumeBGM:MasterVolumeSE;
+		SourceVoice[label]->SetVolume(vol);//音量を変更
 	}
 }
 //=============================================================================

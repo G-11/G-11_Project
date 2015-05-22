@@ -359,14 +359,16 @@ void Renderer::Draw(void)
 			Screen->RenderWindow(Texture[1]);
 		}
 		Device->SetRenderTarget(0,Surface[3]);
-		Screen->RenderScreen(Texture[2]);
+		Screen->RenderWindow(Texture[2]);
 		Fade->Draw(1);//3D描画のみのフェード描画
 
 		for (int cnt = Sprite::LAYER_3;cnt < Sprite::LAYER_INTERFACE;cnt++)
 		{
 			Sprite::DrawAll(cnt);
 		}
-		//Screen->RenderScreen(Texture2D,2,false);
+		Device->SetRenderTarget(0,Surface[4]);
+
+		Screen->RenderScreen(Texture[3],2);
 		
 		//レンダリングモードを適用しないものはこっちで描く
 		Sprite::DrawAll(Sprite::LAYER_INTERFACE);
@@ -381,7 +383,7 @@ void Renderer::Draw(void)
 
 		SafeRelease(OldSurface);
 
-		Screen->RenderWindow(Texture[3]);
+		Screen->RenderWindow(Texture[4]);
 
 		//CDebugProc::DrawFPSGraph();
 		Device->EndScene();	//描画終了

@@ -5,6 +5,15 @@
 class CScreenRender
 {
 public:
+	enum
+	{
+		MODE_NORMAL = 0,
+		MODE_MEGA,
+		MODE_MONO,
+		MODE_SEPIA,
+		MODE_SKY,
+		MODE_MAX
+	};
 	CScreenRender();
 	~CScreenRender();
 
@@ -13,6 +22,8 @@ public:
 	virtual void Init(void);
 	int Mode(void)const{return ColorMode_;}
 	void SetMode(int mode){ColorMode_ = mode;}
+	void SetMask(LPDIRECT3DTEXTURE9 tex){ Effect->SetTexture("MaskMap",tex); }
+	void SetValue(float value){ Effect->SetFloat("value",value); }
 
 protected:
 

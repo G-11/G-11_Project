@@ -16,12 +16,14 @@
 #include "d3dx9.h"
 #include "dinput.h"
 #include "xaudio2.h"
+#include "Common.h"
 #include "Debug.h"
 #include "MathTable.h"
 #include "Texture.h"
 #include "Input/VC.h"
 #include "Window.h"
 #include "sound.h"
+#include "List.h"
 //*****************************************************************************
 // ƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒŠƒ“ƒN
 //*****************************************************************************
@@ -88,5 +90,6 @@ typedef struct
 	D3DXVECTOR2 tex;
 
 }CUSTOM_VTX;
+
 
 #endif

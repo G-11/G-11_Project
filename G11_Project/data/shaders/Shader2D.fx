@@ -121,6 +121,15 @@ float4 PS_NegaMask(VS_OUT Input) :COLOR
 	return Out;
 }
 //=========================================================
+//
+//=========================================================
+float4 PS_Sky(VS_OUT Input) : COLOR
+{
+	float4 Out = tex2D(diffuseSampler,Input.UV) * Input.color;
+	Out.rgb *= tex2D(maskSampler,float2(MaskUV.x,0.5f));
+	return Out;
+}
+//=========================================================
 //テクニック
 //=========================================================
 technique Polygon2D
@@ -200,5 +209,19 @@ technique Polygon2D
 
 		VertexShader = compile vs_2_0 VS();
 		PixelShader = compile ps_2_0 PS_NegaMask();
+	}
+
+	pass Sky
+	{
+		BlendOp = ADD;
+		DestBlend = INVSRCALPHA;
+		SrcBlend = SRCALPHA;
+		CullMode = CCW;
+		ZEnable = true;
+		ZWriteEnable = true;
+
+		VertexShader = compile vs_2_0 VS();
+		PixelShader = compile ps_2_0 PS_Sky();
+
 	}
 };

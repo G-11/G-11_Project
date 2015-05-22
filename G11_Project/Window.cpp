@@ -48,7 +48,8 @@ int Window::Initialize(HINSTANCE hInstance,int cmdShow)
 	srand((unsigned)time(NULL));
 	_hInstance = hInstance;
 	_CmdShow = cmdShow;
-	_Manager = new CManager;
+	Manager::Initialize();
+	_Manager = Manager::Instance();
 
 	
 
@@ -86,11 +87,8 @@ void Window::Finalize(void)
 void Window::Uninit(void)
 {
 	// 終了処理
-	if (_Manager != nullptr)
-	{
-		_Manager->Uninit();
-		delete _Manager;
-	}
+	Manager::Finalize();
+	_Manager = nullptr;
 	// ウィンドウクラスの登録を解除
 	UnregisterClass(ClassName,wcex.hInstance);
 }
@@ -157,7 +155,7 @@ int Window::Run(void)
 				QueryPerformanceCounter(&start);
 				_Manager->Update();
 				QueryPerformanceCounter(&now);
-				updateTime = (double)(now.QuadPart - start.QuadPart) / (double)sys.QuadPart;
+				updateTime = (double)(now.QuadPart - start.QuadPart)*1000 / (double)sys.QuadPart;
 				
 			
 				// 描画処理

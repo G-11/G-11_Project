@@ -1,4 +1,4 @@
-//
+ï»¿//
 //Title.cpp
 //
 
@@ -8,48 +8,158 @@
 #include "Manager.h"
 #include "Shader2D.h"
 #include "Input/Keyboard.h"
+#include "Manager.h"
+#include "Eatan.h"
+#include "MathTable.h"
+typedef enum
+{
+	TMenu_Start=0,
+	TMenu_Tutorial,
+	TMenu_Collection,
+	TMenu_Config,
+	
+	TMenu_Num
+}TitleMenu;
 
 void Title::Init(void)
 {
 	Window* window = Window::Instance();
+	RotFream = 0;
 
-	//”wŒi
-	Sprite* Bg = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f,0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT), WHITE(1.0f), Sprite::LAYER_4);
-	Bg->SetTexture(GetTexture(TEX_BG));
+	//å„æ˜Žæ»…å‡¦ç†
+	MenuNum = TMenu_Start;
 
-	//“_–Å—pƒƒS
-	Sprite* Logo = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f,0), D3DXVECTOR2(100.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_4);
-	Logo->SetTexture(GetTexture(TEX_EFFECT_GEAR));
-	m_logo = Logo;
-	flahing = 0;
-	add_flahing_num = 0.01f;
+	//èƒŒæ™¯
+	Bg = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f,0), D3DXVECTOR2(SCREEN_WIDTH*1.5f, SCREEN_HEIGHT/1.3f), WHITE(1.0f), Sprite::LAYER_BACKGROUND);
+	Bg->SetTexture(GetTexture(TEX_TITLE_BG));
+	Bg->SetUV(D3DXVECTOR4(0, 0.2f, 1, 0.7f));
+
+	//ã‚­ãƒ£ãƒ©
+	Usagi = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 1.4f, SCREEN_HEIGHT/1.3f, 0), D3DXVECTOR2(100, 100), WHITE(1.0f), Sprite::LAYER_4);
+	Usagi->SetTexture(GetTexture(TEX_ITEM_USAGI));
+
+	Kuma = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH/3.5f, SCREEN_HEIGHT/1.5f, 0), D3DXVECTOR2(100, 100), WHITE(1.0f), Sprite::LAYER_4);
+	Kuma->SetTexture(GetTexture(TEX_ITEM_KUMA));
+
+	Neko = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH/1.2f, SCREEN_HEIGHT/1.6f, 0), D3DXVECTOR2(100, 100), WHITE(1.0f), Sprite::LAYER_4);
+	Neko->SetTexture(GetTexture(TEX_ITEM_NEKO));
+
+	TEatan = Eatan::Create(D3DXVECTOR3(SCREEN_WIDTH / 6.5f, SCREEN_HEIGHT / 2.3f, 0), D3DXVECTOR2(SCREEN_WIDTH / 5.0f, SCREEN_HEIGHT / 2.4f), WHITE(1.0f), Sprite::LAYER_3);
+	
+	//ãƒ­ã‚´
+	Logo = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.5f, 0), D3DXVECTOR2(SCREEN_WIDTH/3.0f, SCREEN_HEIGHT/2.0f), WHITE(1.0f), Sprite::LAYER_4);
+	Logo->SetTexture(GetTexture(TEX_GELFLOGO));
+
+	//ã‚¹ã‚¿ãƒ¼ãƒˆ
+	Start = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(250.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_INTERFACE);
+	Start->SetTexture(GetTexture(TEX_INTERFACE_PUSH));
+	
+	Tutorial = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.5f, SCREEN_HEIGHT / 1.4f, 0), D3DXVECTOR2(250.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_INTERFACE);
+	Tutorial->SetTexture(GetTexture(TEX_INTERFACE_PUSH));
+
+	Collection = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 1.4f, 0), D3DXVECTOR2(250.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_INTERFACE);
+	Collection->SetTexture(GetTexture(TEX_INTERFACE_PUSH));
+
+	Config = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 1.2f, SCREEN_HEIGHT / 1.4f, 0), D3DXVECTOR2(250.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_INTERFACE);
+	Config->SetTexture(GetTexture(TEX_INTERFACE_PUSH));
+
+	Flahing = 0;
+	AddFlashingNum = 0.01f;
 
 }
 
 void Title::Uninit(void)
 {
-	CManager::ReleaseObject();
+	Manager::ReleaseObject();
 }
 
 void Title::Update(void)
-{
-	//ƒL[‘€ì—piŠm”FƒeƒXƒgj
-	Keyboard *key = Keyboard::Instance();
-	
-	/*“_–Åˆ—i‰¼j*/
-	if (flahing > 1.0f || flahing < 0)
+{	
+	/*ç‚¹æ»…å‡¦ç†ï¼ˆä»®ï¼‰*/
+	if (Flahing > 1.0f || Flahing < 0)
 	{
-		add_flahing_num = -add_flahing_num;
+		AddFlashingNum = -AddFlashingNum;
+		TEatan->SetState(static_cast<Eatan::EATAN_STATE>(CMath::RandomI((int)TEatan->EATAN_STATE_MOVE,(int)TEatan->EATAN_STATE_MAX)));
 	}
-	flahing += add_flahing_num;
-	m_logo->SetColor(WHITE(flahing));
-	//‚±‚±‚Ü‚Å
+	Flahing += AddFlashingNum;
 
-	//ƒL[‘€ì—piŠm”FƒeƒXƒgF’†g‚È‚µj
-	if (key->Trigger(DIK_L))
+
+
+
+#if _DEBUG
+
+	//å„ç¨®æ˜Žæ»…å‡¦ç†
+	switch (MenuNum)
 	{
-	
+	case TMenu_Start:
+		Start->SetColor(WHITE(Flahing));
+		break;
+	case TMenu_Tutorial:
+		Tutorial->SetColor(WHITE(Flahing));
+		break;
+	case TMenu_Collection:
+		Collection->SetColor(WHITE(Flahing));
+		break;
+	case TMenu_Config:
+		Config->SetColor(WHITE(Flahing));
+		break;
+	default:
+		break;
 	}
+
+	
+
+#endif
+	//ã“ã“ã¾ã§
+
+
+	/*ã‚­ãƒ£ãƒ©ã‚†ã‚Œ*/
+	//å‹•ããƒ†ã‚¹ãƒˆ
+	Usagi->SetRot(cosf(DEG2RAD(RotFream))*PI / 10.0f);
+	Kuma->SetRot(cosf(DEG2RAD(RotFream))*PI / 10.0f);
+	Neko->SetRot(cosf(DEG2RAD(RotFream))*PI / 10.0f);
+	RotFream += 3.0f;
+	
+	//åˆ‡ã‚Šæ›¿ãˆ
+	if (VC::Instance()->Trigger(COMMAND_OK) && Fade::Instance()->Mode() == Fade::FADE_NONE)
+	{
+		Manager::Instance()->SetScene(Manager::SCENE_GAME);
+	}
+
+	/**/
+#if _DEBUG
+	//é¸æŠžåˆ‡ã‚Šæ›¿ãˆ
+
+	if (VC::Instance()->keyboard()->Trigger(DIK_0) && Fade::Instance()->Mode() == Fade::FADE_NONE)
+	{
+		Manager::Instance()->SetScene(Manager::SCENE_OPTION);
+	}
+
+	int OldMenuNum = MenuNum;
+	if (VC::Instance()->Trigger(COMMAND_DOWN))
+	{
+		MenuNum = (MenuNum + 1) % TMenu_Num;
+	}
+	if (VC::Instance()->Trigger(COMMAND_UP))
+	{
+		MenuNum = (MenuNum + (TMenu_Num-1)) % TMenu_Num;
+	}
+	//æ¡ä»¶ãƒã‚§ãƒƒã‚¯
+	if (OldMenuNum != MenuNum)
+	{
+		Start->SetColor(WHITE(1));
+		Tutorial->SetColor(WHITE(1));
+		Collection->SetColor(WHITE(1));
+		Config->SetColor(WHITE(1));
+		Flahing = 0;
+	}
+	//èƒŒæ™¯ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ†ã‚¹ãƒˆ
+	test_num += 0.0001f;
+	Bg->SetUV(D3DXVECTOR4(test_num, 0.2f, 1, 0.7f));
+	
+#endif
+
+
 }
 
 void Title::Draw(void)

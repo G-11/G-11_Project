@@ -8,11 +8,14 @@
 //================================================================================
 #include "Item.h"
 #include "Texture.h"
+#include "Collision.h"
 
 //================================================================================
 //	静的メンバ
 //================================================================================
-std::list<Item*> Item::ItemList;
+List<Item> Item::_ItemList;
+
+const D3DXVECTOR2 DEFAULT_ITEM_SIZE = D3DXVECTOR2(84.0f,84.0f);//アイテムのデフォルトサイズ(いーたんが128x128の時)
 
 //================================================================================
 //	アイテムテーブル
@@ -43,13 +46,10 @@ Item* Item::Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3DXCO
 //================================================================================
 //	コンストラクタ
 //================================================================================
-Item::Item(int priority)
+Item::Item(int priority) :Sprite(priority)
 {
-	if (!ItemList.empty())
-	{
-		ItemList.clear();
-	}
-	ItemList.push_back(this);
+	SelfIterator = nullptr;
+	SelfIterator = _ItemList.Add(this);
 }
 
 //================================================================================
@@ -57,17 +57,8 @@ Item::Item(int priority)
 //================================================================================
 Item::~Item()
 {
-	for (auto itr = ItemList.begin(); itr != ItemList.end();)
-	{
-		if (*itr == this)
-		{
-			itr = ItemList.erase(itr);
-		}
-		else
-		{
-			++itr;
-		}
-	}
+	_ItemList.Delete(SelfIterator);
+	SelfIterator = nullptr;
 }
 
 //================================================================================
@@ -75,13 +66,27 @@ Item::~Item()
 //================================================================================
 void Item::Update()
 {
-
+	Sprite::Update();
 }
 
 //================================================================================
-//	描画処理
+//	当たり判定
+//	アイテムにあたっていたら当たっているアイテムのポインターを返す
+//	あたっていなかったらヌルポインターを返す
 //================================================================================
-void Item::Draw()
+Item* Item::HitCheck(const D3DXVECTOR3& Pos, const D3DXVECTOR3& Size)
 {
+	VALUE<Item>* itr = _ItemList.Begin();
 
+	while (itr)
+	{
+		if (Collision::Circle(Pos, Size.x*0.5f, itr->Data->_Pos, itr->Data->_Size.x*0.5f))
+		{
+			return itr->Data;
+		}
+
+		itr = itr->_Next;
+	}
+
+	return nullptr;
 }

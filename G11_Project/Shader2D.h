@@ -39,7 +39,8 @@ public:
 		ALPHA_MASK,
 		COLOR_MASK,
 		NEGA_MASK,
-		TEX_MAX
+		SKY,
+		PASS_MAX
 	}PASS;
 
 	HRESULT Init(void);
@@ -74,7 +75,7 @@ private:
 
 	static CShader2D* Self;
 	D3DXHANDLE State[STATE_MAX];
-	D3DXHANDLE Technique[TEX_MAX];
+	D3DXHANDLE Technique[PASS_MAX];
 	LPD3DXEFFECT Effect;
 	UINT Pass;
 	D3DXMATRIX MtxIdentity;

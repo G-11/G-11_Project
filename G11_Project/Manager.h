@@ -20,30 +20,39 @@ typedef void (*Function)(void);
 //=============================================================================
 // ƒNƒ‰ƒX’è‹`
 //=============================================================================
-class CManager
+class Manager
 {
 public:
 
 	typedef enum
 	{
 		SCENE_TITLE = 0,
+		SCENE_OPTION,
 		SCENE_GAME,
 		SCENE_RESULT,
 		SCENE_MAX
 	}SCENE;
 
-	CManager();
-	virtual ~CManager();
+	static void Initialize(void);
+	static void Finalize(void);
 	HRESULT Init(HINSTANCE hInstance,HWND hWnd,BOOL bWinfow);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 	static Renderer* GetRenderer(void){return _Render;}
-	void SetScene(SCENE scene);
+	void SetScene(SCENE next);
 	static void ReleaseObject(void);
 	static void SetPause(bool flag);
 
+	static Manager* Instance(void){ return Self; }
+
 private:
+
+	Manager();
+	Manager(const Manager& other){}
+	~Manager(){};
+	Manager &operator= (const Manager& other){};
+
 	static Renderer* _Render;
 
 	void Control(void);
@@ -56,6 +65,7 @@ private:
 	bool SceneChangeFlag;
 
 	static CDebugProc* Debug;
+	static Manager* Self;
 
 	static unsigned __stdcall Thread(void*);
 	static unsigned __stdcall SceneInit(void*);

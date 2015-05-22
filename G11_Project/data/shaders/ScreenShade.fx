@@ -1,9 +1,24 @@
 
 float4x4 Projection2D;
+float value;//汎用変数
+
 texture DiffuseMap;
+texture MaskMap;
 //テクスチャサンプラー
 sampler diffuseSampler = sampler_state {
 	Texture = <DiffuseMap>;
+
+	MinFilter = ANISOTROPIC;
+	MagFilter = LINEAR;
+	MipFilter = LINEAR;
+	MaxAnisotropy = 16;
+
+	AddressU = WRAP;
+	AddressV = WRAP;
+};
+
+sampler maskSampler = sampler_state {
+	Texture = <MaskMap>;
 
 	MinFilter = ANISOTROPIC;
 	MagFilter = LINEAR;
@@ -77,6 +92,12 @@ float4 PS_Sepia(Vs_out VInput) : COLOR
 	return color;
 }
 
+float4 PS_Sky(Vs_out VInput) : COLOR
+{
+	float4 OutColor = tex2D(diffuseSampler,VInput.uv)*VInput.color;
+	OutColor.rgb *= tex2D(maskSampler,float2(value,0.5f)).rgb;
+	return OutColor;
+}
 technique Screen
 {
 	pass Normal
@@ -129,5 +150,18 @@ technique Screen
 
 		VertexShader = compile vs_2_0 VS();
 		PixelShader = compile ps_2_0 PS_Sepia();
+	}
+
+	pass Sky
+	{
+		BlendOp = ADD;
+		DestBlend = INVSRCALPHA;
+		SrcBlend = SRCALPHA;
+		CullMode = CCW;
+		ZEnable = true;
+		ZWriteEnable = true;
+
+		VertexShader = compile vs_2_0 VS();
+		PixelShader = compile ps_2_0 PS_Sky();
 	}
 };

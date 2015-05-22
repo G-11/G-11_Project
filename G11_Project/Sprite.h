@@ -128,9 +128,17 @@ public:
 	
 	void SetUV(int UNum = 0,int VNum = 0,int DivideUNum = 1,int DivideVNum = 1);
 	void SetUV(const D3DXVECTOR4& UV){ uv = UV; }
-	
+	void SetUVX(float x){ uv.x = x; }
+	void SetUVY(float y){ uv.y = y; }
+	void SetUVWidth(float width){ uv.z = width; }
+	void SetUVHeight(float height){ uv.w = height; }
+
 	void SetMaskUV(int UNum = 0,int VNum = 0,int DivideUNum = 1,int DivideVNum = 1);
 	void SetMaskUV(const D3DXVECTOR4& UV){ MaskUV = UV; }
+	void SetMaskUVX(float x){ MaskUV.x = x; }
+	void SetMaskUVY(float y){ MaskUV.y = y; }
+	void SetMaskUVWidth(float width){ MaskUV.z = width; }
+	void SetMaskUVHeight(float height){ MaskUV.w = height; }
 	
 	void SetNext(Sprite* next){Next_ = next;}
 	void SetPrev(Sprite* prev){ Prev_ = prev; }
@@ -158,13 +166,23 @@ public:
 	void AddGreen	(float green){ _Color.g += green; }
 	void AddBlue	(float blue){ _Color.b += blue; }
 	void AddAlpha	(float alpha){ _Color.a += alpha; }
-	
+
+	void AddUV(const D3DXVECTOR4& UV){ uv += uv; }
+	void AddUVX(float x){ uv.x += x; }
+	void AddUVY(float y){ uv.y += y; }
+	void AddUVWidth(float width){ uv.z += width; }
+	void AddUVHeight(float height){ uv.w += height; }
+
 	void AddMaskColor	(const D3DXCOLOR& color){_MaskColor += color;}	
 	void AddMaskRed		(float red){ _MaskColor.r += red; }
 	void AddMaskGreen	(float green){ _MaskColor.g += green; }
 	void AddMaskBlue	(float blue){ _MaskColor.b += blue; }
 	void AddMaskAlpha	(float alpha){ _MaskColor.a += alpha; }
 
+	void AddMaskUVX(float x){ MaskUV.x += x; }
+	void AddMaskUVY(float y){ MaskUV.y += y; }
+	void AddMaskUVWidth(float width){ MaskUV.z += width; }
+	void AddMaskUVHeight(float height){ MaskUV.w += height; }
 	//---------------------------
 
 private:

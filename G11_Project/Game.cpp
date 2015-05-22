@@ -2,56 +2,109 @@
 #include "Sprite.h"
 #include "Gauge.h"
 #include "Camera2D.h"
+#include "Light2D.h"
 #include "Renderer.h"
 #include "Manager.h"
 #include "Pause.h"
 #include "Shader2D.h"
 
 #include "Player.h"
+#include "Item.h"
+#include "Interface.h"
 
-#include "Input/Keyboard.h"
-#include "Gimmick.h"
+#include "Wall.h"
+#include "ScreenRender.h"
+
 #include "StartDevice.h"
-#include "Collision.h"
 
 #ifdef _DEBUG
+#include "Input/Keyboard.h"
 
 bool Game::Hit = false;
 
 #endif
 
-Camera2D* camera=nullptr;
 bool Game::_PauseFlag = false;
-static StartDevice* device = nullptr;
-Player* player = nullptr;
-Sprite* sprite = nullptr;
-D3DXVECTOR3 player_OldPos(0,0,0);
+
+Sprite	*Game::_field = nullptr;
+Wall	*Game::_cilling = nullptr;
+Wall	*Game::_floor = nullptr;
+
+Player	*Game::_player = nullptr;
+Item	*Game::_item = nullptr;
+
+float time = 0;
 void Game::Init(void)
 {
 	Window* window = Window::Instance();
-	sprite = Sprite::Create(D3DXVECTOR3(200.0f,200.0f,0),D3DXVECTOR2(100.0f,300.0f),WHITE(1.0f));
-	sprite->SetRot(DEG2RAD(45.0f));
-	player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 3.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(100.0f, 100.0f), WHITE(1.0f), Sprite::LAYER_3);
 	Sound::Instance()->Play(BGM_TITLE);
+	// 背景
+	_field = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT*1.2f), WHITE(1.0f), Sprite::LAYER_BACKGROUND);
+	_field->SetTexture(GetTexture(TEX_FIELD1_BG));
+
+	// 天井
+	_cilling = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH / 2.0f, 45.0f), D3DXVECTOR2(SCREEN_WIDTH, 150.0f), TEX_CILLING1_BG, Sprite::LAYER_BACKGROUND);
+
+	// 床
+	_floor = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 45.0f), D3DXVECTOR2(SCREEN_WIDTH, 150.0f), TEX_FLOOR1_BG, Sprite::LAYER_BACKGROUND);
+
+	// プレイヤー
+	_player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(128.0f, 128.0f), WHITE(1.0f), Sprite::LAYER_3);
+
+	//// アイテム
+	_item = Item::Create(D3DXVECTOR3(SCREEN_WIDTH / 4.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), 1, Sprite::LAYER_2);
+
+	_field->SetMask(GetTexture(TEX_SKY_MAP));
+	_field->SetPass(CShader2D::SKY);
+
+	StartDevice* start_device;
+	start_device = StartDevice::Create(D3DXVECTOR2(SCREEN_WIDTH*0.75f, SCREEN_HEIGHT*0.5f), D3DXVECTOR2(30.0f, 30.0f));
+	start_device->_Player = _player;
+
+	_Interface = new Interface;
+	_Interface->Init(600,100);
 }
 
 void Game::Uninit(void)
 {
-	CManager::ReleaseObject();
+	SafeDelete(_Interface);
+	Renderer::SetRenderMode(CScreenRender::MODE_NORMAL);
+	Sound::Instance()->Fade(100);
+	Manager::ReleaseObject();
 }
 
 void Game::Update(void)
 {
-	D3DXVECTOR3 reflectVec(0,0,0);
-	if (Collision::CircleQuad(player->Pos(),10.0f,sprite->Quad(),4,player->Speed(),&reflectVec))
-	{
-		D3DXVECTOR3 speed = player->Speed();
-		float angle = atan2(reflectVec.y,reflectVec.x);
-		player->SetSpeed(D3DXVec3Length(&speed),angle);
-		player->SetPos(player_OldPos);
-	}
-	player_OldPos = player->Pos();
 	
+	_Interface->Update();
+	_field->SetMaskUVX(_Interface->Percent());
+	if (Pause != nullptr)
+	{
+		Pause->Update();
+	}
+
+#ifdef _DEBUG
+	CDebugProc::Print("0 リザルトへ遷移\n");
+	if (VC::Instance()->keyboard()->Trigger(DIK_0) &&
+		Fade::Instance()->Mode() == Fade::FADE_NONE)
+	{
+		Manager::Instance()->SetScene(Manager::SCENE_RESULT);
+	}
+
+	//アイテム生成
+	if (VC::Instance()->keyboard()->Trigger(DIK_F1))
+	{
+		Item::Create(D3DXVECTOR3(Random<float>(20.0f, (float)SCREEN_WIDTH-20.0f), Random<float>(20.0f, (float)SCREEN_HEIGHT-20.0f), 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), Random<int>(1, 3), Sprite::LAYER_2);
+	}
+
+	//ゲージリセット
+	if (VC::Instance()->keyboard()->Trigger(DIK_F2))
+	{
+		Interface::AddScore(-Interface::Score());
+	}
+
+#endif
+
 }
 
 void Game::Draw(void)

@@ -37,6 +37,8 @@ public:
 	static void SetStream3D(void);
 	static void SetRenderMode(short num);
 	Fade* GetFade(void){return Fade;}
+	static CScreenRender* ScreenRender(void){ return Screen; }
+
 private:
 #ifdef _DEBUG
 	void DrawFPS(void);

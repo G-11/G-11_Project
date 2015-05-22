@@ -14,7 +14,7 @@ typedef enum
 	VD_MAX
 }VTX_DECL;
 
-class CManager;
+class Manager;
 
 class Window
 {
@@ -37,7 +37,7 @@ public:
 	HINSTANCE hInstance(void)const{ return _hInstance; }
 	int CmdShow(void)const{ return _CmdShow; }
 	D3DXVECTOR2 WindowSize(void)const{ return Size; }
-	CManager* Manager(void){return _Manager; }
+	Manager* manager(void){return _Manager; }
 	static Window* Instance(void){ return Self; }
 
 private:
@@ -58,7 +58,7 @@ private:
 	D3DXVECTOR2 Size;
 	bool FullScreen;
 	UINT FPSLimit;
-	CManager* _Manager;
+	Manager* _Manager;
 	WNDCLASSEX  wcex;
 	LPDIRECT3DVERTEXDECLARATION9 VertexDeclaration[VD_MAX];
 	LPDIRECT3DDEVICE9 _Device;

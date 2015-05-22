@@ -6,6 +6,8 @@
 #include "main.h"
 #include "Scene.h"
 
+class Sprite;
+
 class Result :public Scene
 {
 public:
@@ -14,6 +16,11 @@ public:
 	void Update();
 	void Draw();
 
+private:
+	Sprite *BG;
+	Sprite *Push;//
+
+	float flahing, add_flahing_num;//ƒ¿’l,‰Á‚¦‚é’l 
 
 };
 

@@ -25,13 +25,16 @@
 
 #include "Scene.h"
 #include "Title.h"
+#include "Option.h"
 #include "Game.h"
 #include "Result.h"
 //=============================================================================
 // グローバル変数
 //=============================================================================
-Renderer* CManager::_Render = nullptr;
-CDebugProc* CManager::Debug = nullptr;
+Renderer* Manager::_Render = nullptr;
+CDebugProc* Manager::Debug = nullptr;
+Manager* Manager::Self = nullptr;
+
 #ifdef _DEBUG
 bool ScreenShotMode = false;
 
@@ -41,21 +44,19 @@ bool GetScreenShotMode(void);
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CManager::CManager()
+Manager::Manager()
 {
 	_Render = nullptr;
 }
 //=============================================================================
-// デストラクタ
-//=============================================================================
-CManager::~CManager()
-{
-
-}
-//=============================================================================
 // 初期化
 //=============================================================================
-HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
+void Manager::Initialize(void)
+{
+	Self = new Manager;
+}
+
+HRESULT Manager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 {
 	_Render = new Renderer;
 	if (_Render == nullptr)
@@ -78,7 +79,8 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 
 	CLoading::Instance()->Update();
 	
-	Scene = new Game;
+	Scene = new Title;//最初のシーンを生成
+
 	Sound::Initialize();
 	HANDLE handle = (HANDLE)_beginthreadex(NULL,0,Thread,InitTexture,0,NULL);
 	DWORD code = 0;
@@ -92,18 +94,6 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 			break;
 		}
 	}
-
-	/*handle = (HANDLE)_beginthreadex(NULL,0,Thread,InitSound,0,NULL);
-	while (true)
-	{
-		CLoading::Instance()->Update();
-		GetExitCodeThread(handle,&code);
-		if (code != STILL_ACTIVE)
-		{
-			CloseHandle(handle);
-			break;
-		}
-	}*/
 	handle = (HANDLE)_beginthreadex(NULL,0,SceneInit,this,0,NULL);
 	while (true)
 	{
@@ -116,8 +106,6 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 		}
 	}
 	
-	//CModel::Init();
-	
 	Renderer::SetFade(60,Fade::FADE_IN,D3DXCOLOR(0,0,0,0));
 	Current = Next = SCENE_GAME;
 	SceneChangeFlag = false;
@@ -127,7 +115,16 @@ HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd,BOOL bWindow)
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CManager::Uninit(void)
+void Manager::Finalize(void)
+{
+	if (Self != nullptr)
+	{
+		Self->Uninit();
+		delete Self;
+		Self = nullptr;
+	}
+}
+void Manager::Uninit(void)
 {
 	if (Debug != nullptr)
 	{
@@ -166,7 +163,7 @@ void CManager::Uninit(void)
 //=============================================================================
 // 更新処理
 //=============================================================================
-void CManager::Update(void)
+void Manager::Update(void)
 {
 	VC::Instance()->Update();
 	Camera3D::UpdateAll();
@@ -186,18 +183,18 @@ void CManager::Update(void)
 //=============================================================================
 // 描画処理
 //=============================================================================
-void CManager::Draw(void)
+void Manager::Draw(void)
 {
 	_Render->Draw();
 
 }
 
-void CManager::Control(void)
+void Manager::Control(void)
 {
 
 }
 
-void CManager::ChangeScene(void)
+void Manager::ChangeScene(void)
 {
 	Fade* Fade = Fade::Instance();
 	if (SceneChangeFlag && Fade->Active()==false)
@@ -213,6 +210,9 @@ void CManager::ChangeScene(void)
 		{
 		case SCENE_TITLE:
 			Scene = new Title;
+			break;
+		case SCENE_OPTION:
+			Scene = new Option;
 			break;
 		case SCENE_GAME:
 			Scene = new Game;
@@ -244,15 +244,15 @@ void CManager::ChangeScene(void)
 	}
 }
 
-void CManager::SetScene(SCENE scene)
+void Manager::SetScene(SCENE next)
 {
 
-	Next = scene;
+	Next = next;
 	Fade::Instance()->Start(30,Fade::FADE_OUT,BLACK(1.0f));
 	SceneChangeFlag = true;
 
 }
-void CManager::ReleaseObject(void)
+void Manager::ReleaseObject(void)
 {
 	String::ReleaseAll();
 	Sprite::ReleaseAll();
@@ -261,7 +261,7 @@ void CManager::ReleaseObject(void)
 	LightParticle::ReleaseAll();
 }
 
-unsigned __stdcall CManager::Thread(void* func)
+unsigned __stdcall Manager::Thread(void* func)
 {
 	Function function = (Function)func;
 	function();
@@ -271,17 +271,16 @@ unsigned __stdcall CManager::Thread(void* func)
 	return 0;
 }
 
-unsigned __stdcall CManager::SceneInit(void* func)
+unsigned __stdcall Manager::SceneInit(void* func)
 {
-	CManager* manager = (CManager*)func;
+	Manager* manager = (Manager*)func;
 	manager->Scene->Init();
-
 	_endthreadex(0);
 
 	return 0;
 }
 
-void CManager::SetPause(bool flag)
+void Manager::SetPause(bool flag)
 {
 	Sprite::SetPause(flag);
 	Shaim3DEffect::SetPause(flag);

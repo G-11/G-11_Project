@@ -1,3 +1,4 @@
+#pragma once
 #ifndef _BLURFILTER_H_
 #define _BLURFILTER_H_
 

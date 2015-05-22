@@ -145,7 +145,6 @@ void Shaim3DEffect::UpdateAll(void)
 
 void Shaim3DEffect::DrawAll(void)
 {
-	CDebugProc::Print("PartsNum:%d\nEffectNum:%d\n",Shaim3DParts::Num(),Num_);
 	Shaim3DEffect* effect = Top_;
 	Shaim3DEffect* next = nullptr;
 	LPDIRECT3DSURFACE9 OldSurface;

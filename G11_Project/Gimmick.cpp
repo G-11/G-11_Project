@@ -1,17 +1,23 @@
 #include "Gimmick.h"
 #include "StartDevice.h"
 
+List<Gimmick> Gimmick::_GimmickList;
+
 Gimmick::Gimmick(int priority) :Sprite(priority)
 {
 	TrigAction = nullptr;
 	_Active = false;
 	_Frame = 0;
-	List.clear();
+	DeviceList.clear();
+	SelfIterator = nullptr;
+	SelfIterator = _GimmickList.Add(this);
 }
 
 Gimmick::~Gimmick()
 {
-	List.clear();
+	DeviceList.clear();
+	_GimmickList.Delete(SelfIterator);
+	SelfIterator = nullptr;
 }
 
 Gimmick* Gimmick::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,int priority)
@@ -40,10 +46,10 @@ void Gimmick::Update(void)
 void Gimmick::CheckDevice(void)
 {
 	bool active = true;
-	int num = List.size();
+	int num = DeviceList.size();
 	for (int cnt=0;cnt<num;cnt++)
 	{
-		if (!List[cnt]->Active())
+		if (!DeviceList[cnt]->Active())
 		{
 			active = false;
 			break;
@@ -54,5 +60,5 @@ void Gimmick::CheckDevice(void)
 
 void Gimmick::AddStartDevice(StartDevice* device)
 {
-	List.push_back(device);
+	DeviceList.push_back(device);
 }

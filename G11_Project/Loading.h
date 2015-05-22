@@ -34,16 +34,20 @@ private:
 
 	void CastMatrix(void);
 
+	static const int PolygonNum = 3;
 	static CLoading* Self;
 
 	LPDIRECT3DTEXTURE9 Texture;
 	static CScreenRender* ScreenRender;
 	Mutex* mutex;
+	float frame;
 
-	D3DXMATRIX WorldMatrix[2];
-	D3DXVECTOR3 _Pos[2];
-	float _Rot[2];
-	D3DXVECTOR3 _Size[2];
+	D3DXMATRIX WorldMatrix[PolygonNum];
+	D3DXVECTOR3 _Pos[PolygonNum];
+	float _Rot[PolygonNum];
+	D3DXVECTOR3 _Size[PolygonNum];
+	D3DXVECTOR4 uv[PolygonNum];
+	LARGE_INTEGER sys,start,now;
 };
 
 #endif

@@ -119,10 +119,10 @@ void GPDInput::Update(void)
 
 		}
 
-		_StickX[LEFT] = (PadState.lX <= 8 && PadState.lX >= -8)? 0 :PadState.lX / 1000.0f;
-		_StickY[LEFT] = (PadState.lY <= 8 && PadState.lY >= -8) ? 0 : PadState.lY / 1000.0f;
-		_StickX[RIGHT] = (PadState.lZ <= 8 && PadState.lZ >= -8) ? 0 : PadState.lZ / 1000.0f;
-		_StickY[RIGHT] = (PadState.lRz <= 8 && PadState.lRz >= -8) ? 0 : PadState.lRz / 1000.0f;
+		_StickX[LEFT] =		PadState.lX / 1000.0f;
+		_StickY[LEFT] =		PadState.lY / 1000.0f;
+		_StickX[RIGHT] =	PadState.lZ / 1000.0f;
+		_StickY[RIGHT] =	PadState.lRz / 1000.0f;
 		
 	}
 	else
@@ -164,6 +164,17 @@ BOOL CALLBACK GPDInput::EnumAxesCallback(const DIDEVICEOBJECTINSTANCE *instance,
 	diprg.lMin = 0 - 1000;
 	diprg.lMax = 0 + 1000;
 	hr = InputDevice->SetProperty(DIPROP_RANGE,&diprg.diph);
+
+	if (FAILED(hr)) return DIENUM_STOP;
+
+	//LRスティックのデッドゾーンの設定
+	DIPROPDWORD diprop;
+	diprop.diph.dwSize = sizeof(diprop);
+	diprop.diph.dwHeaderSize = sizeof(diprop.diph);
+	diprop.diph.dwHow = DIPH_BYID;
+	diprop.diph.dwObj = instance->dwType;
+	diprop.dwData = 2000;//ニュートラルポジションから前後20%は無視する
+	hr = InputDevice->SetProperty(DIPROP_DEADZONE,&diprop.diph);
 
 	if (FAILED(hr)) return DIENUM_STOP;
 

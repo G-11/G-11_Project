@@ -19,12 +19,18 @@ public:
 	void AddStartDevice(StartDevice* device);
 	int Frame(void){ return _Frame; }
 
+	static List<Gimmick>& GimmickList(void){ return _GimmickList; }
+	static void InitList(void){ _GimmickList.Clear(); }
+
 protected:
 	bool _Active;
 	void CheckDevice(void);
 	int _Frame;
-	std::vector<StartDevice*> List;
+	std::vector<StartDevice*> DeviceList;
 	Action TrigAction;//‹N“®‚µ‚½Œã‚Ì‹““®
+
+	static List<Gimmick> _GimmickList;
+	VALUE<Gimmick>* SelfIterator;
 
 };
 #endif

@@ -31,7 +31,7 @@ public:
 	bool Release(char button)const{ return _Release[key[button]]; }
 	bool Repeat(char button)const{ return _Repeat[key[button]]; }
 	float StickX(char direction)const{ return _StickX[direction]; }
-	float StickY(char direction)const{ return _StickY[direction]; }
+	float StickY(char direction)const{ return -_StickY[direction]; }
 	float Shoulder(char direction)const{ return _Shoulder[direction]; }
 
 	static BOOL CALLBACK EnumJoystickCallback(const DIDEVICEINSTANCE* instance,void* context);

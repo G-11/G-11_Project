@@ -22,6 +22,7 @@ typedef struct
 typedef enum {
 	SOUND_NONE = 0,
 	BGM_TITLE,
+	SE_JINGLE,
 	MAX_SOUND
 
 }SOUND_TYPE; //–¼‘O‚ð“ü—Í
@@ -43,6 +44,16 @@ public:
 	void SetFade(SOUND_TYPE label,float volume,int frame);
 	void Fade(int frame);
 	void Fade(SOUND_TYPE label,int frame);
+
+	static float MVolumeBGM(void){ return MasterVolumeBGM; }
+	static float MVolumeSE(void){ return MasterVolumeSE; }
+
+	static void SetMasterVolumeBGM(float volume){ MasterVolumeBGM = volume; }
+	static void SetMasterVolumeSE(float volume){ MasterVolumeSE = volume; }
+
+	static void AddMasterVolumeBGM(float volume){ MasterVolumeBGM += volume; }
+	static void AddMasterVolumeSE(float volume){ MasterVolumeSE += volume; }
+
 private:
 	Sound();
 	Sound(const Sound& other){};
@@ -59,6 +70,7 @@ private:
 	DWORD AudioSize[MAX_SOUND];
 	float Volume[MAX_SOUND];
 	float ChangeVolume[MAX_SOUND];
+	float CurrentVolume[MAX_SOUND];
 	bool FadeFlag[MAX_SOUND];
 	const static PARAM Param[MAX_SOUND];
 
@@ -66,6 +78,9 @@ private:
 	HRESULT ReadChunkData(HANDLE file,void *pBuffer,DWORD dwBuffersize,DWORD dwBufferoffset);
 
 	static Sound* Self;
+
+	static float MasterVolumeBGM;
+	static float MasterVolumeSE;
 
 };
 

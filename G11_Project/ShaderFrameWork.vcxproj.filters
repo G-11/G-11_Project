@@ -149,20 +149,38 @@
     <Filter Include="01.SCENE\02_GAME\Gimmick\StartDevice">
       <UniqueIdentifier>{97f76ae4-4bec-4baa-b83f-f680b124b292}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.SCENE\02_GAME\Player">
-      <UniqueIdentifier>{34979923-abd3-4265-9578-64faa8f55739}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.SCENE\01_TITLE">
-      <UniqueIdentifier>{590eb587-96ee-41d1-bf5a-06678d96596e}</UniqueIdentifier>
+      <UniqueIdentifier>{1ab02e02-a6d6-4ebc-b9a3-5fc324e0d3f7}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.SCENE\03_RESULT">
-      <UniqueIdentifier>{e178919c-2ca9-4e75-a68f-1cdf196eb3a9}</UniqueIdentifier>
+      <UniqueIdentifier>{a1010c27-543b-44ba-b11e-e8450703cbf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage">
+      <UniqueIdentifier>{ace4277f-55fc-4e5a-b3fc-1ab822cd0441}</UniqueIdentifier>
     </Filter>
     <Filter Include="00.SYSTEM\Sound">
       <UniqueIdentifier>{a505819b-13c9-46fa-a055-b8d9cde25e3e}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.SCENE\02_GAME\Item">
       <UniqueIdentifier>{401606de-3b57-455f-85c1-951d28336049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Player">
+      <UniqueIdentifier>{499994b5-8922-46d1-bd0a-a30898fa905f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Wall">
+      <UniqueIdentifier>{a225ea8a-6ca5-4cf0-9521-3c398f701303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\List">
+      <UniqueIdentifier>{651b32df-5d93-436e-b12b-b4c4176c72ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\Main\Common">
+      <UniqueIdentifier>{2da10c5e-b8db-491d-aad1-f76f43ac242f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Interface">
+      <UniqueIdentifier>{0f129b14-828c-496d-8775-2be6078c74a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\01_TITLE\Option">
+      <UniqueIdentifier>{9bc7c081-9e49-4028-88c6-59dbfcbdbb7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +307,6 @@
     <ClCompile Include="StartDevice.cpp">
       <Filter>01.SCENE\02_GAME\Gimmick\StartDevice</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>01.SCENE\02_GAME\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>01.SCENE\01_TITLE</Filter>
     </ClCompile>
@@ -303,6 +318,24 @@
     </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>00.SYSTEM\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>01.SCENE\02_GAME\Wall</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>00.SYSTEM\Main\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Eatan.cpp">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface.cpp">
+      <Filter>01.SCENE\02_GAME\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>01.SCENE\01_TITLE\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -345,9 +378,6 @@
     <ClInclude Include="Scene.h">
       <Filter>01.SCENE</Filter>
     </ClInclude>
-    <ClInclude Include="List.hpp">
-      <Filter>00.SYSTEM</Filter>
-    </ClInclude>
     <ClInclude Include="ScreenRender.h">
       <Filter>00.SYSTEM\Shader\RenderTarget</Filter>
     </ClInclude>
@@ -362,9 +392,6 @@
     </ClInclude>
     <ClInclude Include="Shaim3DParts.h">
       <Filter>00.SYSTEM\Shaim3DEffect\3DParts</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>00.SYSTEM\Collision</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -434,8 +461,8 @@
     <ClInclude Include="Gauge.h">
       <Filter>00.SYSTEM\インターフェイスパーツ\Gage</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>01.SCENE\02_GAME\Player</Filter>
+    <ClInclude Include="Collision.h">
+      <Filter>00.SYSTEM\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Gimmick.h">
       <Filter>01.SCENE\02_GAME\Gimmick</Filter>
@@ -454,6 +481,27 @@
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>01.SCENE\02_GAME\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>01.SCENE\02_GAME\Wall</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>00.SYSTEM\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>00.SYSTEM\Main\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Eatan.h">
+      <Filter>01.SCENE\02_GAME\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface.h">
+      <Filter>01.SCENE\02_GAME\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
+      <Filter>01.SCENE\01_TITLE\Option</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
