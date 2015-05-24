@@ -16,6 +16,7 @@ class Player;
 class Item;
 class Wall;
 class Interface;
+class Stage_1;
 
 class Game:public Scene
 {
@@ -41,6 +42,7 @@ private:
 
 	static Player	*_player;
 	static Item		*_item;
+	static Stage_1	*_stage1;
 	Interface* _Interface;
 };
 

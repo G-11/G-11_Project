@@ -12,6 +12,8 @@
 #include "Input\VC.h"
 #include "Item.h"
 #include "Interface.h"
+#include "Wall.h"
+#include "Collision.h"
 
 //================================================================================
 //	íËêî
@@ -94,8 +96,29 @@ void Player::Update()
 			}
 		}
 	}
+	List<Wall>* wall = Wall::HitList();
+	VALUE<Wall>* itr = wall->Begin();
 
-	
+	while (itr)
+	{
+		D3DXVECTOR3 reflectVec(0,0,0);
+		D3DXVECTOR3 *quad = itr->Data->Quad();
+
+		if (Collision::CircleQuad(_Pos,10.0f,quad,4,_Speed,&reflectVec))
+		{
+			D3DXVECTOR3 speed = _Speed;
+			float angle = atan2(reflectVec.x,reflectVec.y);
+			float sp = D3DXVec3Length(&speed);
+			_Speed.x = sinf(angle)*sp;
+			_Speed.y = -cosf(angle)*sp;
+			angle = RAD2DEG(angle);
+			SetPos(OldPos);
+		}
+
+		itr = itr->_Next;
+	}
+
+	OldPos = _Pos;
 
 	Eatan::Update();
 }

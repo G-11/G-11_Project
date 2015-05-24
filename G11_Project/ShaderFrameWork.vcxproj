@@ -128,6 +128,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="Source_1.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ScreenRender.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Shaim3DParts.cpp" />
     <ClCompile Include="Shimmer.cpp" />
     <ClCompile Include="ShimmerParticle2D.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StartDevice.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Title.cpp" />
@@ -195,6 +197,8 @@
     <ClInclude Include="Shaim3DParts.h" />
     <ClInclude Include="Shimmer.h" />
     <ClInclude Include="ShimmerParticle2D.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Stage_1.h" />
     <ClInclude Include="StartDevice.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Texture.h" />

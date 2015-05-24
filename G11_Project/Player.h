@@ -28,6 +28,6 @@ public:
 	
 
 private:
-	
+	D3DXVECTOR3 OldPos;
 };
 

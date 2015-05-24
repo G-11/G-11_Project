@@ -231,3 +231,12 @@ float t_sqrtF(const float& x)
 	//xRes *= ( 1.5f - ( xHalf * xRes * xRes ) );//コメントアウトを外すと精度が上がる
 	return xRes * x;
 }
+
+int Randi(int min,int max)
+{
+	return CMath::RandomI(min,max);
+}
+float Randf(float min,float max)
+{
+	return CMath::RandomF(min,max);
+}

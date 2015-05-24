@@ -17,6 +17,8 @@
 
 #include "StartDevice.h"
 
+#include "Stage_1.h"
+
 #ifdef _DEBUG
 #include "Input/Keyboard.h"
 
@@ -32,6 +34,7 @@ Wall	*Game::_floor = nullptr;
 
 Player	*Game::_player = nullptr;
 Item	*Game::_item = nullptr;
+Stage_1	*Game::_stage1 = nullptr;
 
 float time = 0;
 void Game::Init(void)
@@ -51,11 +54,13 @@ void Game::Init(void)
 	// プレイヤー
 	_player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(128.0f, 128.0f), WHITE(1.0f), Sprite::LAYER_3);
 
-	//// アイテム
+	// アイテム
 	_item = Item::Create(D3DXVECTOR3(SCREEN_WIDTH / 4.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), 1, Sprite::LAYER_2);
 
 	_field->SetMask(GetTexture(TEX_SKY_MAP));
 	_field->SetPass(CShader2D::SKY);
+
+	_stage1 = Stage_1::Create();
 
 	StartDevice* start_device;
 	start_device = StartDevice::Create(D3DXVECTOR2(SCREEN_WIDTH*0.75f, SCREEN_HEIGHT*0.5f), D3DXVECTOR2(30.0f, 30.0f));
@@ -94,7 +99,7 @@ void Game::Update(void)
 	//アイテム生成
 	if (VC::Instance()->keyboard()->Trigger(DIK_F1))
 	{
-		Item::Create(D3DXVECTOR3(Random<float>(20.0f, (float)SCREEN_WIDTH-20.0f), Random<float>(20.0f, (float)SCREEN_HEIGHT-20.0f), 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), Random<int>(1, 3), Sprite::LAYER_2);
+		Item::Create(D3DXVECTOR3(Randf(20.0f, (float)SCREEN_WIDTH-20.0f), Randf(20.0f, (float)SCREEN_HEIGHT-20.0f), 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), Randi(1, 3), Sprite::LAYER_2);
 	}
 
 	//ゲージリセット

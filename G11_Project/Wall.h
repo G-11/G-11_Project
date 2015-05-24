@@ -12,7 +12,7 @@ public:
 
 	static Wall* Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int priority = Sprite::LAYER_0);
 
-	static List<Wall>& HitList(void){return _HitList; }
+	static List<Wall>* HitList(void){return &_HitList; }
 	static void InitHitList(void){ _HitList.Clear(); }
 private:
 	static List<Wall> _HitList;

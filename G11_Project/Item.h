@@ -45,7 +45,7 @@ public:
 
 	int	ID(){ return _ID; }
 	float Score(){ return _Score; }
-	static List<Item>& ItemList(void){return _ItemList; }
+	static List<Item>* ItemList(void){return &_ItemList; }
 	static void InitList(void){ _ItemList.Clear(); }
 
 	virtual void Action(){};		//ƒAƒCƒeƒ€æ“¾‚Ì“®ì

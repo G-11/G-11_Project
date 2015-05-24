@@ -176,6 +176,9 @@
     <Filter Include="00.SYSTEM\Main\Common">
       <UniqueIdentifier>{2da10c5e-b8db-491d-aad1-f76f43ac242f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1">
+      <UniqueIdentifier>{c1491b58-0a52-4b2a-8956-4fb3ecb87cd8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.SCENE\02_GAME\Interface">
       <UniqueIdentifier>{0f129b14-828c-496d-8775-2be6078c74a6}</UniqueIdentifier>
     </Filter>
@@ -327,6 +330,12 @@
     </ClCompile>
     <ClCompile Include="Common.cpp">
       <Filter>00.SYSTEM\Main\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>01.SCENE\02_GAME\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source_1.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1</Filter>
     </ClCompile>
     <ClCompile Include="Eatan.cpp">
       <Filter>01.SCENE\02_GAME\Player</Filter>
@@ -493,6 +502,12 @@
     </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>00.SYSTEM\Main\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>01.SCENE\02_GAME\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage_1.h">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1</Filter>
     </ClInclude>
     <ClInclude Include="Eatan.h">
       <Filter>01.SCENE\02_GAME\Player</Filter>

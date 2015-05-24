@@ -81,6 +81,8 @@ type Random(type min,type max)
 		return CMath::RandomF(min,max);
 	}
 }
-
+//ã‚ÌŠÖ”‚ÅŒx‚ª‚¤‚´‚©‚Á‚½‚ç‰º‚ÌŠÖ”‚ğg‚¤
+int Randi(int min,int max);
+float Randf(float min,float max);
 
 #endif
