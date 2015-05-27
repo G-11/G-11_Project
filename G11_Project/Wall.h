@@ -14,7 +14,8 @@ public:
 
 	static List<Wall>* HitList(void){return &_HitList; }
 	static void InitHitList(void){ _HitList.Clear(); }
-private:
+
+protected:
 	static List<Wall> _HitList;
 	VALUE<Wall>* SelfIterator;
 };

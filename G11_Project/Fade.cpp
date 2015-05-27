@@ -67,20 +67,22 @@ void Fade::Draw(int layer)
 	if (Fading[layer])
 	{
 		Renderer::SetStream2D();
+		D3DXVECTOR3 _Pos(0,0,0);
+		_Pos.x = Window::Instance()->WindowSize().x / 2.0f;
+		_Pos.y = Window::Instance()->WindowSize().y / 2.0f;
+		_Pos.z = 0;
+
 		Camera2D* camera = Camera2D::GetCamera(0);
+		camera->SetNoMove();
 		WorldMtx = _Shader->Identity();
-		D3DXVECTOR3 pos = D3DXVECTOR3(SCREEN_WIDTH / 2 + camera->GetPosP().x*0.265f,SCREEN_HEIGHT / 2 - camera->GetPosP().y*0.265f,0);
 		D3DXMATRIX MtxScl,MtxRot,MtxTrans;
 		D3DXMatrixScaling(&MtxScl,Size.x,Size.y,1.0f);
 		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxScl);
 
-		D3DXMatrixTranslation(&MtxTrans,pos.x,pos.y,0);
+		D3DXMatrixTranslation(&MtxTrans,_Pos.x,_Pos.y,_Pos.z);
 		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
 
 		_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
-
-		//_Shader->SetMatrix(CShader2D::POS_MTX,MtxTrans);
-		//_Shader->SetFloatArray(CShader2D::SIZE,Size,3);
 
 		//テクスチャの設定
 		_Shader->SetTexture(Texture);
@@ -90,7 +92,8 @@ void Fade::Draw(int layer)
 		_Shader->DrawBegin();
 		_Shader->Draw(CShader2D::NORMAL,D3DPT_TRIANGLESTRIP);
 		_Shader->DrawEnd();
-		
+
+		Camera2D::Set(0);
 	}
 }
 

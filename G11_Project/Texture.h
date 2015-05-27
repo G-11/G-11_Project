@@ -40,6 +40,8 @@ typedef enum
 	TEX_CILLING1_BG,
 	TEX_FLOOR1_BG,
 
+	TEX_GOAL,
+
 	TEXTURE_MAX
 
 }TEX;

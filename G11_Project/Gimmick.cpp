@@ -3,7 +3,7 @@
 
 List<Gimmick> Gimmick::_GimmickList;
 
-Gimmick::Gimmick(int priority) :Sprite(priority)
+Gimmick::Gimmick(int priority) :Wall(priority)
 {
 	TrigAction = nullptr;
 	_Active = false;

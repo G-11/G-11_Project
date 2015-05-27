@@ -10,13 +10,15 @@ public:
 	Stage_1();
 	~Stage_1();
 
-	void Uninit(void);
+	void Release(void);
 	void Update(void);
 
 	static Stage_1 *Create();
 
-private:
+	static void HitGimmick(bool hit){ hitChk = hit; }
+	static bool hitChk;
 
+private:
 };
 
 #endif

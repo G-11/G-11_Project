@@ -38,6 +38,8 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Stage/field1.jpg",
 	"data/texture/Stage/tenzyou1.png",
 	"data/texture/Stage/yuka1.png",
+
+	"data/texture/Stage/ueki.png"
 };
 LPDIRECT3DTEXTURE9 Texture[TEXTURE_MAX];
 static D3DXIMAGE_INFO ImageInfo[TEXTURE_MAX];

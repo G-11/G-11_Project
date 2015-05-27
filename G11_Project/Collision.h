@@ -422,17 +422,29 @@ inline D3DXVECTOR3 Collision::CreateReflectVec(const D3DXVECTOR3& point1Start,co
 {
 	D3DXVECTOR3 vec0,vec1,vec2;
 
-	vec0 = point1End - point1Start;//vecLine
-	vec1 = point2End - point2Start;//vecMove
-	vec2 = point1Start - point2Start;
+	D3DXVECTOR3 VecNormal, Vec1,Vec2;
+	float Length1, Length2;
 
-	float dotProduct = vec0.x * vec1.x + vec1.y*vec0.y;
-	float valueMove = sqrt(vec1.x*vec1.x + vec1.y*vec1.y);
-	float valueLine = sqrt(vec0.x*vec0.x + vec0.y*vec0.y);
-	float angle = -acosf(dotProduct / (valueMove*valueLine));
-	D3DXVECTOR3 reflect(cosf(angle)*vec0.x - sinf(angle)*vec0.y,cosf(angle)*vec0.y+sinf(angle)*vec0.x,0);
-	D3DXVec3Normalize(&reflect,&reflect);
-	//reflect.y *= -1;
+	D3DXVec3Normalize(&VecNormal, &(point1End - point1Start));
+	Vec1 = point2Start - point1Start;
+	Length1 = D3DXVec3Dot(&VecNormal, &Vec1);
+
+	D3DXVECTOR3 Point11 = point1Start + (VecNormal*Length1);
+	Point11 -= point2Start;
+
+	D3DXVECTOR3 PointAStart = point2Start + (Point11*2.0f);
+
+	Vec2 = point2End - point1Start;
+	Length2 = D3DXVec3Dot(&VecNormal, &Vec2);
+
+	D3DXVECTOR3 Point21 = point1Start + (VecNormal*Length2);
+	Point21 -= point2End;
+
+	D3DXVECTOR3 PointAEnd = point2End + (Point21*2.0f);
+
+	D3DXVECTOR3 reflect = PointAEnd - PointAStart;
+	D3DXVec3Normalize(&reflect, &reflect);
+
 	return reflect;
 }
 

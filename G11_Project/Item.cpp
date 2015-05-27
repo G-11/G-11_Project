@@ -22,8 +22,8 @@ const D3DXVECTOR2 DEFAULT_ITEM_SIZE = D3DXVECTOR2(84.0f,84.0f);//ƒAƒCƒeƒ€‚Ìƒfƒtƒ
 //================================================================================
 const float Item::ItemScore[ITEM_ID_MAX] = {
 	10.0f,			//‚¤‚³‚¬
-	10.0f,			//‚Ë‚±
-	10.0f,			//‚­‚Ü
+	-5.0f,			//‚Ë‚±
+	50.0f,			//‚­‚Ü
 };
 
 //================================================================================
@@ -38,7 +38,7 @@ Item* Item::Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3DXCO
 
 	item->SetID(id);
 	item->SetTexture(GetTexture(TEX((int)TEX_ITEM_OFFSET + id)));
-	item->SetScore(ItemScore[id]);
+	item->SetScore(ItemScore[id-1]);
 
 	return item;
 }

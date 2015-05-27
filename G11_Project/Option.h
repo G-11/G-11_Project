@@ -6,6 +6,7 @@
 
 class Sprite;
 class Gauge;
+class Number;
 
 class Option :public Scene
 {
@@ -21,7 +22,13 @@ private:
 	Sprite* SEFrame;
 	Gauge* BGMGauge;
 	Gauge* SEGauge;
+	Number* BGMVolume;
+	Number* SEVolume;
 
+	D3DXVECTOR3 DestPos;
+	D3DXVECTOR3 CursolPosition[3];
+
+	const static short ItemMax;
 	short Select;
 };
 

@@ -92,6 +92,11 @@ void Title::Update(void)
 	switch (MenuNum)
 	{
 	case TMenu_Start:
+		//切り替え
+		if (VC::Instance()->Trigger(COMMAND_OK) && Fade::Instance()->Mode() == Fade::FADE_NONE)
+		{
+			Manager::Instance()->SetScene(Manager::SCENE_GAME);
+		}
 		Start->SetColor(WHITE(Flahing));
 		break;
 	case TMenu_Tutorial:
@@ -101,6 +106,11 @@ void Title::Update(void)
 		Collection->SetColor(WHITE(Flahing));
 		break;
 	case TMenu_Config:
+		//切り替え
+		if (VC::Instance()->Trigger(COMMAND_OK) && Fade::Instance()->Mode() == Fade::FADE_NONE)
+		{
+			Manager::Instance()->SetScene(Manager::SCENE_OPTION);
+		}
 		Config->SetColor(WHITE(Flahing));
 		break;
 	default:
@@ -120,11 +130,6 @@ void Title::Update(void)
 	Neko->SetRot(cosf(DEG2RAD(RotFream))*PI / 10.0f);
 	RotFream += 3.0f;
 	
-	//切り替え
-	if (VC::Instance()->Trigger(COMMAND_OK) && Fade::Instance()->Mode() == Fade::FADE_NONE)
-	{
-		Manager::Instance()->SetScene(Manager::SCENE_GAME);
-	}
 
 	/**/
 #if _DEBUG

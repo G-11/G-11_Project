@@ -10,6 +10,9 @@
 #include "main.h"
 
 class CShader2D;
+class Wall;
+class Player;
+
 //======================================================
 //カメラクラス
 //======================================================
@@ -28,7 +31,7 @@ protected:
 
 	static CShader2D* _Shader;
 	D3DXVECTOR3 Pos;		//カメラの位置
-	D3DXVECTOR3 DestPos;	//移動量?
+	D3DXVECTOR3 DestPos;	//移動先
 	D3DXVECTOR3 Speed;			//速度
 	D3DXVECTOR3 Rot;			//角度
 	D3DXMATRIX Projection2D;		//プロジェクションマトリクス
@@ -38,6 +41,18 @@ protected:
 	D3DXVECTOR3 ClickPos;
 	static int CameraNum;		//現在のカメラ数
 	int frame;
+
+	Wall* Cilling;
+	Wall* Floor;
+
+	static Player* player;
+	D3DXVECTOR3 OldPos;
+
+	float _TopLimit;
+	float _BottomLimit;
+	float _LeftLimit;
+	float _RightLimit;
+
 
 public:
 	Camera2D(const D3DXVECTOR2 &LUPos = D3DXVECTOR2(0,0),D3DXVECTOR2 &size = D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT));//コストラクタ
@@ -68,7 +83,7 @@ public:
 	D3DXVECTOR2 GetViewPortSize(void)const	{ return D3DXVECTOR2((float)ViewPort.Width,(float)ViewPort.Height); }
 	D3DXMATRIX Projection(void){ return Projection2D; }
 
-	void SetPosP	(const D3DXVECTOR3 &pos)			{ Pos = pos; }
+	void SetPosP(const D3DXVECTOR3 &pos){ Pos = pos; }
 	void SetSpeed	(const D3DXVECTOR3 &speed)		{ Speed = speed; }
 	void SetRot		(const D3DXVECTOR3 &rot)			{ Rot = rot; }
 	void SetViewPortPos(const D3DXVECTOR2 &Pos)	{ ViewPort.X = (DWORD)Pos.x; ViewPort.Y = (DWORD)Pos.y; }
@@ -81,6 +96,19 @@ public:
 
 	static Camera2D* GetCamera(int Index);				//Index番目のカメラのポインタを取得
 
+	void SetPlayer(Player* p){ player = p; }
+	void SetCilling(Wall* cilling);
+	void SetFloor(Wall* floor);
+
+	void SetTopLimit(float limit){ _TopLimit = limit; }
+	void SetBottomLimit(float limit){ _BottomLimit = limit; }
+	void SetLeftLimit(float limit){ _LeftLimit = limit; }
+	void SetRightLimit(float limit){ _RightLimit = limit; }
+
+	float TopLimit(){ return _TopLimit; }
+	float BottomLimit(){ return _BottomLimit; }
+	float LeftLimit(){ return _LeftLimit; }
+	float RightLimit(){ return _RightLimit; }
 };
 
 #endif

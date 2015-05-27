@@ -8,6 +8,8 @@
 #include "Camera2D.h"
 #include "Renderer.h"
 #include "Shader2D.h"
+#include "Wall.h"
+#include "Player.h"
 #define CAMERA_SPEED (2.0f)
 //======================================================
 //グローバル変数
@@ -16,6 +18,7 @@ int Camera2D::CameraNum = 0;
 Camera2D* Camera2D::Top = NULL;
 Camera2D* Camera2D::Cur = NULL;
 CShader2D* Camera2D::_Shader = nullptr;
+Player* Camera2D::player = nullptr;
 //======================================================
 //コンストラクタ
 //引数：LUPos 描画開始点(左上の座標)
@@ -37,6 +40,9 @@ Camera2D::Camera2D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 	ViewPort.Height = (DWORD)size.y;
 	ViewPort.MaxZ = 1.0f;
 	ViewPort.MinZ = 0.0f;
+
+	_LeftLimit = -200.0f;
+	_RightLimit = SCREEN_WIDTH + 200;
 
 	CameraNum++;
 
@@ -193,6 +199,34 @@ Camera2D* Camera2D::Create(const D3DXVECTOR3 &PPos,const D3DXVECTOR2 &LUPos,D3DX
 //======================================================
 void Camera2D::Update(void)
 {
+	if (player != nullptr)
+	{
+		D3DXVECTOR3 playerPos = player->Pos();
+
+		//プレイヤーの動きに追従させる(プレイヤーの座標から画面の半分ずらす)
+		DestPos.x = playerPos.x - SCREEN_WIDTH*0.5f;
+		DestPos.y = playerPos.y - SCREEN_HEIGHT*0.5f;
+
+		//プレイヤーが上下のリミットを超えたらYをもとに戻す
+		if (playerPos.y < _TopLimit || playerPos.y > _BottomLimit)
+		{
+			DestPos.y = OldPos.y;
+		}
+
+		//プレイヤーが左右のリミットを超えたらXをもとに戻す	
+		if (playerPos.x < _LeftLimit || playerPos.x > _RightLimit)
+		{
+			DestPos.x = OldPos.x;
+		}
+		OldPos = DestPos;
+
+		//プレイヤーの移動方向にカメラを少しずらす
+		DestPos += player->Speed()*5.0f;
+
+		Pos += (DestPos - Pos)*0.03f;
+	}
+
+	
 }
 //======================================================
 //適用
@@ -203,7 +237,7 @@ void Camera2D::Set(void)
 	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
 
 	Projection2D._41 = -1.0f - Pos.x / (SCREEN_WIDTH*0.5f);
-	Projection2D._42 = 1.0f - Pos.y / (SCREEN_HEIGHT*0.5f);
+	Projection2D._42 = 1.0f + Pos.y / (SCREEN_HEIGHT*0.5f);
 	
 	_Shader->SetMatrix(CShader2D::PROJECTION,Projection2D);
 }
@@ -275,4 +309,31 @@ Camera2D* Camera2D::GetCamera(int Index)
 		pCamera = Next;
 	}
 	return NULL;
+}
+
+
+//======================================================
+//天井セット
+//======================================================
+void Camera2D::SetCilling(Wall* cilling)
+{
+	Cilling = cilling;
+	D3DXVECTOR3 CillingPos = cilling->Pos();
+	D3DXVECTOR2 CillingSize = cilling->Size();
+	
+	_TopLimit = CillingPos.y - CillingSize.y*0.5f + SCREEN_HEIGHT*0.5f;
+
+}
+
+//======================================================
+//床セット
+//======================================================
+void Camera2D::SetFloor(Wall* floor)
+{
+	Floor = floor;
+	D3DXVECTOR3 FloorPos = Floor->Pos();
+	D3DXVECTOR2 FloorSize = Floor->Size();
+
+	_BottomLimit = FloorPos.y + FloorSize.y*0.5f - SCREEN_HEIGHT*0.5f;
+
 }

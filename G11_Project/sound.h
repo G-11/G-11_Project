@@ -51,8 +51,16 @@ public:
 	static void SetMasterVolumeBGM(float volume){ MasterVolumeBGM = volume; }
 	static void SetMasterVolumeSE(float volume){ MasterVolumeSE = volume; }
 
-	static void AddMasterVolumeBGM(float volume){ MasterVolumeBGM += volume; }
-	static void AddMasterVolumeSE(float volume){ MasterVolumeSE += volume; }
+	static void AddMasterVolumeBGM(float volume){
+		MasterVolumeBGM += volume;
+		if (MasterVolumeBGM > 1.0f){ MasterVolumeBGM = 1.0f; } 
+		else if (MasterVolumeBGM < 0){ MasterVolumeBGM = 0; } 
+	}
+	static void AddMasterVolumeSE(float volume){
+		MasterVolumeSE += volume; 
+		if (MasterVolumeSE > 1.0f){ MasterVolumeSE = 1.0f; }
+		else if (MasterVolumeSE < 0){ MasterVolumeSE = 0; }
+	}
 
 private:
 	Sound();

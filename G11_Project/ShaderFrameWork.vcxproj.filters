@@ -185,6 +185,12 @@
     <Filter Include="01.SCENE\01_TITLE\Option">
       <UniqueIdentifier>{9bc7c081-9e49-4028-88c6-59dbfcbdbb7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.SYSTEM\インターフェイスパーツ\Score">
+      <UniqueIdentifier>{710ae946-d519-4d39-bf30-d0220f5045cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\BreakObject">
+      <UniqueIdentifier>{a7647bdf-018c-4020-a5b7-a2890f038d61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -334,9 +340,6 @@
     <ClCompile Include="Stage.cpp">
       <Filter>01.SCENE\02_GAME\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Source_1.cpp">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1</Filter>
-    </ClCompile>
     <ClCompile Include="Eatan.cpp">
       <Filter>01.SCENE\02_GAME\Player</Filter>
     </ClCompile>
@@ -345,6 +348,18 @@
     </ClCompile>
     <ClCompile Include="Option.cpp">
       <Filter>01.SCENE\01_TITLE\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="Counter.cpp">
+      <Filter>00.SYSTEM\インターフェイスパーツ\Score</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage_1.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>01.SCENE\02_GAME\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakObject.cpp">
+      <Filter>01.SCENE\02_GAME\BreakObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -517,6 +532,15 @@
     </ClInclude>
     <ClInclude Include="Option.h">
       <Filter>01.SCENE\01_TITLE\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="Counter.h">
+      <Filter>00.SYSTEM\インターフェイスパーツ\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>01.SCENE\02_GAME\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakObject.h">
+      <Filter>01.SCENE\02_GAME\BreakObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,7 +27,8 @@
 #define EATAN_ANIMATION_SPEED_REVERSE	(0.02f)
 
 //上下に揺れる移動量
-#define EATAN_SWAY_HEIGHT		(0.02f)
+//
+#define EATAN_SWAY_HEIGHT		(0.05f)
 
 //上下に揺れるスピード
 #define EATAN_SWAY_SPEED		(0.04f)
@@ -89,7 +90,7 @@ void Eatan::Update()
 	if (SwayFlag)
 	{
 		SwayCount += EATAN_SWAY_SPEED;
-		_Speed.y += sinf(SwayCount)*EATAN_SWAY_HEIGHT;
+		SetOffsetY( sinf(SwayCount)*EATAN_SWAY_HEIGHT);
 	}
 
 	//前回と状態が変わっていたらアニメーション用カウンタをリセット

@@ -16,7 +16,7 @@ class Player;
 class Item;
 class Wall;
 class Interface;
-class Stage_1;
+class Stage;
 
 class Game:public Scene
 {
@@ -25,6 +25,9 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+
+	static Player *GetPlayer(void){ return _player;}
+
 	static void SetPause(bool flag){ _PauseFlag = flag; }
 	static bool PauseFlag(void){return _PauseFlag; }
 
@@ -42,7 +45,9 @@ private:
 
 	static Player	*_player;
 	static Item		*_item;
-	static Stage_1	*_stage1;
+	static Stage	*_stage;
+
+
 	Interface* _Interface;
 };
 

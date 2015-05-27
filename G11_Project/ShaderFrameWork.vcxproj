@@ -93,9 +93,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlurFilter.cpp" />
+    <ClCompile Include="BreakObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="CircleGauge.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="Eatan.cpp" />
@@ -127,8 +129,9 @@
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Counter.cpp" />
     <ClCompile Include="sound.cpp" />
-    <ClCompile Include="Source_1.cpp" />
+    <ClCompile Include="Stage_1.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ScreenRender.cpp" />
@@ -148,9 +151,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlurFilter.h" />
+    <ClInclude Include="BreakObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="CircleGauge.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Debug.h" />
@@ -184,6 +189,7 @@
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Result.h" />
+    <ClInclude Include="Counter.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Renderer.h" />

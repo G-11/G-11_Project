@@ -1,14 +1,14 @@
 #pragma once
 #ifndef _GIMMICK_H_
 #define _GIMMICK_H_
-#include "Sprite.h"
+#include "Wall.h"
 #include "StartDevice.h"
 #include<vector>
 
 class Gimmick;
 
 typedef void(*Action)(Gimmick*);
-class Gimmick :public Sprite
+class Gimmick :public Wall
 {
 public:
 	Gimmick(int priority);

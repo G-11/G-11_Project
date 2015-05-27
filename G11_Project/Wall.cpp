@@ -25,6 +25,7 @@ Wall* Wall::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int 
 	float widthPer = size.x/size.y;
 	wall->uv.z = widthPer;
 	wall->uv.y = 0.01f;
-	wall->uv.w = 0.99f;
+	wall->uv.w = 0.98f;
+
 	return wall;
 }

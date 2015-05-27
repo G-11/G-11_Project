@@ -4,8 +4,9 @@
 #include "Input/Keyboard.h"
 #include "resource.h"
 #include<time.h>
+
 const char* Window::ClassName = "AppClass";
-const char* Window::WindowName = "Shooting";
+const char* Window::WindowName = "ÇÌÇΩÇ∞ÇÃÇ¢Å[ÇΩÇÒ";
 Window* Window::Self = new Window;
 
 int Window::Initialize(HINSTANCE hInstance,int cmdShow)
@@ -35,7 +36,7 @@ int Window::Initialize(HINSTANCE hInstance,int cmdShow)
 	_hWnd = CreateWindowEx(0,
 		ClassName,
 		WindowName,
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPED,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		(int)(Size.x + GetSystemMetrics(SM_CXDLGFRAME) * 2),
