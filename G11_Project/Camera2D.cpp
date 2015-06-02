@@ -168,6 +168,7 @@ Camera2D* Camera2D::Create(const D3DXVECTOR3 &PPos)
 	pCamera = new Camera2D();
 	pCamera->Pos = PPos;
 	pCamera->DestPos = PPos;
+	pCamera->OldPos = PPos;
 	pCamera->Projection2D = D3DXMATRIX(
 		2.0f / SCREEN_WIDTH,0,0,0,
 		0,-2.0f / SCREEN_HEIGHT,0,0,
@@ -225,8 +226,8 @@ void Camera2D::Update(void)
 
 		Pos += (DestPos - Pos)*0.03f;
 	}
-
 	
+	Speed = Pos - OldPos;
 }
 //======================================================
 //“K—p

@@ -14,9 +14,9 @@
 #define EATAN_PARTITION_STOP		(1)			
 #define EATAN_PARTITION_MOVE		(2)
 #define EATAN_PARTITION_EAT			(6)
-#define EATAN_PARTITION_GLAD		(2)
+#define EATAN_PARTITION_GLAD		(6)
 #define EATAN_PARTITION_ATTACK		(2)
-#define EATAN_PARTITION_REVERSE		(2)
+#define EATAN_PARTITION_REVERSE		(3)
 
 //アニメーションのスピード
 #define EATAN_ANIMATION_SPEED_STOP		(0.03f)
@@ -41,6 +41,7 @@ Eatan::Eatan(int priority) :Sprite(priority)
 	//ステータスの初期化
 	_State = EATAN_STATE_STOP;			//停止状態で生成
 	OldState = EATAN_STATE_STOP;
+	NextState = EATAN_STATE_NON;
 	MaxPartition = 0;
 	SwayCount = 0;
 
@@ -110,7 +111,9 @@ void Eatan::Update()
 			//食べる
 			//攻撃
 			if (_State == EATAN_STATE_EAT ||
-				_State == EATAN_STATE_ATTACK)
+				_State == EATAN_STATE_ATTACK ||
+				_State == EATAN_STATE_GLAD ||
+				_State == EATAN_STATE_REVERSE)
 			{
 				if (SwayFlag)
 				{
@@ -120,6 +123,13 @@ void Eatan::Update()
 				{
 					_State = EATAN_STATE_STOP;
 				}
+			}
+
+			//次のステートが設定されていたらそちらに変更
+			if (NextState != EATAN_STATE_NON)
+			{
+				_State = NextState;
+				NextState = EATAN_STATE_NON;
 			}
 
 		}
@@ -156,5 +166,14 @@ void Eatan::Draw()
 //================================================================================
 void Eatan::SetState(EATAN_STATE State)
 {
-	_State = State;
+	//以下の状態のときはステートの変更を受け付けない
+	//食べる
+	//攻撃
+	//吐く
+	if (_State != EATAN_STATE_EAT &&
+		_State != EATAN_STATE_ATTACK &&
+		_State != EATAN_STATE_REVERSE)
+	{
+		_State = State;
+	}
 }

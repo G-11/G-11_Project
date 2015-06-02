@@ -240,3 +240,33 @@ float Randf(float min,float max)
 {
 	return CMath::RandomF(min,max);
 }
+
+
+D3DXVECTOR2 EaseIn(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent)
+{
+	D3DXVECTOR3 sub = -(startPos - destPos);
+	D3DXVECTOR3 pos = sub * (percent*percent) + startPos;
+	
+	return D3DXVECTOR2(pos.x,pos.y);
+}
+D3DXVECTOR2 EaseOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent)
+{
+	D3DXVECTOR3 sub = destPos - startPos;
+	D3DXVECTOR3 pos = startPos + (2.0f*sub*percent) - (sub*percent*percent);
+
+	return D3DXVECTOR2(pos.x,pos.y);
+}
+D3DXVECTOR2 EaseInOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent)
+{
+	D3DXVECTOR3 sub = destPos - startPos;
+	D3DXVECTOR3 pos = startPos + (-2.0f * sub * percent * percent * percent) + (3.0f * sub * percent * percent);
+	return D3DXVECTOR2(pos.x,pos.y);
+}
+
+D3DXVECTOR2 Bezier(const D3DXVECTOR2& startPos,const D3DXVECTOR2& destPos,const D3DXVECTOR2& relay1,const D3DXVECTOR2& relay2,float percent)
+{
+	float rev = 1.0f - percent;
+	float p[4] = { rev*rev*rev,3.0f*percent*(rev*rev),3.0f*(percent*percent)*rev,percent*percent*percent };
+	return (startPos*p[0]) + (relay1*p[1]) + (relay2 * p[2]) + (destPos*p[3]);
+
+}

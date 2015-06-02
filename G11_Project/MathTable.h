@@ -1,6 +1,7 @@
 #ifndef _MATH_TABLE_H_
 #define _MATH_TABLE_H_
 
+#include "main.h"
 #include <stdio.h>
 #include <math.h>
 #include <random>
@@ -85,4 +86,8 @@ type Random(type min,type max)
 int Randi(int min,int max);
 float Randf(float min,float max);
 
+D3DXVECTOR2 EaseIn(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
+D3DXVECTOR2 EaseOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
+D3DXVECTOR2 EaseInOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
+D3DXVECTOR2 Bezier(const D3DXVECTOR2& startPos,const D3DXVECTOR2& destPos,const D3DXVECTOR2& relay1,const D3DXVECTOR2& relay2,float percent);
 #endif

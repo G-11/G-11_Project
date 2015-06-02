@@ -349,8 +349,10 @@ void Sprite::SetMaskUV(int UNum,int VNum,int DivideUNum,int DivideVNum)
 
 void Sprite::CastMatrix(void)
 {
+
 	for (int cnt = 0;cnt < 4;cnt++)
 	{
-		D3DXVec3TransformCoord(&_Quad[cnt],&QuadBase[cnt],&WorldMtx);
+		D3DXVECTOR3 quad = D3DXVECTOR3(QuadBase[cnt].x + _Offset.x,QuadBase[cnt].y + _Offset.y,0);
+		D3DXVec3TransformCoord(&_Quad[cnt],&quad,&WorldMtx);
 	}
 }

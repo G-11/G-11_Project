@@ -32,6 +32,13 @@ class Item :public Sprite
 public:
 	//定数
 	const static D3DXVECTOR2 DEFAULT_ITEM_SIZE;
+
+	enum
+	{
+		ITEM_STATE_NON = 0,
+		ITEM_STATE_EATED,
+		ITEM_STATE_MAX,
+	};
 public:
 	Item(int priority = 0);
 	~Item();
@@ -48,8 +55,12 @@ public:
 	static List<Item>* ItemList(void){return &_ItemList; }
 	static void InitList(void){ _ItemList.Clear(); }
 
-	virtual void Action(){};		//アイテム取得時の動作
+	void Eated(D3DXVECTOR3* pos, float CountMax, float AnimationSpeed);			//食べられた時のアニメーション
+	virtual void Action();		//アイテム取得時の動作
+	virtual void Action(D3DXVECTOR3* pos, float CountMax, float AnimationSpeed);
 	static Item* HitCheck(const D3DXVECTOR3& Pos, const D3DXVECTOR3& Size);
+
+	int State(){ return _State; }
 
 protected:
 	static List<Item> _ItemList;
@@ -58,4 +69,10 @@ protected:
 	int _ID;
 	float _Score;
 	static const float ItemScore[ITEM_ID_MAX];
+
+	int _State;
+	D3DXVECTOR3* PlayerPos;
+	float _CountMax;
+	float _AnimationSpeed;
+	float EatedCount;
 };

@@ -41,6 +41,8 @@ void Gimmick::Update(void)
 		}
 		_Frame++;
 	}
+	
+	Wall::Update();
 }
 
 void Gimmick::CheckDevice(void)

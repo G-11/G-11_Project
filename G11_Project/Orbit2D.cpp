@@ -31,6 +31,7 @@ Orbit2D::Orbit2D()
 	_Color = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
 	ReleaseFlag_ = false;
 	frame = 0;
+	Pass = CShader2D::ADD;
 
 	LinkList();
 }
@@ -264,7 +265,7 @@ void Orbit2D::Draw(void)
 	_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
 	_Shader->SetTexture(Texture);
 
-	_Shader->Draw(CShader2D::ADD,D3DPT_TRIANGLESTRIP,(DivideNum - 1) * 2);
+	_Shader->Draw((CShader2D::PASS)Pass,D3DPT_TRIANGLESTRIP,(DivideNum - 1) * 2);
 }
 //=============================================================================
 //ŠJ•ú

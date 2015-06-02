@@ -15,7 +15,8 @@
 #include "Wall.h"
 #include "Collision.h"
 #include "Camera2D.h"
-
+#include "GrowupEffect.h"
+#include "CheckPoint.h"
 //================================================================================
 //	定数
 //================================================================================
@@ -25,6 +26,12 @@
 //慣性の減衰率
 #define PLAYER_INERTIA		(0.95f)
 
+//反射方向の開き(DEG)		
+#define PLAYER_REFRECT_RAND (30.0f)
+
+//ギミックに当たった時の押し出されるスピード
+#define PLAYER_REFRECT_SPEED (5.0f)
+
 
 //================================================================================
 //	コンストラクタ
@@ -33,6 +40,8 @@ Player::Player(int Priority) :Eatan(Priority)
 {
 	HitCheckFlag = true;
 	ActionFlag = true;
+	CurrentCheckPoint = nullptr;
+	CheckPointPos = D3DXVECTOR3(0,0,0);
 }
 
 //================================================================================
@@ -57,7 +66,7 @@ Player* Player::Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3
 
 	player->SetTexture(GetTexture(TEX_EATAN));
 	player->SetSwayFlag(true);
-	player->SetState(EATAN_STATE_STOP);
+	player->SetState(EATAN_STATE_MOVE);
 
 	return player;
 }
@@ -100,18 +109,26 @@ void Player::Update()
 		//食べる判定
 		if (_State == EATAN_STATE_EAT)
 		{
-			//口を開け切ったとき
-			if (AnimationCount >= AnimationPartition[EATAN_STATE_EAT] / 2.0f)
+			
+			//当たり判定
+			Item* item = Item::HitCheck(_Pos, _Size);
+			if (item != nullptr)
 			{
-				//当たり判定
-				Item* item = Item::HitCheck(_Pos, _Size);
-				if (item != nullptr)
-				{
-					float score = item->Score();
-					Interface::AddScore(score);
-					item->SetRelease();
-				}
+				float score = item->Score();
+				Interface::AddScore(score);
+				item->Action(&_Pos, AnimationPartition[EATAN_STATE_EAT], (float)AnimationSpeed[EATAN_STATE_EAT]);
+					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12);
+
+					if (score > 0)
+					{
+						SetNextState(EATAN_STATE_GLAD);
+					}
+					else
+					{
+						SetNextState(EATAN_STATE_REVERSE);
+					}
 			}
+			
 		}
 	}
 
@@ -126,11 +143,22 @@ void Player::Update()
 			D3DXVECTOR3 reflectVec(0, 0, 0);
 			D3DXVECTOR3 *quad = itr->Data->Quad();
 
-			if (Collision::CircleQuad(_Pos, 10.0f, quad, 4, _Speed, &reflectVec))
+			if (Collision::CircleQuad(_Pos, 5.0f, quad, 4, _Speed, &reflectVec))
 			{
+				itr->Data->HitAffect();
+				D3DXVECTOR3 wallSpeed = itr->Data->Speed();
+				//壁の移動ベクトルからプレイヤー方向の成分のみを加算
+				D3DXVECTOR3 playerwall = _Pos - itr->Data->Pos();
+				D3DXVec3Normalize(&playerwall, &playerwall);
+				float wallReflect = D3DXVec3Dot(&playerwall, &wallSpeed);
+				playerwall *= (wallReflect+PLAYER_REFRECT_SPEED);
+
+				//反射ベクトルをランダム変化させる
+				float randReflect = Randf(-PLAYER_REFRECT_RAND*0.5, PLAYER_REFRECT_RAND*0.5);
+
 				D3DXVECTOR3 speed = _Speed;
-				float angle = atan2(reflectVec.x, reflectVec.y);
-				float sp = D3DXVec3Length(&speed);
+				float angle = atan2(reflectVec.x, reflectVec.y) + DEG2RAD(randReflect);
+				float sp = D3DXVec3Length(&(speed + playerwall));
 				_Speed.x = sinf(angle)*sp;
 				_Speed.y = cosf(angle)*sp;
 				angle = RAD2DEG(angle);
@@ -138,6 +166,27 @@ void Player::Update()
 			}
 
 			itr = itr->_Next;
+		}
+
+		
+		VALUE<CheckPoint>* checkPoint = CheckPoint::HitList()->Begin();
+
+		while (checkPoint)
+		{
+			if (!checkPoint->Data->Active())
+			{
+				if (Collision::Circle(_Pos,10.0f,checkPoint->Data->Pos(),checkPoint->Data->Size().x))
+				{
+					checkPoint->Data->SetActive(true);
+					CheckPointPos = checkPoint->Data->Pos();
+
+					if (CurrentCheckPoint != nullptr){ CurrentCheckPoint->SetActive(false); }
+
+					CurrentCheckPoint = checkPoint->Data;
+					break;
+				}
+			}
+			checkPoint = checkPoint->_Next;
 		}
 
 	}

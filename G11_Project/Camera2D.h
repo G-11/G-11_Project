@@ -79,6 +79,7 @@ public:
 	static int GetCameraNum(void)			{ return CameraNum; }//ƒJƒƒ‰”‚ğæ“¾
 	D3DXVECTOR3 GetPosP(void)const			{ return Pos; }//ƒJƒƒ‰ˆÊ’u‚ğæ“¾
 	D3DXVECTOR3 GetRot(void)const			{ return Rot; }
+	D3DXVECTOR3 GetSpeed(void)const			{ return Speed; }
 	D3DXVECTOR2 GetViewPortPos(void)const	{ return D3DXVECTOR2((float)ViewPort.X,(float)ViewPort.Y); }
 	D3DXVECTOR2 GetViewPortSize(void)const	{ return D3DXVECTOR2((float)ViewPort.Width,(float)ViewPort.Height); }
 	D3DXMATRIX Projection(void){ return Projection2D; }

@@ -21,28 +21,6 @@ BreakObject* BreakObject::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,
 
 void BreakObject::Update(void)
 {
-	
-	if (_Player != nullptr)
-	{
-		if (!Active)
-		{
-			if (Collision::CircleQuad(_Player->Pos(),_Player->Size().x / 2.0f,_Quad,4))
-			{
-				D3DXVECTOR3 vec(0,0,0);
-				float speed = 0;
-				vec = _Player->Speed();
-				speed = D3DXVec3LengthSq(&vec);
-				if (speed > 12.0f)
-				{
-					Active = true;
-					float angle = atan2(vec.y,vec.x) + Randf(DEG2RAD(-70.0f),DEG2RAD(70.0f));
-					_Speed.x = cosf(angle)*10.0f;
-					_Speed.y = sinf(angle)*10.0f;
-				}
-			}
-		}
-	}
-
 	if (Active)
 	{
 		_Rot.z += DEG2RAD(10.0f);
@@ -59,4 +37,25 @@ void BreakObject::Update(void)
 
 	Sprite::Update();
 
+}
+
+void BreakObject::HitAffect(void)
+{
+	if (_Player != nullptr)
+	{
+		if (!Active)
+		{
+			D3DXVECTOR3 vec(0,0,0);
+			float speed = 0;
+			vec = _Player->Speed();
+			speed = D3DXVec3LengthSq(&vec);
+			if (speed > 90.0f)
+			{
+				Active = true;
+				float angle = atan2(vec.y,vec.x) + Randf(DEG2RAD(-70.0f),DEG2RAD(70.0f));
+				_Speed.x = cosf(angle)*10.0f;
+				_Speed.y = sinf(angle)*10.0f;
+			}
+		}
+	}
 }

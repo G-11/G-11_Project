@@ -93,9 +93,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BlurFilter.cpp" />
+    <ClCompile Include="BoundObject.cpp" />
     <ClCompile Include="BreakObject.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="CheckEffect.cpp" />
+    <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="CircleGauge.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Common.cpp" />
@@ -106,6 +109,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="Gimmick.cpp" />
+    <ClCompile Include="GrowupEffect.cpp" />
     <ClCompile Include="Input\GamePad.cpp" />
     <ClCompile Include="Input\GPDInput.cpp" />
     <ClCompile Include="Input\GPXInput.cpp" />
@@ -151,9 +155,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BlurFilter.h" />
+    <ClInclude Include="BoundObject.h" />
     <ClInclude Include="BreakObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Camera2D.h" />
+    <ClInclude Include="CheckEffect.h" />
+    <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="CircleGauge.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Collision.h" />
@@ -165,6 +172,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gauge.h" />
     <ClInclude Include="Gimmick.h" />
+    <ClInclude Include="GrowupEffect.h" />
     <ClInclude Include="Input\GamePad.h" />
     <ClInclude Include="Input\GPDInput.h" />
     <ClInclude Include="Input\GPXInput.h" />

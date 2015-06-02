@@ -466,11 +466,12 @@ void Renderer::RenderAffect(void)
 
 	SetStream2D();
 	Shaim3DEffect::DrawAll();
-	Orbit2D::DrawAll();
+	
 	for (int cnt = 0;cnt < Sprite::LAYER_3;cnt++)
 	{
 		Sprite::DrawAll(cnt);
 	}
+	Orbit2D::DrawAll();
 
 	CShader2D::Instance()->SetFloatArray(CShader2D::UV,D3DXVECTOR4(0,0,1.0f,1.0f),4);
 }

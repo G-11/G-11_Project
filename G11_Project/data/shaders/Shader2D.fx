@@ -139,7 +139,7 @@ technique Polygon2D
 		BlendOp = ADD;
 		DestBlend = INVSRCALPHA;
 		SrcBlend = SRCALPHA;
-		CullMode = CCW;
+		CullMode = NONE;
 		ZEnable = true;
 		ZWriteEnable = true;
 

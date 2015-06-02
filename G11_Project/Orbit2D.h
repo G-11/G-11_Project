@@ -40,6 +40,7 @@ public:
 	void SetColor(const D3DXCOLOR& color){_Color = color;}
 	void SetTexture(LPDIRECT3DTEXTURE9 tex){Texture = tex;}
 	void SetRelease(bool flag = true){ReleaseFlag_ = flag;}
+	void SetPass(short pass){ Pass = pass; }
 
 	D3DXVECTOR3 HeadPos(void)const{return Pos;}
 	D3DXVECTOR3 Speed(void)const{return _Speed;}
@@ -77,6 +78,7 @@ protected:
 	bool ReleaseFlag_;
 	int frame;
 	int CountDown;
+	short Pass;
 };
 
 #endif

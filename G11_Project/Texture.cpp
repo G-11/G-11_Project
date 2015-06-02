@@ -17,7 +17,12 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Interface/Number.png",
 	"data/texture/Interface/CGauge.png",
 	"data/texture/Interface/GaugePoint.png",
+
 	"data/texture/Effect/SkyMap.png",
+	"data/texture/Effect/GrowUp.png",
+	"data/texture/Effect/CheckPoint.png",
+	"data/texture/Effect/Tail1.png",
+
 	"data/texture/Interface/gauge.png",
 	"data/texture/Interface/gaugeFrame.png",
 	"data/texture/Interface/clock.png",

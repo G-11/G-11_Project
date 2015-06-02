@@ -21,7 +21,7 @@ public:
 		EATAN_STATE_ATTACK,	//攻撃
 		EATAN_STATE_REVERSE,	//吐く
 		EATAN_STATE_MAX,
-		EATAN_SATAE_NON,
+		EATAN_STATE_NON,
 	}EATAN_STATE;
 
 	static Eatan* Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3DXCOLOR &color, int priority = 0);
@@ -32,11 +32,13 @@ public:
 	virtual void Update();
 	virtual void Draw();
 
-	void SetState(EATAN_STATE State);
+	void SetState(EATAN_STATE State);	//すぐにステートを変更する
+	void SetNextState(EATAN_STATE State){ NextState = State; }	//現在のモーションが終わり次第ステートを変更する
 	void SetSwayFlag(bool Flag){ SwayFlag = Flag; }
 	EATAN_STATE State(){ return _State; }
 
 protected :
+	EATAN_STATE NextState;
 	EATAN_STATE _State;
 	EATAN_STATE OldState;
 

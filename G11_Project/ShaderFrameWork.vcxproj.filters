@@ -191,6 +191,21 @@
     <Filter Include="01.SCENE\02_GAME\BreakObject">
       <UniqueIdentifier>{a7647bdf-018c-4020-a5b7-a2890f038d61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.SCENE\02_GAME\BoundObject">
+      <UniqueIdentifier>{84a8dfe1-6275-4510-be09-afbb470e0bc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect">
+      <UniqueIdentifier>{16a32fa6-7320-4e21-914e-9021b91007f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Growup">
+      <UniqueIdentifier>{1beafbc6-ef07-4157-b69d-c13f84f62eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\CheckPoint">
+      <UniqueIdentifier>{42ec4dca-b447-4210-8b5e-a517fd879039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Check">
+      <UniqueIdentifier>{0a4b75c8-b4a3-4225-be3c-a2e1e61d760f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -360,6 +375,18 @@
     </ClCompile>
     <ClCompile Include="BreakObject.cpp">
       <Filter>01.SCENE\02_GAME\BreakObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GrowupEffect.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Growup</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundObject.cpp">
+      <Filter>01.SCENE\02_GAME\BoundObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckPoint.cpp">
+      <Filter>01.SCENE\02_GAME\CheckPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckEffect.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Check</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,6 +568,18 @@
     </ClInclude>
     <ClInclude Include="BreakObject.h">
       <Filter>01.SCENE\02_GAME\BreakObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundObject.h">
+      <Filter>01.SCENE\02_GAME\BoundObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GrowupEffect.h">
+      <Filter>01.SCENE\02_GAME\Effect\Growup</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckPoint.h">
+      <Filter>01.SCENE\02_GAME\CheckPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckEffect.h">
+      <Filter>01.SCENE\02_GAME\Effect\Check</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

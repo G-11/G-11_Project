@@ -17,6 +17,8 @@
 
 #include "StartDevice.h"
 #include "BreakObject.h"
+#include "BoundObject.h"
+#include "CheckPoint.h"
 
 #include "Stage.h"
 #include "Stage_1.h"
@@ -47,7 +49,7 @@ void Game::Init(void)
 	Sound::Instance()->Play(BGM_TITLE);
 	
 	// 背景
-	_field = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT*1.2f), WHITE(1.0f), Sprite::LAYER_BACKGROUND);
+	_field = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT), WHITE(1.0f), Sprite::LAYER_BACKGROUND);
 	_field->SetTexture(GetTexture(TEX_FIELD1_BG));
 
 	// 天井
@@ -60,7 +62,7 @@ void Game::Init(void)
 	_field->SetPass(CShader2D::SKY);
 
 	// プレイヤー
-	_player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(128.0f, 128.0f), WHITE(1.0f), Sprite::LAYER_3);
+	_player = Player::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(158.0f, 158.0f), WHITE(1.0f), Sprite::LAYER_1);
 	StartDevice::SetPlayer(_player);
 	BreakObject::SetPlayer(_player);
 	// アイテム
@@ -68,12 +70,18 @@ void Game::Init(void)
 
 	// ステージ１
 	_stage = Stage_1::Create();
+	//_stage = new Stage_1;
+	//_stage = Stage::Create(STAGE_MODE1);
 
 
 	BreakObject::Create(D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT / 2.0f),D3DXVECTOR2(100.0f,100.0f),TEX_GOAL);
 	BreakObject::Create(D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT / 2.0f+10.0f),D3DXVECTOR2(100.0f,100.0f),TEX_GOAL);
 	BreakObject::Create(D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT / 2.0f-10.0f),D3DXVECTOR2(100.0f,100.0f),TEX_GOAL);
 	BreakObject::Create(D3DXVECTOR2(SCREEN_WIDTH-30.0f,SCREEN_HEIGHT / 2.0f),D3DXVECTOR2(100.0f,100.0f),TEX_GOAL);
+
+	BoundObject* object = BoundObject::Create(D3DXVECTOR2(-150.0f,SCREEN_HEIGHT / 2.0f),D3DXVECTOR2(200.0f,60.0f),TEX_FLOOR1_BG,5);
+	object->SetOffsetX(0.5f-(60.0f/200.0f)*0.25f);
+	object->SetAction([](BoundObject* gim){ if (gim->Rot().z < PI / 2.0f){ gim->AddRot(DEG2RAD(2.0f)); } });
 
 	//ゴール
 	Goal* goal = Goal::Create(D3DXVECTOR3(-50.0f, -100.0f, 0.0f), D3DXVECTOR2(50.0f, 50.0f), WHITE(1.0f), Sprite::LAYER_2);
@@ -86,6 +94,11 @@ void Game::Init(void)
 
 	_Interface = new Interface;
 	_Interface->Init(600,100);
+
+	CheckPoint::Create(D3DXVECTOR2(-100.0f,150.0f));
+	CheckPoint::Create(D3DXVECTOR2(100.0f,150.0f));
+
+
 }
 
 void Game::Uninit(void)
@@ -103,10 +116,16 @@ void Game::Uninit(void)
 
 void Game::Update(void)
 {
-	_stage->Update();
+	if (_stage != nullptr)
+	{
+		_stage->Update();
+	}
 
 	_Interface->Update();
 	_field->SetMaskUVX(_Interface->Percent());
+
+	_field->AddUVX(Camera2D::GetCamera(0)->GetSpeed().x*-0.00001f);
+
 	if (Pause != nullptr)
 	{
 		Pause->Update();
@@ -130,6 +149,13 @@ void Game::Update(void)
 	if (VC::Instance()->keyboard()->Trigger(DIK_F2))
 	{
 		Interface::AddScore(-Interface::Score());
+	}
+
+	//ゲームリセット
+	if (VC::Instance()->keyboard()->Trigger(DIK_9) &&
+		Fade::Instance()->Mode() == Fade::FADE_NONE)
+	{
+		Manager::Instance()->SetScene(Manager::SCENE_GAME);
 	}
 
 #endif

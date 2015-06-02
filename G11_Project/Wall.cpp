@@ -7,6 +7,8 @@ Wall::Wall(int priority) :Sprite(priority)
 {
 	SelfIterator = nullptr;
 	SelfIterator = _HitList.Add(this);
+
+	OldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 Wall::~Wall()
@@ -28,4 +30,16 @@ Wall* Wall::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int 
 	wall->uv.w = 0.98f;
 
 	return wall;
+}
+
+void Wall::HitAffect(void)
+{
+
+}
+
+void Wall::Update()
+{
+	_Speed = _Pos - OldPos;
+
+	OldPos = _Pos;
 }

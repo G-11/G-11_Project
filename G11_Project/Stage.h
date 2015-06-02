@@ -24,18 +24,17 @@ protected:
 
 public:
 
-
 	Stage();
 	~Stage(){};
 
-	virtual void Update(void){};
-	virtual void Release(void){};
-
 	static STAGE_MODE stageMode;
-	void SetStage(STAGE_MODE mode);
+	virtual void Release(void){};
+	virtual void Update(void){};
+	static void SetStage(STAGE_MODE mode);
+	static Stage *Create(STAGE_MODE mode);
 
 private:
-	static Stage *_stage;
+	static Stage *_stageSelect;
 };
 
 #endif

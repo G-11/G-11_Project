@@ -50,6 +50,9 @@ Item::Item(int priority) :Sprite(priority)
 {
 	SelfIterator = nullptr;
 	SelfIterator = _ItemList.Add(this);
+
+	_State = ITEM_STATE_NON;
+	EatedCount = 0.0f;
 }
 
 //================================================================================
@@ -66,6 +69,26 @@ Item::~Item()
 //================================================================================
 void Item::Update()
 {
+	//食べられている時のアニメーション
+	if (_State == ITEM_STATE_EATED)
+	{
+		D3DXVECTOR3 Vec;
+		D3DXVECTOR3 Size;
+		
+		D3DXVec3Lerp(&Vec, PlayerPos, &_Pos, (1.0f - EatedCount / _CountMax));
+		D3DXVec3Lerp(&Size, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), &_Size, (1.0f - EatedCount / _CountMax));
+		
+		_Pos = Vec;
+		_Size = Size;
+
+		EatedCount += _AnimationSpeed;
+
+		if (EatedCount > _CountMax)
+		{
+			SetRelease();
+		}
+	}
+
 	Sprite::Update();
 }
 
@@ -80,13 +103,42 @@ Item* Item::HitCheck(const D3DXVECTOR3& Pos, const D3DXVECTOR3& Size)
 
 	while (itr)
 	{
-		if (Collision::Circle(Pos, Size.x*0.5f, itr->Data->_Pos, itr->Data->_Size.x*0.5f))
+		if (itr->Data->_State != ITEM_STATE_EATED)
 		{
-			return itr->Data;
+			if (Collision::Circle(Pos, Size.x*0.5f, itr->Data->_Pos, itr->Data->_Size.x*0.5f))
+			{
+				return itr->Data;
+			}
 		}
-
 		itr = itr->_Next;
 	}
 
 	return nullptr;
+}
+
+//================================================================================
+//	食べられた時のアニメーション
+//================================================================================
+void Item::Action()
+{
+
+}
+
+//================================================================================
+//	食べられた時のアニメーション
+//================================================================================
+void Item::Action(D3DXVECTOR3* Pos, float CountMax, float AnimationSpeed)
+{
+	Eated(Pos, CountMax, AnimationSpeed);
+}
+
+//================================================================================
+//	食べられた時のアニメーション
+//================================================================================
+void Item::Eated(D3DXVECTOR3* Pos, float CountMax, float AnimationSpeed)
+{
+	_State = ITEM_STATE_EATED;
+	PlayerPos = Pos;
+	_CountMax = CountMax;
+	_AnimationSpeed = AnimationSpeed;
 }
