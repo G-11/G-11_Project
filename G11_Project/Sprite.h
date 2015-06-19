@@ -28,6 +28,7 @@ protected:
 	D3DXCOLOR _MaskColor;
 	D3DXMATRIX WorldMtx;
 	D3DXVECTOR3 _Quad[4];
+	D3DXVECTOR3 _LocalQuadBase[4];
 	const static D3DXVECTOR3 QuadBase[4];
 	int frame;			//フレームカウント
 	bool ReleaseFlag;
@@ -90,6 +91,7 @@ public:
 	D3DXVECTOR3 Size(void)const		{ return _Size; }
 	D3DXVECTOR4 UV(void)const		{ return uv; }
 	D3DXVECTOR3* Quad(void)			{ return _Quad; }
+	D3DXVECTOR3* LocalQuadBase(void)	{ return _LocalQuadBase; }
 	static int Num(void){return Sprite::PolygonNum;}
 
 	static void SetTop(Sprite* top,int priority=0){Top_[priority] = top;}
@@ -99,6 +101,10 @@ public:
 	void SetPos		(const D3DXVECTOR3 &pos){ _Pos = pos; }
 	void SetPosX	(const float pos){ _Pos.x = pos; }
 	void SetPosY	(const float pos){ _Pos.y = pos; }
+
+	void SetSpeed(const D3DXVECTOR3 &pos){ _Speed = pos; }
+	void SetSpeedX(const float pos){ _Speed.x = pos; }
+	void SetSpeedY(const float pos){ _Speed.y = pos; }
 	
 	void SetOffset	(const D3DXVECTOR2& offset){ _Offset = offset; }
 	void SetOffsetX	(const float x){ _Offset.x = x; }
@@ -139,6 +145,13 @@ public:
 	void SetMaskUVY(float y){ MaskUV.y = y; }
 	void SetMaskUVWidth(float width){ MaskUV.z = width; }
 	void SetMaskUVHeight(float height){ MaskUV.w = height; }
+
+	void SetLocalQuadBase(D3DXVECTOR3 quad[]){
+		for (int cnt = 0;cnt < 4;cnt++)
+		{
+			_LocalQuadBase[cnt] = quad[cnt];
+		}
+	}
 	
 	void SetNext(Sprite* next){Next_ = next;}
 	void SetPrev(Sprite* prev){ Prev_ = prev; }
@@ -149,6 +162,10 @@ public:
 	void AddPos		(const D3DXVECTOR3 &pos){ _Pos += pos; }
 	void AddPosX	(const float pos){ _Pos.x += pos; }
 	void AddPosY	(const float pos){ _Pos.y += pos; }
+
+	void AddSpeed(const D3DXVECTOR3 &pos){ _Speed += pos; }
+	void AddSpeedX(const float pos){ _Speed.x += pos; }
+	void AddSpeedY(const float pos){ _Speed.y += pos; }
 	
 	void AddOffset	(const D3DXVECTOR2& offset){ _Offset += offset; }
 	void AddOffsetX	(const float x){ _Offset.x += x; }

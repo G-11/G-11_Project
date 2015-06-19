@@ -33,11 +33,11 @@ private:
 
 	
 	float Flahing,AddFlashingNum,RotFream;//α値,加える値,左右ゆれ用
-	int MenuNum;
+	int MenuNum;//メニュー選択用
 
-#if _DEBUG
+
 	float test_num;
-#endif
+
 
 };
 

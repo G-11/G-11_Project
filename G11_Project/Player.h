@@ -10,7 +10,7 @@
 #include "Eatan.h"
 
 class CheckPoint;
-
+class Clog;
 //================================================================================
 //	プレイヤークラス
 //================================================================================
@@ -32,10 +32,17 @@ public:
 	
 
 private:
+
+	void HitWall(void);
+	void HitCheckPoint(void);
+	bool HitClog(void);
+
 	D3DXVECTOR3 OldPos;
 	bool HitCheckFlag;
 	bool ActionFlag;
 	CheckPoint* CurrentCheckPoint;
 	D3DXVECTOR3 CheckPointPos;
+	Clog* HavingObject;
+	int Score;		//前回食べたもののスコア
 };
 

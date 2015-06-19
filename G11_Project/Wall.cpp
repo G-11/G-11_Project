@@ -24,17 +24,29 @@ Wall* Wall::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int 
 	wall->_Pos = Vector3(pos,0);
 	wall->_Size = Vector3(size,1.0f);
 	wall->Texture = GetTexture(texId);
-	float widthPer = size.x/size.y;
-	wall->uv.z = widthPer;
-	wall->uv.y = 0.01f;
-	wall->uv.w = 0.98f;
+	float widthPer = 1.0f;
+	if (size.x > size.y)
+	{
+		widthPer = size.x / size.y;
+		wall->uv.z = widthPer;
+		wall->uv.y = 0.01f;
+		wall->uv.w = 0.98f;
+	}
+	else
+	{
+		widthPer = size.y / size.x;
+		wall->uv.x = 0.01f;
+		wall->uv.z = 0.98f;
+		wall->uv.w = widthPer;
+	}
+	
 
 	return wall;
 }
 
-void Wall::HitAffect(void)
+bool Wall::HitAffect(void)
 {
-
+	return false;
 }
 
 void Wall::Update()

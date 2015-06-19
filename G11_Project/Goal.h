@@ -21,10 +21,10 @@ public:
 	void Update();
 	void Draw();
 
-	void SetPlayer(Player* p){ player = p; }
+	static void SetPlayer(Player* p){ player = p; }
 
 private:
-	Player* player;
+	static Player* player;
 };
 
 

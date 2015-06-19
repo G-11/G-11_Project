@@ -16,7 +16,7 @@ class Player;
 class Item;
 class Wall;
 class Interface;
-class Stage;
+class StageManager;
 
 class Game:public Scene
 {
@@ -39,13 +39,13 @@ private:
 	CPause* Pause;
 	static bool _PauseFlag;
 
-	static Sprite	*_field;
+	static Sprite	*_Field;
 	static Wall	*_cilling;
 	static Wall	*_floor;
 
 	static Player	*_player;
 	static Item		*_item;
-	static Stage	*_stage;
+	static StageManager* Stage;
 
 
 	Interface* _Interface;

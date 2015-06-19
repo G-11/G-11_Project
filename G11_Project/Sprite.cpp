@@ -41,6 +41,7 @@ Sprite::Sprite(int priority)
 	ReleaseFlag = false;
 	Priority = priority;
 	_Pass = CShader2D::NORMAL;
+	memcpy(_LocalQuadBase,QuadBase,sizeof(D3DXVECTOR3)*4);
 	memcpy(_Quad,QuadBase,sizeof(D3DXVECTOR3)*4);
 	PolygonNum++;
 	LinkList();
@@ -352,7 +353,7 @@ void Sprite::CastMatrix(void)
 
 	for (int cnt = 0;cnt < 4;cnt++)
 	{
-		D3DXVECTOR3 quad = D3DXVECTOR3(QuadBase[cnt].x + _Offset.x,QuadBase[cnt].y + _Offset.y,0);
+		D3DXVECTOR3 quad = D3DXVECTOR3(_LocalQuadBase[cnt].x + _Offset.x,_LocalQuadBase[cnt].y + _Offset.y,0);
 		D3DXVec3TransformCoord(&_Quad[cnt],&quad,&WorldMtx);
 	}
 }

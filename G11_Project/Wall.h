@@ -15,7 +15,7 @@ public:
 	static List<Wall>* HitList(void){return &_HitList; }
 	static void InitHitList(void){ _HitList.Clear(); }
 
-	virtual void HitAffect(void);
+	virtual bool HitAffect(void);
 	virtual void Update();
 
 protected:

@@ -9,15 +9,12 @@
 #include "Gauge.h"
 
 
-VIS_CHAR Result::ResultCharId[6];
+VIS_CHAR Result::ResultCharId[RESULTCHARMAX];
 
 void Result::Init(void)
 {
 	Window* window = Window::Instance();
 
-	SetResultCharId(1);
-	SetResultCharId(2);
-	SetResultCharId(3);
 
 	BG = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT), WHITE(1.0f), Sprite::LAYER_4);
 	BG->SetTexture(GetTexture(TEX_TITLE_BG));
@@ -28,10 +25,11 @@ void Result::Init(void)
 	Push->SetTexture(GetTexture(TEX_INTERFACE_PUSH));
 
 	//ゲージ
-	GlowGauge = Gauge::Create(D3DXVECTOR2(SCREEN_WIDTH / 3.8, SCREEN_HEIGHT / 1.4f), D3DXVECTOR2(100, 600), 0, 100.0f, 0, UP, Sprite::LAYER_INTERFACE);
+	GlowGauge = Gauge::Create(D3DXVECTOR2(SCREEN_WIDTH / 3.8f, SCREEN_HEIGHT / 1.4f), D3DXVECTOR2(100, 600), 0, 100.0f, 0, UP, Sprite::LAYER_INTERFACE);
 	GlowGauge->SetDelay(0.02f);//ゲージの伸びるスピード？
 	GlowGauge->SetTexture(GetTexture(TEX_GLOW_GAUGE));
 	GlowGauge->SetRot(D3DX_PI/2);//90度へ
+	GlowGauge->SetColor(RED(1.0f));
 
 	//ゲージ枠
 	GaugeFream = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT/1.4f, 0), D3DXVECTOR2(100, 600), WHITE(1.0f), Sprite::LAYER_INTERFACE);
@@ -41,22 +39,20 @@ void Result::Init(void)
 
 
 	//キャラ枠
-	GaugeFream = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3.0f, 0), D3DXVECTOR2(180, 512), WHITE(1.0f), Sprite::LAYER_INTERFACE);
-	GaugeFream->SetTexture(GetTexture(TEX_GLOE_GAUGE_FRAME));//枠のテクスチャ
-	GaugeFream->SetRot(D3DX_PI / 2);//枠を90度へ
+	CharFream = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3.0f, 0), D3DXVECTOR2(180, 700), WHITE(1.0f), Sprite::LAYER_INTERFACE);
+	CharFream->SetTexture(GetTexture(TEX_GLOE_GAUGE_FRAME));//枠のテクスチャ
+	CharFream->SetRot(D3DX_PI / 2);//枠を90度へ
+
 	charVisCnt = 0; 
 	charVisTime = 0;
 	charFlag = false;
-	//キャラクタ
-	//for (int i = 0; i < 6; i++)
-//	{
-		//if (ResultCharId[i].vis)
-			//Item::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.8f+(100*i), SCREEN_HEIGHT / 3, 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), ResultCharId[i].id, Sprite::LAYER_INTERFACE);
-//	}
+
 
 
 	flahing = 0;
 	add_flahing_num = 0.01f;
+	gaugeCnt = 0;
+	gaugeChangeColor = 0;
 
 }
 
@@ -83,25 +79,56 @@ void Result::Update(void)
 		Manager::Instance()->SetScene(Manager::SCENE_TITLE);
 	}
 
+	//キャラ表示
 	if (!charFlag)
 	{
-		if (charVisTime > 60)
+		//テスト 
+		if (charVisTime > 30)
 		{
+			//表示フラグが立っていたら
 			if (ResultCharId[charVisCnt].vis)
 			{
-				Item::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.8f + (100 * charVisCnt), SCREEN_HEIGHT / 3, 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), ResultCharId[charVisCnt].id, Sprite::LAYER_INTERFACE);
+				//ResultCharID内に入っているIDに対応するキャラの表示
+				Item::Create(D3DXVECTOR3(SCREEN_WIDTH / 3.5f + (100 * charVisCnt), SCREEN_HEIGHT / 3, 0), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), ResultCharId[charVisCnt].id, Sprite::LAYER_INTERFACE);
+				charVisTime = 0;//Timeリセット
+				gaugeCnt++;
 			}
-			charVisTime = 0;
-			if (charVisCnt > 6)
+			//全体キャラ数までいったら
+			if (charVisCnt > RESULTCHARMAX)
 			{
-				charFlag = true;
+				charFlag = true;//キャラクタ最大数まで表示したら
 			}
-			charVisCnt++;
+			charVisCnt++;//
 		}
-		charVisTime++;
+		charVisTime++;//時間
 	}
-	
-	GlowGauge->SetCurrent(100);
+
+	if (charFlag)
+	{
+		float sub = RESULTCHARMAX*1.0f;
+		if (gaugeChangeColor < gaugeCnt / sub * 100)
+		{
+			gaugeChangeColor++;
+			switch (gaugeChangeColor)
+			{
+			case 25:
+				GlowGauge->SetColor(YELLOW(1.0f));
+				break;
+			case 50:
+				GlowGauge->SetColor(CYAN(1.0f));
+				break;
+			case 100:
+				GlowGauge->SetColor(WHITE(1.0f));
+				break;
+			}
+		}
+		else
+		{
+			gaugeChangeColor = (int)(gaugeCnt / sub * 100);
+		}
+		GlowGauge->SetCurrent((float)gaugeChangeColor);
+		
+	}
 
 }
 
@@ -112,7 +139,7 @@ void Result::Draw(void)
 
 void Result::SetResultCharId(int id)
 {
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < RESULTCHARMAX; i++)
 	{
 		if (!ResultCharId[i].vis)
 		{
@@ -126,7 +153,7 @@ void Result::SetResultCharId(int id)
 
 void Result::ResetResultChar(void)
 {
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < RESULTCHARMAX; i++)
 	{
 		ResultCharId[i].vis = false;
 	}

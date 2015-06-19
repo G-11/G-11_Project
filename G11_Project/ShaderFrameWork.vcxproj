@@ -100,6 +100,10 @@
     <ClCompile Include="CheckEffect.cpp" />
     <ClCompile Include="CheckPoint.cpp" />
     <ClCompile Include="CircleGauge.cpp" />
+    <ClCompile Include="Clog.cpp" />
+    <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="CutEffect.cpp" />
+    <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -118,6 +122,7 @@
     <ClCompile Include="Input\VC.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Ivy.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Light2D.cpp" />
     <ClCompile Include="LightParticle.cpp" />
@@ -135,6 +140,7 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Counter.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Stage_1.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -147,7 +153,10 @@
     <ClCompile Include="Shimmer.cpp" />
     <ClCompile Include="ShimmerParticle2D.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="StartDevice.cpp" />
+    <ClCompile Include="Stump.cpp" />
+    <ClCompile Include="Taizou.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -162,6 +171,10 @@
     <ClInclude Include="CheckEffect.h" />
     <ClInclude Include="CheckPoint.h" />
     <ClInclude Include="CircleGauge.h" />
+    <ClInclude Include="Clog.h" />
+    <ClInclude Include="Creature.h" />
+    <ClInclude Include="CutEffect.h" />
+    <ClInclude Include="Gate.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Common.h" />
@@ -181,6 +194,7 @@
     <ClInclude Include="Input\VC.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Ivy.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Light2D.h" />
     <ClInclude Include="LightParticle.h" />
@@ -212,9 +226,13 @@
     <ClInclude Include="Shimmer.h" />
     <ClInclude Include="ShimmerParticle2D.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageManager.h" />
     <ClInclude Include="Stage_1.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="StartDevice.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Stump.h" />
+    <ClInclude Include="Taizou.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Wall.h" />

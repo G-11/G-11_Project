@@ -16,25 +16,17 @@ class Gimmick;
 class Stage
 {
 protected:
-
-	Gimmick *GetGimmick(void){ return _gimmick;}
-
-	Gimmick *_gimmick;
-	int gmkNum;
-
+	
 public:
 
 	Stage();
 	~Stage(){};
 
-	static STAGE_MODE stageMode;
+	virtual void Init(void){};
+
 	virtual void Release(void){};
 	virtual void Update(void){};
-	static void SetStage(STAGE_MODE mode);
-	static Stage *Create(STAGE_MODE mode);
 
-private:
-	static Stage *_stageSelect;
 };
 
 #endif

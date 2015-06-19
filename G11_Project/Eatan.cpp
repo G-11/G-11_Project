@@ -11,20 +11,37 @@
 //	定数
 //================================================================================
 //アニメーションの分割数
-#define EATAN_PARTITION_STOP		(1)			
+#define EATAN_PARTITION_STOP		(2)			
 #define EATAN_PARTITION_MOVE		(2)
 #define EATAN_PARTITION_EAT			(6)
 #define EATAN_PARTITION_GLAD		(6)
 #define EATAN_PARTITION_ATTACK		(2)
+#define EATAN_PARTITION_MASTICATION	(2)
 #define EATAN_PARTITION_REVERSE		(3)
+#define EATAN_PARTITION_HAVE		(2)
+#define EATAN_PARTITION_WORRIED		(2)
 
 //アニメーションのスピード
-#define EATAN_ANIMATION_SPEED_STOP		(0.03f)
-#define EATAN_ANIMATION_SPEED_MOVE		(0.03f)
-#define EATAN_ANIMATION_SPEED_EAT		(0.2f)
-#define EATAN_ANIMATION_SPEED_GLAD		(0.03f)
-#define EATAN_ANIMATION_SPEED_ATTACK	(0.2f)
-#define EATAN_ANIMATION_SPEED_REVERSE	(0.02f)
+#define EATAN_ANIMATION_SPEED_STOP			(0.03f)
+#define EATAN_ANIMATION_SPEED_MOVE			(0.03f)
+#define EATAN_ANIMATION_SPEED_EAT			(0.2f)
+#define EATAN_ANIMATION_SPEED_GLAD			(0.03f)
+#define EATAN_ANIMATION_SPEED_ATTACK		(0.2f)
+#define EATAN_ANIMATION_SPEED_MASTICATION	(0.2f)
+#define EATAN_ANIMATION_SPEED_REVERSE		(0.02f)
+#define EATAN_ANIMATION_SPEED_HAVE			(0.03f)
+#define EATAN_ANIMATION_SPEED_WORRIED		(0.03f)
+
+//アニメーションの繰り返し数(0で無限ループ、1で繰り返しなし,それ以外は指定回数繰り返し)
+#define EATAN_ANIMATION_REPEATE_STOP			(0)
+#define EATAN_ANIMATION_REPEATE_MOVE			(0)
+#define EATAN_ANIMATION_REPEATE_EAT				(1)
+#define EATAN_ANIMATION_REPEATE_GLAD			(1)
+#define EATAN_ANIMATION_REPEATE_ATTACK			(1)
+#define EATAN_ANIMATION_REPEATE_MASTICATION		(5)
+#define EATAN_ANIMATION_REPEATE_REVERSE			(1)
+#define EATAN_ANIMATION_REPEATE_HAVE			(0)
+#define EATAN_ANIMATION_REPEATE_WORRIED			(3)
 
 //上下に揺れる移動量
 //
@@ -51,6 +68,9 @@ Eatan::Eatan(int priority) :Sprite(priority)
 	AnimationPartition[EATAN_STATE_GLAD] = EATAN_PARTITION_GLAD;
 	AnimationPartition[EATAN_STATE_ATTACK] = EATAN_PARTITION_ATTACK;
 	AnimationPartition[EATAN_STATE_REVERSE] = EATAN_PARTITION_REVERSE;
+	AnimationPartition[EATAN_STATE_HAVE] = EATAN_PARTITION_HAVE;
+	AnimationPartition[EATAN_STATE_WORRIED] = EATAN_PARTITION_WORRIED;
+	AnimationPartition[EATAN_STATE_MASTICATION] = EATAN_PARTITION_MASTICATION;
 
 	AnimationSpeed[EATAN_STATE_STOP] = EATAN_ANIMATION_SPEED_STOP;
 	AnimationSpeed[EATAN_STATE_MOVE] = EATAN_ANIMATION_SPEED_MOVE;
@@ -58,12 +78,29 @@ Eatan::Eatan(int priority) :Sprite(priority)
 	AnimationSpeed[EATAN_STATE_GLAD] = EATAN_ANIMATION_SPEED_GLAD;
 	AnimationSpeed[EATAN_STATE_ATTACK] = EATAN_ANIMATION_SPEED_ATTACK;
 	AnimationSpeed[EATAN_STATE_REVERSE] = EATAN_ANIMATION_SPEED_REVERSE;
+	AnimationSpeed[EATAN_STATE_HAVE] = EATAN_ANIMATION_SPEED_STOP;
+	AnimationSpeed[EATAN_STATE_WORRIED] = EATAN_ANIMATION_SPEED_WORRIED;
+	AnimationSpeed[EATAN_STATE_MASTICATION] = EATAN_ANIMATION_SPEED_MASTICATION;
+
+	AnimationRepeat[EATAN_STATE_STOP] =			EATAN_ANIMATION_REPEATE_STOP;
+	AnimationRepeat[EATAN_STATE_MOVE] =			EATAN_ANIMATION_REPEATE_MOVE;
+	AnimationRepeat[EATAN_STATE_EAT] =			EATAN_ANIMATION_REPEATE_EAT;
+	AnimationRepeat[EATAN_STATE_GLAD] =			EATAN_ANIMATION_REPEATE_GLAD;
+	AnimationRepeat[EATAN_STATE_ATTACK] =		EATAN_ANIMATION_REPEATE_ATTACK;
+	AnimationRepeat[EATAN_STATE_REVERSE] =		EATAN_ANIMATION_REPEATE_REVERSE;
+	AnimationRepeat[EATAN_STATE_HAVE] =			EATAN_ANIMATION_REPEATE_STOP;
+	AnimationRepeat[EATAN_STATE_WORRIED] =		EATAN_ANIMATION_REPEATE_WORRIED;
+	AnimationRepeat[EATAN_STATE_MASTICATION] =	EATAN_ANIMATION_REPEATE_MASTICATION;
 
 	//アニメーション枚数の最大値
 	for (int i = 0; i < EATAN_STATE_MAX; i++)
 	{
 		MaxPartition = max(MaxPartition, AnimationPartition[i]);
 	}
+
+	StateList.clear();
+
+	LoopCount = 0;
 }
 
 //================================================================================
@@ -107,30 +144,45 @@ void Eatan::Update()
 		if (AnimationCount > AnimationPartition[_State])
 		{
 			AnimationCount = 0.0f;
-			//繰り返さないモーション
-			//食べる
-			//攻撃
-			if (_State == EATAN_STATE_EAT ||
-				_State == EATAN_STATE_ATTACK ||
-				_State == EATAN_STATE_GLAD ||
-				_State == EATAN_STATE_REVERSE)
+			//アニメーションのループ
+			//無限ループのアニメーション
+			if (AnimationRepeat[_State] == 0)
 			{
-				if (SwayFlag)
+
+			}
+			//繰り返し回数指定のアニメーション
+			else
+			{
+				LoopCount++;
+
+				//繰り返し終了
+				if (LoopCount + 1 > AnimationRepeat[_State])
 				{
-					_State = EATAN_STATE_MOVE;
+					if (SwayFlag)
+					{
+						_State = EATAN_STATE_STOP;
+					}
+					else
+					{
+						_State = EATAN_STATE_STOP;
+					}
+
+					LoopCount = 0;
+
+					//次のステートが設定されていたらそちらに変更
+					EATAN_STATE state = EATAN_STATE_NON;
+					if (!StateList.empty())state = StateList.front();
+					if (state != EATAN_STATE_NON)
+					{
+						_State = state;
+						StateList.pop_front();
+					}
 				}
-				else
-				{
-					_State = EATAN_STATE_STOP;
-				}
+
+				
+				
 			}
 
-			//次のステートが設定されていたらそちらに変更
-			if (NextState != EATAN_STATE_NON)
-			{
-				_State = NextState;
-				NextState = EATAN_STATE_NON;
-			}
 
 		}
 	}
@@ -176,4 +228,18 @@ void Eatan::SetState(EATAN_STATE State)
 	{
 		_State = State;
 	}
+}
+
+void Eatan::AddState(EATAN_STATE state)
+{
+	//リスト末尾と同じステートは無視する
+	
+	EATAN_STATE LastState = EATAN_STATE_NON;
+	if(!StateList.empty())StateList.back();
+	if (LastState == state)
+	{
+		return;
+	}
+
+	StateList.push_back(state);
 }

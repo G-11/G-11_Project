@@ -9,6 +9,9 @@
 #include "Item.h"
 #include "Texture.h"
 #include "Collision.h"
+#include "Player.h"
+#include "Game.h"
+#include "Shader2D.h"
 
 //================================================================================
 //	Ã“Iƒƒ“ƒo
@@ -22,8 +25,12 @@ const D3DXVECTOR2 DEFAULT_ITEM_SIZE = D3DXVECTOR2(84.0f,84.0f);//ƒAƒCƒeƒ€‚Ìƒfƒtƒ
 //================================================================================
 const float Item::ItemScore[ITEM_ID_MAX] = {
 	10.0f,			//‚¤‚³‚¬
-	-5.0f,			//‚Ë‚±
+	5.0f,			//‚Ë‚±
 	50.0f,			//‚­‚Ü
+	10.0f,				//‚Ô‚½
+	10.0f,				//‚¤‚µ
+	-50.0f,			//‚³‚¢
+	100.0f,			//‚½‚¢‚¼‚¤
 };
 
 //================================================================================
@@ -52,7 +59,8 @@ Item::Item(int priority) :Sprite(priority)
 	SelfIterator = _ItemList.Add(this);
 
 	_State = ITEM_STATE_NON;
-	EatedCount = 0.0f;
+	EatedCount = 0;
+	ChangeStateFlag = true;
 }
 
 //================================================================================
@@ -72,21 +80,31 @@ void Item::Update()
 	//H‚×‚ç‚ê‚Ä‚¢‚éŽž‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
 	if (_State == ITEM_STATE_EATED)
 	{
-		D3DXVECTOR3 Vec;
-		D3DXVECTOR3 Size;
-		
-		D3DXVec3Lerp(&Vec, PlayerPos, &_Pos, (1.0f - EatedCount / _CountMax));
-		D3DXVec3Lerp(&Size, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), &_Size, (1.0f - EatedCount / _CountMax));
-		
-		_Pos = Vec;
-		_Size = Size;
-
-		EatedCount += _AnimationSpeed;
-
-		if (EatedCount > _CountMax)
+		Player *player = Game::GetPlayer();
+		if (player->State() == Player::EATAN_STATE_EAT)
 		{
-			SetRelease();
+			ChangeStateFlag = true;
 		}
+		if (ChangeStateFlag)
+		{
+			if (player->State() == Player::EATAN_STATE_MASTICATION)
+			{
+				EatedCount++;
+				ChangeStateFlag = false;
+			}
+		}
+	}
+	switch (EatedCount)
+	{
+	case 1:
+		Mask = GetTexture(TEX_MASK_EAT);
+		_Pass = CShader2D::ALPHA_MASK;
+		break;
+	case 2:
+		SetRelease();
+		break;
+	default:
+		break;
 	}
 
 	Sprite::Update();
@@ -105,7 +123,7 @@ Item* Item::HitCheck(const D3DXVECTOR3& Pos, const D3DXVECTOR3& Size)
 	{
 		if (itr->Data->_State != ITEM_STATE_EATED)
 		{
-			if (Collision::Circle(Pos, Size.x*0.5f, itr->Data->_Pos, itr->Data->_Size.x*0.5f))
+			if (Collision::Circle(Pos, Size.x*0.25f, itr->Data->_Pos, itr->Data->_Size.x*0.5f))
 			{
 				return itr->Data;
 			}
@@ -139,6 +157,5 @@ void Item::Eated(D3DXVECTOR3* Pos, float CountMax, float AnimationSpeed)
 {
 	_State = ITEM_STATE_EATED;
 	PlayerPos = Pos;
-	_CountMax = CountMax;
 	_AnimationSpeed = AnimationSpeed;
 }

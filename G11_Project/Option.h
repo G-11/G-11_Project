@@ -6,7 +6,7 @@
 
 class Sprite;
 class Gauge;
-class Number;
+class Counter;
 
 class Option :public Scene
 {
@@ -22,8 +22,8 @@ private:
 	Sprite* SEFrame;
 	Gauge* BGMGauge;
 	Gauge* SEGauge;
-	Number* BGMVolume;
-	Number* SEVolume;
+	Counter* BGMVolume;
+	Counter* SEVolume;
 
 	D3DXVECTOR3 DestPos;
 	D3DXVECTOR3 CursolPosition[3];

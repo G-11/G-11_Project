@@ -103,7 +103,7 @@ void Counter::Update(void)
 	int num = CurrentScore;
 	for(int cnt = 0; cnt<CountPlace; cnt++)
 	{//数字クラスに値をセット
-		number[cnt]->SetUV(num % 10,0,10,1);
+		number[cnt]->SetNum(num%10);
 		num /= 10;
 	}
 

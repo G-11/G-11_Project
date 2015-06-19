@@ -27,6 +27,8 @@ protected:
 	void CheckDevice(void);
 	int _Frame;
 	std::vector<StartDevice*> DeviceList;
+
+	D3DXVECTOR2 _Speed;
 	Action TrigAction;//‹N“®‚µ‚½Œã‚Ì‹““®
 
 	static List<Gimmick> _GimmickList;

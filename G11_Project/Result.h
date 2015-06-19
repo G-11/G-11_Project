@@ -6,6 +6,8 @@
 #include "main.h"
 #include "Scene.h"
 #include "Item.h"
+
+#define RESULTCHARMAX (6)
 class Sprite;
 class Gauge;
 
@@ -25,23 +27,25 @@ public:
 	void Update();
 	void Draw();
 
-	void SetResultCharId(int id);
+	static void SetResultCharId(int id);
 private:
 	Sprite *BG;//背景
 	Sprite *Push;//Pushボタン
 	Sprite *REatan;//リザルト用いーたん
 	Sprite *CharFream;//コレクション用キャラ枠
 
-	Sprite *ResultChar[6];//キャラクタ数
+	Sprite *ResultChar[RESULTCHARMAX];//キャラクタ数
 
 	Sprite *GaugeFream;//ゲージ外枠
 	Gauge *GlowGauge;//ゲージ
 
-	static VIS_CHAR ResultCharId[6];//キャラの表示非表示
+	static VIS_CHAR ResultCharId[RESULTCHARMAX];//キャラの表示非表示
 	float flahing, add_flahing_num;//α値,加える値 
 	bool charFlag;//キャラクタを
 	int charVisTime;//取得キャラ表示時間
 	int charVisCnt;
+	int gaugeCnt;//ゲージ用カウント数、全体に対し取得したアイテム分のゲージ上昇用
+	int gaugeChangeColor;//ゲージの色変え用変数
 	void ResetResultChar(void);
 
 };

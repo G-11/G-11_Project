@@ -17,6 +17,7 @@
 #include "Camera2D.h"
 #include "GrowupEffect.h"
 #include "CheckPoint.h"
+#include "Clog.h"
 //================================================================================
 //	定数
 //================================================================================
@@ -24,7 +25,7 @@
 #define PLAYER_SPEED		(0.5f)
 
 //慣性の減衰率
-#define PLAYER_INERTIA		(0.95f)
+#define PLAYER_INERTIA		(0.93f)
 
 //反射方向の開き(DEG)		
 #define PLAYER_REFRECT_RAND (30.0f)
@@ -42,6 +43,7 @@ Player::Player(int Priority) :Eatan(Priority)
 	ActionFlag = true;
 	CurrentCheckPoint = nullptr;
 	CheckPointPos = D3DXVECTOR3(0,0,0);
+	HavingObject = nullptr;
 }
 
 //================================================================================
@@ -66,7 +68,7 @@ Player* Player::Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3
 
 	player->SetTexture(GetTexture(TEX_EATAN));
 	player->SetSwayFlag(true);
-	player->SetState(EATAN_STATE_MOVE);
+	player->SetState(EATAN_STATE_STOP);
 
 	return player;
 }
@@ -78,6 +80,16 @@ void Player::Update()
 {
 	VC* vc = VC::Instance();
 
+	bool have = false;
+	//当たり判定フラグ
+	if (HitCheckFlag)
+	{
+		HitWall();
+		HitCheckPoint();
+		have = HitClog();
+
+	}
+
 	//操作フラグ
 	if (ActionFlag)
 	{
@@ -88,6 +100,18 @@ void Player::Update()
 		_Speed += D3DXVECTOR3(vc->LStickX(), vc->LStickY(), 0.0f) * PLAYER_SPEED;
 		_Speed *= PLAYER_INERTIA;
 
+		if (_State == EATAN_STATE_EAT || _State == EATAN_STATE_MASTICATION || _State == EATAN_STATE_REVERSE)
+		{
+			_Speed *= 0.5f;
+		}
+
+		//持っている物に座標を渡す
+		if (HavingObject != nullptr)
+		{
+			D3DXVECTOR3 pos = _Pos;
+			pos.y += _Size.y/2.0f;
+			HavingObject->SetPos(pos);
+		}
 
 		//****************************************
 		//	攻撃
@@ -102,7 +126,15 @@ void Player::Update()
 		//****************************************
 		if (vc->Trigger(COMMAND_A))
 		{
-			SetState(EATAN_STATE_EAT);
+			if (!have && HavingObject != nullptr)
+			{
+				HavingObject->SetHave(false);
+				HavingObject = nullptr;
+			}
+			else
+			{
+				SetState(EATAN_STATE_EAT);
+			}
 
 		}
 
@@ -116,80 +148,32 @@ void Player::Update()
 			{
 				float score = item->Score();
 				Interface::AddScore(score);
+				Score = (int)score;
 				item->Action(&_Pos, AnimationPartition[EATAN_STATE_EAT], (float)AnimationSpeed[EATAN_STATE_EAT]);
-					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12);
+				
 
-					if (score > 0)
-					{
-						SetNextState(EATAN_STATE_GLAD);
-					}
-					else
-					{
-						SetNextState(EATAN_STATE_REVERSE);
-					}
+				if (score > 0)
+				{
+					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12);
+					AddState(EATAN_STATE_MASTICATION);
+					AddState(EATAN_STATE_EAT);
+					AddState(EATAN_STATE_MASTICATION);
+					AddState(EATAN_STATE_GLAD);
+				}
+				else
+				{
+					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12,CShader2D::SUB);
+					AddState(EATAN_STATE_MASTICATION);
+					AddState(EATAN_STATE_EAT);
+					AddState(EATAN_STATE_MASTICATION);
+					AddState(EATAN_STATE_REVERSE);
+				}
 			}
 			
 		}
 	}
 
-	//当たり判定フラグ
-	if (HitCheckFlag)
-	{
-		List<Wall>* wall = Wall::HitList();
-		VALUE<Wall>* itr = wall->Begin();
-
-		while (itr)
-		{
-			D3DXVECTOR3 reflectVec(0, 0, 0);
-			D3DXVECTOR3 *quad = itr->Data->Quad();
-
-			if (Collision::CircleQuad(_Pos, 5.0f, quad, 4, _Speed, &reflectVec))
-			{
-				itr->Data->HitAffect();
-				D3DXVECTOR3 wallSpeed = itr->Data->Speed();
-				//壁の移動ベクトルからプレイヤー方向の成分のみを加算
-				D3DXVECTOR3 playerwall = _Pos - itr->Data->Pos();
-				D3DXVec3Normalize(&playerwall, &playerwall);
-				float wallReflect = D3DXVec3Dot(&playerwall, &wallSpeed);
-				playerwall *= (wallReflect+PLAYER_REFRECT_SPEED);
-
-				//反射ベクトルをランダム変化させる
-				float randReflect = Randf(-PLAYER_REFRECT_RAND*0.5, PLAYER_REFRECT_RAND*0.5);
-
-				D3DXVECTOR3 speed = _Speed;
-				float angle = atan2(reflectVec.x, reflectVec.y) + DEG2RAD(randReflect);
-				float sp = D3DXVec3Length(&(speed + playerwall));
-				_Speed.x = sinf(angle)*sp;
-				_Speed.y = cosf(angle)*sp;
-				angle = RAD2DEG(angle);
-				SetPos(OldPos);
-			}
-
-			itr = itr->_Next;
-		}
-
-		
-		VALUE<CheckPoint>* checkPoint = CheckPoint::HitList()->Begin();
-
-		while (checkPoint)
-		{
-			if (!checkPoint->Data->Active())
-			{
-				if (Collision::Circle(_Pos,10.0f,checkPoint->Data->Pos(),checkPoint->Data->Size().x))
-				{
-					checkPoint->Data->SetActive(true);
-					CheckPointPos = checkPoint->Data->Pos();
-
-					if (CurrentCheckPoint != nullptr){ CurrentCheckPoint->SetActive(false); }
-
-					CurrentCheckPoint = checkPoint->Data;
-					break;
-				}
-			}
-			checkPoint = checkPoint->_Next;
-		}
-
-	}
+	
 	OldPos = _Pos;
 
 	Eatan::Update();
@@ -200,6 +184,88 @@ void Player::Update()
 //================================================================================
 void Player::Draw()
 {
-
+	CDebugProc::Print("Player:x.%f,y.%f",_Pos.x,_Pos.y);
 	Eatan::Draw();
+}
+
+void Player::HitWall(void)
+{
+	List<Wall>* wall = Wall::HitList();
+	VALUE<Wall>* itr = wall->Begin();
+
+	while (itr)
+	{
+		D3DXVECTOR3 reflectVec(0,0,0);
+		D3DXVECTOR3 *quad = itr->Data->Quad();
+
+		if (Collision::CircleQuad(_Pos,5.0f,quad,4,_Speed,&reflectVec))
+		{
+			if (!itr->Data->HitAffect())
+			{
+				D3DXVECTOR3 wallSpeed = itr->Data->Speed();
+				//壁の移動ベクトルからプレイヤー方向の成分のみを加算
+				D3DXVECTOR3 playerwall = _Pos - itr->Data->Pos();
+				D3DXVec3Normalize(&playerwall,&playerwall);
+				float wallReflect = D3DXVec3Dot(&playerwall,&wallSpeed);
+				playerwall *= (wallReflect + PLAYER_REFRECT_SPEED);
+
+				//反射ベクトルをランダム変化させる
+				float randReflect = Randf(-PLAYER_REFRECT_RAND*0.5,PLAYER_REFRECT_RAND*0.5);
+
+				D3DXVECTOR3 speed = _Speed;
+				float angle = atan2(reflectVec.x,reflectVec.y) + DEG2RAD(randReflect);
+				float sp = D3DXVec3Length(&(speed + playerwall));
+				_Speed.x = sinf(angle)*sp;
+				_Speed.y = cosf(angle)*sp;
+				angle = RAD2DEG(angle);
+				SetPos(OldPos);
+			}
+		}
+
+		itr = itr->_Next;
+	}
+}
+
+void Player::HitCheckPoint(void)
+{
+	VALUE<CheckPoint>* checkPoint = CheckPoint::HitList()->Begin();
+
+	while (checkPoint)
+	{
+		if (!checkPoint->Data->Active())
+		{
+			if (Collision::Circle(_Pos,10.0f,checkPoint->Data->Pos(),checkPoint->Data->Size().x))
+			{
+				checkPoint->Data->SetActive(true);
+				CheckPointPos = checkPoint->Data->Pos();
+
+				if (CurrentCheckPoint != nullptr){ CurrentCheckPoint->SetActive(false); }
+
+				CurrentCheckPoint = checkPoint->Data;
+				break;
+			}
+		}
+		checkPoint = checkPoint->_Next;
+	}
+}
+
+bool Player::HitClog(void)
+{
+	if (HavingObject == nullptr && VC::Instance()->Trigger(COMMAND_A))
+	{
+		VALUE<Clog>* clog = Clog::HitList()->Begin();
+
+		while (clog)
+		{
+			if (Collision::Circle(_Pos,_Size.x / 2.0f,clog->Data->Pos(),clog->Data->Size().x))
+			{
+				clog->Data->SetHave(true);
+				HavingObject = clog->Data;
+				_State = EATAN_STATE_HAVE;
+				return true;
+			}
+			clog = clog->_Next;
+		}
+	}
+	return false;
 }

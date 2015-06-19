@@ -14,14 +14,18 @@
 const LPCSTR TextureFileName[] = {
 	"data/texture/white.bmp",
 
-	"data/texture/Interface/Number.png",
+	"data/texture/Interface/numbarseat.png",
 	"data/texture/Interface/CGauge.png",
 	"data/texture/Interface/GaugePoint.png",
+	"data/texture/Interface/Cursor_000.png",
 
 	"data/texture/Effect/SkyMap.png",
 	"data/texture/Effect/GrowUp.png",
 	"data/texture/Effect/CheckPoint.png",
 	"data/texture/Effect/Tail1.png",
+	"data/texture/Effect/Star.png",
+	"data/texture/Effect/turueffect.png",
+	"data/texture/Effect/kaziru.png",
 
 	"data/texture/Interface/gauge.png",
 	"data/texture/Interface/gaugeFrame.png",
@@ -33,10 +37,26 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Item/usagi.png",
 	"data/texture/Item/neko.png",
 	"data/texture/Item/kuma.png",
+	"data/texture/Item/buta.png",
+	"data/texture/Item/usi.png",
+	"data/texture/Item/sai.png",
+	"data/texture/Item/taizoustump.png",
+
+	"data/texture/Creature/taizou.png",
+
+	"data/texture/Stage/Log_000.png",
+	"data/texture/Stage/Ivy_000.png",
+	"data/texture/Stage/rock.png",
+	"data/texture/Stage/Block_Breakable_000.png",
+	"data/texture/Stage/Block_Indestructible_000.png",
+	"data/texture/Stage/kirikabu.png",
 
 	"data/texture/Interface/botun.png",
+	"data/texture/Interface/mokuhyou1.png",
+	"data/texture/Interface/mokuhyou2.png",
 
 	"data/texture/field1.jpg",
+	"data/texture/BG_Options_000.png",
 	"data/texture/result.jpg",
 	"data/texture/gelfÉçÉS.png",
 

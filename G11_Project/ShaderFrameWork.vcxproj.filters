@@ -185,9 +185,6 @@
     <Filter Include="01.SCENE\01_TITLE\Option">
       <UniqueIdentifier>{9bc7c081-9e49-4028-88c6-59dbfcbdbb7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00.SYSTEM\インターフェイスパーツ\Score">
-      <UniqueIdentifier>{710ae946-d519-4d39-bf30-d0220f5045cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.SCENE\02_GAME\BreakObject">
       <UniqueIdentifier>{a7647bdf-018c-4020-a5b7-a2890f038d61}</UniqueIdentifier>
     </Filter>
@@ -205,6 +202,36 @@
     </Filter>
     <Filter Include="01.SCENE\02_GAME\Effect\Check">
       <UniqueIdentifier>{0a4b75c8-b4a3-4225-be3c-a2e1e61d760f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.SYSTEM\インターフェイスパーツ\Counter">
+      <UniqueIdentifier>{710ae946-d519-4d39-bf30-d0220f5045cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Star">
+      <UniqueIdentifier>{23b6f09c-0606-4728-9964-52a5619c3ca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\StageManager">
+      <UniqueIdentifier>{352c9c3e-72f1-458a-b0ec-ab8e9f3dc14e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Clog">
+      <UniqueIdentifier>{2ec2ba92-f3dc-4134-8642-653ad0aebfa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Ivy">
+      <UniqueIdentifier>{2081d464-f843-4e4e-b486-3af4a5d1b785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Gate">
+      <UniqueIdentifier>{30ad2bfa-b969-4512-b4a6-61556c314b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Switch">
+      <UniqueIdentifier>{8937517f-2697-4198-b09e-300ac4dc3de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Cut">
+      <UniqueIdentifier>{3952c68c-a622-4706-850e-2fdd7ff94f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Creature">
+      <UniqueIdentifier>{f2170b23-d70d-4e58-af24-ed153909cc39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Creature\Taizou">
+      <UniqueIdentifier>{9fb385e2-0c75-4dad-b9dd-7ae1f532110a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -365,7 +392,7 @@
       <Filter>01.SCENE\01_TITLE\Option</Filter>
     </ClCompile>
     <ClCompile Include="Counter.cpp">
-      <Filter>00.SYSTEM\インターフェイスパーツ\Score</Filter>
+      <Filter>00.SYSTEM\インターフェイスパーツ\Counter</Filter>
     </ClCompile>
     <ClCompile Include="Stage_1.cpp">
       <Filter>01.SCENE\02_GAME\Stage\Stage_1</Filter>
@@ -388,6 +415,33 @@
     <ClCompile Include="CheckEffect.cpp">
       <Filter>01.SCENE\02_GAME\Effect\Check</Filter>
     </ClCompile>
+    <ClCompile Include="Star.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Star</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\StageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Clog.cpp">
+      <Filter>01.SCENE\02_GAME\Clog</Filter>
+    </ClCompile>
+    <ClCompile Include="Ivy.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Ivy</Filter>
+    </ClCompile>
+    <ClCompile Include="Gate.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="Stump.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Switch</Filter>
+    </ClCompile>
+    <ClCompile Include="CutEffect.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Cut</Filter>
+    </ClCompile>
+    <ClCompile Include="Creature.cpp">
+      <Filter>01.SCENE\02_GAME\Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="Taizou.cpp">
+      <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -401,9 +455,6 @@
     </ClInclude>
     <ClInclude Include="MathTable.h">
       <Filter>00.SYSTEM\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>00.SYSTEM\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Manager.h">
       <Filter>00.SYSTEM\Manager</Filter>
@@ -561,7 +612,7 @@
       <Filter>01.SCENE\01_TITLE\Option</Filter>
     </ClInclude>
     <ClInclude Include="Counter.h">
-      <Filter>00.SYSTEM\インターフェイスパーツ\Score</Filter>
+      <Filter>00.SYSTEM\インターフェイスパーツ\Counter</Filter>
     </ClInclude>
     <ClInclude Include="Goal.h">
       <Filter>01.SCENE\02_GAME\Stage</Filter>
@@ -580,6 +631,36 @@
     </ClInclude>
     <ClInclude Include="CheckEffect.h">
       <Filter>01.SCENE\02_GAME\Effect\Check</Filter>
+    </ClInclude>
+    <ClInclude Include="Star.h">
+      <Filter>01.SCENE\02_GAME\Effect\Star</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>01.SCENE\02_GAME\Stage\StageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Clog.h">
+      <Filter>01.SCENE\02_GAME\Clog</Filter>
+    </ClInclude>
+    <ClInclude Include="Ivy.h">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Ivy</Filter>
+    </ClInclude>
+    <ClInclude Include="Gate.h">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="Stump.h">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Switch</Filter>
+    </ClInclude>
+    <ClInclude Include="CutEffect.h">
+      <Filter>01.SCENE\02_GAME\Effect\Cut</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>00.SYSTEM\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Creature.h">
+      <Filter>01.SCENE\02_GAME\Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="Taizou.h">
+      <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

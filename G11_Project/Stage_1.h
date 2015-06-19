@@ -4,11 +4,15 @@
 
 #include "Stage.h"
 
+#define ITEM_OFSET (80.0f)
+
 class Stage_1 : public Stage
 {
 public:
 	Stage_1();
 	~Stage_1();
+
+	void Init(void);
 
 	void Release(void);
 	void Update(void);

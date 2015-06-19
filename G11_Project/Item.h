@@ -19,6 +19,10 @@ typedef enum
 	ITEM_ID_USAGI,
 	ITEM_ID_NEKO,
 	ITEM_ID_KUMA,
+	ITEM_ID_BUTA,
+	ITEM_ID_USI,
+	ITEM_ID_SAI,
+	ITEM_ID_TAIZOU,
 	ITEM_ID_MAX,
 }ITEM_ID;
 
@@ -72,7 +76,7 @@ protected:
 
 	int _State;
 	D3DXVECTOR3* PlayerPos;
-	float _CountMax;
 	float _AnimationSpeed;
-	float EatedCount;
+	int EatedCount;
+	bool ChangeStateFlag;
 };

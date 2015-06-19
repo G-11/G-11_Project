@@ -16,6 +16,7 @@ public:
 		ON,
 		TIMER,
 		SWITCH,
+		COMMAND,//重なった状態でアクションボタンで起動
 		TRIGGERTYPE_MAX
 	}TRIGGER_TYPE;
 
@@ -25,8 +26,9 @@ public:
 	static StartDevice* CreateON(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,int priority = Sprite::LAYER_1);
 	static StartDevice* CreateTimer(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,int timeLimit,int priority = Sprite::LAYER_1);
 	static StartDevice* CreateSwitch(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,int priority = Sprite::LAYER_1);
+	static StartDevice* CreateCommand(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,int priority = Sprite::LAYER_1);
 
-	void Update(void);
+	virtual void Update(void);
 
 	static void SetPlayer(Player* player){ _Player = player; }
 	
@@ -40,6 +42,7 @@ public:
 protected:
 	static Player* _Player;
 
+	bool HitClog(void);
 	bool _Active;
 	TRIGGER_TYPE TriggerType;
 	static List<StartDevice> _StartDeviceList;

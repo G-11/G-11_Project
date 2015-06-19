@@ -53,7 +53,7 @@ void GrowupEffect::Update(void)
 		SetRelease();
 		return;
 	}
-	D3DXVECTOR2 destPos(ParentPos->x,ParentPos->y);
+	D3DXVECTOR2 destPos(ParentPos->x,ParentPos->y+30.0f);
 	_Pos = Vector3(Bezier(StartPos,destPos,RelayPoint[0],RelayPoint[1],per),0);
 
 	frame ++;

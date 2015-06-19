@@ -89,6 +89,7 @@ public:
 	void SetRot		(const D3DXVECTOR3 &rot)			{ Rot = rot; }
 	void SetViewPortPos(const D3DXVECTOR2 &Pos)	{ ViewPort.X = (DWORD)Pos.x; ViewPort.Y = (DWORD)Pos.y; }
 	void SetViewPortSize(const D3DXVECTOR2 &Size)	{ ViewPort.Width = (DWORD)Size.x;ViewPort.Height = (DWORD)Size.y; }
+	void SetDestPos(const D3DXVECTOR3& pos){ DestPos = pos; }
 	static void SetShader(CShader2D* shader){_Shader = shader;}
 	void AddPosP(const D3DXVECTOR3 &pos)			{ Pos += pos; }
 	void AddRot	(const D3DXVECTOR3 &rot)			{ Rot += rot; }
@@ -110,6 +111,8 @@ public:
 	float BottomLimit(){ return _BottomLimit; }
 	float LeftLimit(){ return _LeftLimit; }
 	float RightLimit(){ return _RightLimit; }
+
+	void ResetPos(const D3DXVECTOR3& pos){ DestPos = OldPos = Pos = pos; }
 };
 
 #endif
