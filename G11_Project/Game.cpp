@@ -28,6 +28,7 @@
 #ifdef _DEBUG
 #include "Input/Keyboard.h"
 #include "Clog.h"
+#include "PlayerLight.h"
 bool Game::Hit = false;
 
 #endif
@@ -68,14 +69,14 @@ void Game::Init(void)
 	D3DXVECTOR3 pos = _player->Pos();
 	pos.x = 0;
 	camera->ResetPos(pos);
+
 	Goal::SetPlayer(_player);
+	Item::SetPlayer(_player);
 
 	camera->SetPlayer(_player);
 
 	_Interface = new Interface;
-	_Interface->Init(600,100);
-
-	
+	_Interface->Init(360000,100);
 
 }
 
@@ -87,6 +88,7 @@ void Game::Uninit(void)
 	
 	StartDevice::SetPlayer(nullptr);
 	BreakObject::SetPlayer(nullptr);
+	Item::SetPlayer(nullptr);
 	SafeDelete(Stage);
 	SafeDelete(_Interface);
 	Renderer::SetRenderMode(CScreenRender::MODE_NORMAL);

@@ -1,6 +1,7 @@
 #include "Light2D.h"
 #include "Shader2D.h"
 #include "LightParticle.h"
+#include "Camera2D.h"
 
 LightScreen* LightScreen::Self = new LightScreen;
 
@@ -56,17 +57,17 @@ LPDIRECT3DTEXTURE9 LightScreen::Render(LPDIRECT3DTEXTURE9 tex)
 	Device->GetRenderTarget(0,&OldSurface);
 	Device->SetRenderTarget(0,Surface);
 
-	//陽炎マップをクリアする
-	Device->Clear(0L,nullptr,(D3DCLEAR_TARGET | D3DCLEAR_STENCIL),D3DCOLOR_ARGB(0,0,0,0),1.0f,0);
-
-
+	//光源マップをクリアする
+	Device->Clear(0L,nullptr,(D3DCLEAR_TARGET | D3DCLEAR_STENCIL),D3DCOLOR_ARGB(128,0,0,0),1.0f,0);
 	LightParticle::DrawAll();
 	_Shader->DrawBegin();
+
+	Camera2D::GetCamera(0)->SetNoMove();
 
 
 	Device->SetRenderTarget(0,ResultSurface);
 
-	Device->Clear(0L,nullptr,(D3DCLEAR_TARGET | D3DCLEAR_STENCIL),D3DXCOLOR(0.0f,0,0,0),1.0f,0);
+	Device->Clear(0L,nullptr,(D3DCLEAR_TARGET | D3DCLEAR_STENCIL),D3DXCOLOR(0.0f,0,0,0.5f),1.0f,0);
 
 	_Shader->SetTexture(tex);
 	_Shader->SetMask(Texture);
@@ -92,6 +93,8 @@ LPDIRECT3DTEXTURE9 LightScreen::Render(LPDIRECT3DTEXTURE9 tex)
 		OldSurface->Release();
 		OldSurface = nullptr;
 	}
+
+	Camera2D::Set(0);
 
 	return Result;
 }

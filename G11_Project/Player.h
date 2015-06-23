@@ -30,7 +30,7 @@ public:
 	void SetHitCheckFlag(bool Flag){ HitCheckFlag = Flag; }
 	void SetActionFlag(bool Flag){ ActionFlag = Flag; }
 	
-
+	D3DXVECTOR3* PosPtr(void){ return &_Pos; }
 private:
 
 	void HitWall(void);

@@ -154,7 +154,6 @@ void Player::Update()
 
 				if (score > 0)
 				{
-					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12);
 					AddState(EATAN_STATE_MASTICATION);
 					AddState(EATAN_STATE_EAT);
 					AddState(EATAN_STATE_MASTICATION);
@@ -162,7 +161,6 @@ void Player::Update()
 				}
 				else
 				{
-					GrowupEffect::Creates(_Pos,&_Pos,250.0f,60,12,CShader2D::SUB);
 					AddState(EATAN_STATE_MASTICATION);
 					AddState(EATAN_STATE_EAT);
 					AddState(EATAN_STATE_MASTICATION);

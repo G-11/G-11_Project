@@ -13,8 +13,9 @@ sampler diffuseSampler = sampler_state {
 	MipFilter = LINEAR;
 	MaxAnisotropy = 16;
 
-	AddressU = WRAP;
-	AddressV = WRAP;
+	AddressU = BORDER;
+	AddressV = BORDER;
+	BorderColor = 0x00000000;
 };
 
 sampler maskSampler = sampler_state {

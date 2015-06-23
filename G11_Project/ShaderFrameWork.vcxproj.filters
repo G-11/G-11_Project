@@ -215,15 +215,6 @@
     <Filter Include="01.SCENE\02_GAME\Clog">
       <UniqueIdentifier>{2ec2ba92-f3dc-4134-8642-653ad0aebfa3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Ivy">
-      <UniqueIdentifier>{2081d464-f843-4e4e-b486-3af4a5d1b785}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Gate">
-      <UniqueIdentifier>{30ad2bfa-b969-4512-b4a6-61556c314b48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01.SCENE\02_GAME\Stage\Stage_1\Switch">
-      <UniqueIdentifier>{8937517f-2697-4198-b09e-300ac4dc3de1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.SCENE\02_GAME\Effect\Cut">
       <UniqueIdentifier>{3952c68c-a622-4706-850e-2fdd7ff94f4f}</UniqueIdentifier>
     </Filter>
@@ -232,6 +223,27 @@
     </Filter>
     <Filter Include="01.SCENE\02_GAME\Creature\Taizou">
       <UniqueIdentifier>{9fb385e2-0c75-4dad-b9dd-7ae1f532110a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Gimmick">
+      <UniqueIdentifier>{2484944d-c5e8-4a88-b076-990cc76e69a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Gimmick\Gate">
+      <UniqueIdentifier>{30ad2bfa-b969-4512-b4a6-61556c314b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Gimmick\Ivy">
+      <UniqueIdentifier>{2081d464-f843-4e4e-b486-3af4a5d1b785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Gimmick\Switch">
+      <UniqueIdentifier>{8937517f-2697-4198-b09e-300ac4dc3de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Gimmick\Sensor">
+      <UniqueIdentifier>{7006d589-62fd-49fa-bf13-f357be32c93b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Smorke">
+      <UniqueIdentifier>{ce4785e4-2b58-4931-9c91-650dc120aefd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Player\Light">
+      <UniqueIdentifier>{9683ab40-e975-4e3f-b87e-b7fba6cea15a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -425,13 +437,13 @@
       <Filter>01.SCENE\02_GAME\Clog</Filter>
     </ClCompile>
     <ClCompile Include="Ivy.cpp">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Ivy</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Ivy</Filter>
     </ClCompile>
     <ClCompile Include="Gate.cpp">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Gate</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Gate</Filter>
     </ClCompile>
     <ClCompile Include="Stump.cpp">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Switch</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Switch</Filter>
     </ClCompile>
     <ClCompile Include="CutEffect.cpp">
       <Filter>01.SCENE\02_GAME\Effect\Cut</Filter>
@@ -441,6 +453,15 @@
     </ClCompile>
     <ClCompile Include="Taizou.cpp">
       <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensor.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Sensor</Filter>
+    </ClCompile>
+    <ClCompile Include="Smoke.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Smorke</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerLight.cpp">
+      <Filter>01.SCENE\02_GAME\Player\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -642,13 +663,13 @@
       <Filter>01.SCENE\02_GAME\Clog</Filter>
     </ClInclude>
     <ClInclude Include="Ivy.h">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Ivy</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Ivy</Filter>
     </ClInclude>
     <ClInclude Include="Gate.h">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Gate</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Gate</Filter>
     </ClInclude>
     <ClInclude Include="Stump.h">
-      <Filter>01.SCENE\02_GAME\Stage\Stage_1\Switch</Filter>
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Switch</Filter>
     </ClInclude>
     <ClInclude Include="CutEffect.h">
       <Filter>01.SCENE\02_GAME\Effect\Cut</Filter>
@@ -661,6 +682,15 @@
     </ClInclude>
     <ClInclude Include="Taizou.h">
       <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensor.h">
+      <Filter>01.SCENE\02_GAME\Stage\Gimmick\Sensor</Filter>
+    </ClInclude>
+    <ClInclude Include="Smoke.h">
+      <Filter>01.SCENE\02_GAME\Effect\Smorke</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerLight.h">
+      <Filter>01.SCENE\02_GAME\Player\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -211,10 +211,10 @@ void Renderer::Init2D(void)
 	Vtx2[2].vtx = D3DXVECTOR3(-0.5f,0.5f,0);
 	Vtx2[3].vtx = D3DXVECTOR3(0.5f,0.5f,0);
 
-	Vtx2[0].tex = D3DXVECTOR2(0,0);
-	Vtx2[1].tex = D3DXVECTOR2(1,0);
-	Vtx2[2].tex = D3DXVECTOR2(0,1);
-	Vtx2[3].tex = D3DXVECTOR2(1,1);
+	Vtx2[0].tex = D3DXVECTOR2(0.001f,0.001f);
+	Vtx2[1].tex = D3DXVECTOR2(0.999f,0.001f);
+	Vtx2[2].tex = D3DXVECTOR2(0.001f,0.999f);
+	Vtx2[3].tex = D3DXVECTOR2(0.999f,0.999f);
 
 	VtxBuff[1]->Unlock();
 

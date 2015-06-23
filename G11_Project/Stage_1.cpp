@@ -13,6 +13,7 @@
 #include "Ivy.h"
 #include "Gate.h"
 #include "Stump.h"
+#include "Sensor.h"
 #include "Clog.h"
 #include "Item.h"
 #include "Goal.h"
@@ -57,7 +58,7 @@ void Stage_1::Init(void)
 	D3DXVECTOR3* quad;
 
 	// 床
-	Wall *wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH * 3.0f, 945.0f), D3DXVECTOR2(SCREEN_WIDTH * 6.0f, 150.0f), TEX_FLOOR1_BG, Sprite::LAYER_1);
+	Wall *wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH * 4.0f, 945.0f), D3DXVECTOR2(SCREEN_WIDTH * 8.0f, 150.0f), TEX_FLOOR1_BG, Sprite::LAYER_1);
 	quad = wall->LocalQuadBase();
 	quad[0].y = -0.255f;
 	quad[1].y = -0.255f;
@@ -65,7 +66,7 @@ void Stage_1::Init(void)
 	camera->SetFloor(wall);
 
 	// 天井
-	wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH * 3.0f, 45.0f), D3DXVECTOR2(SCREEN_WIDTH * 6.0f, 150.0f), TEX_CILLING1_BG, Sprite::LAYER_1);
+	wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH * 4.0f, 45.0f), D3DXVECTOR2(SCREEN_WIDTH * 8.0f, 150.0f), TEX_CILLING1_BG, Sprite::LAYER_1);
 	quad = wall->LocalQuadBase();
 	quad[2].y = 0.255f;
 	quad[3].y = 0.255f;
@@ -80,7 +81,7 @@ void Stage_1::Init(void)
 	wall->SetLocalQuadBase(quad);
 	wall->SetRot(PI/2.0f);
 
-	wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH*6.0f,450.0f),D3DXVECTOR2(1280.0f,256.0f),TEX_FLOOR1_BG,Sprite::LAYER_1);
+	wall = Wall::Create(D3DXVECTOR2(SCREEN_WIDTH*8.0f,450.0f),D3DXVECTOR2(1280.0f,256.0f),TEX_FLOOR1_BG,Sprite::LAYER_1);
 	quad = wall->LocalQuadBase();
 	quad[0].y = -0.255f;
 	quad[1].y = -0.255f;
@@ -88,7 +89,7 @@ void Stage_1::Init(void)
 	wall->SetRot(-(PI / 2.0f));
 
 	camera->SetLeftLimit(560.0f);
-	camera->SetRightLimit(SCREEN_WIDTH*6.0f - 560.0f);
+	camera->SetRightLimit(SCREEN_WIDTH*8.0f - 560.0f);
 
 	// 仮のアイテム座標　※一時的に書いたもの
 	D3DXVECTOR2 itemPos = D3DXVECTOR2(1000.0f, SCREEN_HEIGHT / 2.0f);
@@ -105,7 +106,7 @@ void Stage_1::Init(void)
 	
 
 	Gimmick* gimmick = Gimmick::Create(D3DXVECTOR2(850.0f,340.0f),D3DXVECTOR2(128.0f,256.0f),Sprite::LAYER_2);
-	gimmick->SetTexture(GetTexture(TEX_MARUTA));
+	gimmick->SetTexture(GetTexture(TEX_LOG_GIMMICK));
 	gimmick->SetAction([](Gimmick* gimmick){ 
 		gimmick->AddSpeedY(0.48f);
 		gimmick->AddPos(gimmick->Speed());
@@ -120,7 +121,7 @@ void Stage_1::Init(void)
 	Clog::Create(D3DXVECTOR2(1000.0f,800.0f),D3DXVECTOR2(75.0f,75.0f));
 
 	//最初のゲート
-	gimmick = Gate::Create(D3DXVECTOR2(1700.0f,700.0f),D3DXVECTOR2(128.0f,500.0f),TEX_MARUTA,Sprite::LAYER_0);
+	gimmick = Gate::Create(D3DXVECTOR2(1700.0f,700.0f),D3DXVECTOR2(128.0f,500.0f),TEX_LOG_GIMMICK,Sprite::LAYER_0);
 	gimmick->SetAction([](Gimmick* gimmick){
 		D3DXVECTOR3 pos = (D3DXVECTOR3(1700.0f,1250.0f,0) - gimmick->Pos())*0.01f;
 		gimmick->AddPos(pos);
@@ -128,7 +129,7 @@ void Stage_1::Init(void)
 	
 	gimmick->AddStartDevice(start);
 
-	gimmick = Gate::Create(D3DXVECTOR2(1700.0f,250.0f),D3DXVECTOR2(128.0f,500.0f),TEX_MARUTA,Sprite::LAYER_0);
+	gimmick = Gate::Create(D3DXVECTOR2(1700.0f,250.0f),D3DXVECTOR2(128.0f,500.0f),TEX_LOG_GIMMICK,Sprite::LAYER_0);
 	
 	gimmick->SetAction([](Gimmick* gimmick){
 		D3DXVECTOR3 pos = (D3DXVECTOR3(1700.0f,-350.0f,0) - gimmick->Pos())*0.01f;
@@ -138,12 +139,12 @@ void Stage_1::Init(void)
 
 	wall = Wall::Create(D3DXVECTOR2(2000.0f,256.0f),D3DXVECTOR2(256.0f,512.0f),TEX_BREAKABLE_OBJ);
 
-	Item::Create(D3DXVECTOR3(2500.0f,890.0f,0),ITEM_SIZE,WHITE(1.0f),ITEM_ID_KUMA,Sprite::LAYER_0);
+	Item::Create(D3DXVECTOR3(2500.0f,890.0f,0),ITEM_SIZE,WHITE(1.0f),ITEM_ID_KUMA,Sprite::LAYER_2);
 	for (int num = 0;num < 3;num++)
 	{
 		for (int cnt = 0;cnt < 3;cnt++)
 		{
-			BreakObject* breakObj = BreakObject::Create(D3DXVECTOR2(2200.0f + num*300.0f,890.0f - cnt*64.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA);
+			BreakObject* breakObj = BreakObject::Create(D3DXVECTOR2(2200.0f + num*300.0f,890.0f - cnt*64.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_BREAK);
 			breakObj->SetRot(PI / 2.0f);
 		}
 	}
@@ -175,19 +176,19 @@ void Stage_1::Init(void)
 	// 上段
 	for (int cnt = 0; cnt < 5; cnt++)
 	{
-		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt, 200.0f), D3DXVECTOR2(150.0f, 300.0f), TEX_MARUTA, true, Sprite::LAYER_0);
+		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt,200.0f),D3DXVECTOR2(150.0f,300.0f),TEX_LOG_BREAK,true,Sprite::LAYER_0);
 	}
 
 	// 中段
 	for (int cnt = 0; cnt < 7; cnt++)
 	{
-		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt, 525.0f), D3DXVECTOR2(150.0f, 300.0f), TEX_MARUTA, true, Sprite::LAYER_0);
+		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt,525.0f),D3DXVECTOR2(150.0f,300.0f),TEX_LOG_BREAK,true,Sprite::LAYER_0);
 	}
 
 	// 下段
 	for (int cnt = 0; cnt < 5; cnt++)
 	{
-		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt, 850.0f), D3DXVECTOR2(150.0f, 300.0f), TEX_MARUTA, true, Sprite::LAYER_0);
+		wall = BreakObject::Create(D3DXVECTOR2(3370.0f + 150.0f * cnt,850.0f),D3DXVECTOR2(150.0f,300.0f),TEX_LOG_BREAK,true,Sprite::LAYER_0);
 	}
 
 	Item::Create(D3DXVECTOR3(4150.0f, 200.0f, 0.0f), ITEM_SIZE, WHITE(1.0f), ITEM_ID_SAI);
@@ -197,10 +198,10 @@ void Stage_1::Init(void)
 	Wall::Create(D3DXVECTOR2(5654.0f,850.0f),D3DXVECTOR2(1408.0f,128.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
 	Wall::Create(D3DXVECTOR2(5000.0f,480.0f),D3DXVECTOR2(128.0f,128.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
 
-	wall = Wall::Create(D3DXVECTOR2(5000.0f,288.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA,Sprite::LAYER_0);
+	wall = Wall::Create(D3DXVECTOR2(5000.0f,288.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_WALL,Sprite::LAYER_0);
 	wall->SetUVHeight(-1.0f);
 
-	BoundObject* boundObj =  BoundObject::Create(D3DXVECTOR2(5000.0f,810.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA,4,Sprite::LAYER_0);
+	BoundObject* boundObj = BoundObject::Create(D3DXVECTOR2(5000.0f,810.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_GIMMICK,4,Sprite::LAYER_0);
 	boundObj->SetOffsetY(-0.5f);
 	boundObj->SetAction([](BoundObject* obj)
 	{
@@ -214,7 +215,7 @@ void Stage_1::Init(void)
 		}
 	});
 
-	boundObj = BoundObject::Create(D3DXVECTOR2(5070.0f,480.0f),D3DXVECTOR2(128.0f,384.0f),TEX_MARUTA,4,Sprite::LAYER_0);
+	boundObj = BoundObject::Create(D3DXVECTOR2(5070.0f,480.0f),D3DXVECTOR2(128.0f,384.0f),TEX_LOG_GIMMICK,4,Sprite::LAYER_0);
 	boundObj->SetOffsetY(-0.5f);
 	boundObj->SetRot(PI/2.0f);
 	boundObj->SetAction([](BoundObject* obj)
@@ -230,10 +231,12 @@ void Stage_1::Init(void)
 	});
 	Wall::Create(D3DXVECTOR2(5490.0f,480.0f),D3DXVECTOR2(128.0f,128.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
 
-	wall = Wall::Create(D3DXVECTOR2(5480.0f,680.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA,Sprite::LAYER_0);
+	wall = Wall::Create(D3DXVECTOR2(5480.0f,680.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_WALL,Sprite::LAYER_0);
 	wall->SetUVHeight(1.0f);
 
-	boundObj = BoundObject::Create(D3DXVECTOR2(5480.0f,148.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA,4,Sprite::LAYER_0);
+	Item::Create(vector3(5200.0f,270.0f,0),ITEM_SIZE,WHITE(1.0f),ITEM_ID_USI);
+
+	boundObj = BoundObject::Create(D3DXVECTOR2(5480.0f,148.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_GIMMICK,4,Sprite::LAYER_0);
 	boundObj->SetOffsetY(-0.5f);
 	boundObj->SetRot(PI);
 	boundObj->SetAction([](BoundObject* obj)
@@ -248,7 +251,7 @@ void Stage_1::Init(void)
 		}
 	});
 
-	boundObj = BoundObject::Create(D3DXVECTOR2(5560.0f,480.0f),D3DXVECTOR2(128.0f,384.0f),TEX_MARUTA,4,Sprite::LAYER_0);
+	boundObj = BoundObject::Create(D3DXVECTOR2(5560.0f,480.0f),D3DXVECTOR2(128.0f,384.0f),TEX_LOG_GIMMICK,4,Sprite::LAYER_0);
 	boundObj->SetOffsetY(-0.5f);
 	boundObj->SetRot(PI / 2.0f);
 	boundObj->SetAction([](BoundObject* obj)
@@ -266,7 +269,7 @@ void Stage_1::Init(void)
 	Wall::Create(D3DXVECTOR2(6160.0f,590.0f),D3DXVECTOR2(128.0f,384.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
 	Wall::Create(D3DXVECTOR2(6288.0f,590.0f),D3DXVECTOR2(128.0f,384.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
 	
-	boundObj = BoundObject::Create(D3DXVECTOR2(6000.0f,148.0f),D3DXVECTOR2(128.0f,256.0f),TEX_MARUTA,4,Sprite::LAYER_0);
+	boundObj = BoundObject::Create(D3DXVECTOR2(6000.0f,148.0f),D3DXVECTOR2(128.0f,256.0f),TEX_LOG_GIMMICK,4,Sprite::LAYER_0);
 	boundObj->SetOffsetY(-0.5f);
 	boundObj->SetRot(PI);
 	boundObj->SetAction([](BoundObject* obj)
@@ -282,19 +285,72 @@ void Stage_1::Init(void)
 	});
 
 	Clog::Create(D3DXVECTOR2(5750.0f,700.0f),D3DXVECTOR2(75.0f,75.0f));
-
+	Item::Create(vector3(6480.0f,600.0f,0),ITEM_SIZE,WHITE(1.0f),ITEM_ID_BUTA,Sprite::LAYER_2);
 	for (int cnt = 0;cnt < 14;cnt++)
 	{
-		wall = BreakObject::Create(D3DXVECTOR2(6480.0f,470.0f+cnt*32.0f),D3DXVECTOR2(64.0f,256.0f),TEX_MARUTA,false);
+		wall = BreakObject::Create(D3DXVECTOR2(6480.0f,470.0f + cnt*32.0f),D3DXVECTOR2(64.0f,256.0f),TEX_LOG_BREAK,false);
 		wall->SetRot(PI / 2.0f);
 	}
 
 	Wall::Create(D3DXVECTOR2(6730.0f,384.0f),D3DXVECTOR2(256.0f,768.0f),TEX_BREAKABLE_OBJ);
 
-	Taizou::Create(D3DXVECTOR2(7000.0f,600.0f));
+	Taizou::Create(D3DXVECTOR2(7700.0f,750.0f));
+
+	Wall::Create(vector2(7316.0f,600.0f),vector2(512.0f,128.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
+	Wall::Create(vector2(8080.0f,600.0f),vector2(512.0f,128.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
+	Wall::Create(vector2(7124.0f,800.0f),vector2(128.0f,256.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
+	Wall::Create(vector2(8278.0f,800.0f),vector2(128.0f,256.0f),TEX_BREAKABLE_OBJ,Sprite::LAYER_2);
+
+	Sensor* sensor = Sensor::Create(vector2(7700.0f,850.0f),50.0f);
+	Clog::Create(vector2(7700.0f,850.0f),vector2(75.0f,75.0f));
+	sensor->SetAction([](Gimmick* gimmick)
+	{
+		VALUE<Creature>* creature = Creature::HitList()->Begin();
+		bool hit = false;
+		while (creature)
+		{
+			if (Collision::CircleDot(gimmick->Pos(),70.0f,creature->Data->Pos()))
+			{
+				((Sensor*)gimmick)->AddFrame();
+				hit = true;
+				break;
+			}
+			creature = creature->_Next;
+		}
+		if (hit)
+		{
+			if (((Sensor*)gimmick)->Frame() >= 60 && creature)
+			{
+				creature->Data->Capture();
+			}
+		}
+		else
+		{
+			((Sensor*)gimmick)->SetFrame();
+		}
+	});
+
+	start = Stump::Create(vector2(7400.0f,540.0f),vector2(64.0f,64.0f));
+
+	sensor->AddStartDevice(start);
+	gimmick = Gate::Create(vector2(7900.0f,450.0f),vector2(128.0f,256.0f),TEX_LOG_GIMMICK,Sprite::LAYER_0);
+	gimmick->SetAction([](Gimmick* gimmick){
+		float y = (800.0f - gimmick->Pos().y)*0.1f;
+		gimmick->AddPosY(y);
+	});
+	gimmick->AddStartDevice(start);
+
+	start = Stump::Create(vector2(8000.0f,540.0f),vector2(64.0f,64.0f));
+	sensor->AddStartDevice(start);
+	gimmick = Gate::Create(vector2(7500.0f,450.0f),vector2(128.0f,256.0f),TEX_LOG_GIMMICK,Sprite::LAYER_0);
+	gimmick->SetAction([](Gimmick* gimmick){
+		float y = (800.0f - gimmick->Pos().y)*0.1f;
+		gimmick->AddPosY(y);
+	});
+	gimmick->AddStartDevice(start);
 
 	//ゴール
-	Goal* goal = Goal::Create(D3DXVECTOR3(7500.0f,800.0f,0.0f),D3DXVECTOR2(256.0f,256.0f),WHITE(1.0f),Sprite::LAYER_2);
+	Goal* goal = Goal::Create(D3DXVECTOR3(10000.0f,800.0f,0.0f),D3DXVECTOR2(256.0f,256.0f),WHITE(1.0f),Sprite::LAYER_2);
 
 }
 

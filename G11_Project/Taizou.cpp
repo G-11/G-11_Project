@@ -1,4 +1,6 @@
 #include "Taizou.h"
+#include "Item.h"
+#include "Smoke.h"
 
 Taizou* Taizou::Create(const vector2& pos,const vector2& size)
 {
@@ -40,5 +42,8 @@ void Taizou::Update(void)
 
 void Taizou::Capture(void)
 {
-
+	Smoke::Create(vector2(_Pos.x,_Pos.y),vector2(300.0f,300.0f));
+	Item* item = Item::Create(_Pos,vector2(84.0f,84.0f),WHITE(1.0f),ITEM_ID_TAIZOU);
+	item->SetSpeedY(-10.0f);
+	SetRelease();
 }

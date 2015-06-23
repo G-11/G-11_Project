@@ -8,6 +8,7 @@
 //	include
 //================================================================================
 #include "Sprite.h"
+
 #include <list>
 
 //================================================================================
@@ -27,7 +28,7 @@ typedef enum
 }ITEM_ID;
 
 class Item;
-
+class Player;
 //================================================================================
 //	アイテムクラス
 //================================================================================
@@ -63,11 +64,13 @@ public:
 	virtual void Action();		//アイテム取得時の動作
 	virtual void Action(D3DXVECTOR3* pos, float CountMax, float AnimationSpeed);
 	static Item* HitCheck(const D3DXVECTOR3& Pos, const D3DXVECTOR3& Size);
+	static void SetPlayer(Player* player){ _Player = player; }
 
 	int State(){ return _State; }
 
 protected:
 	static List<Item> _ItemList;
+	static Player* _Player;
 
 	VALUE<Item>* SelfIterator;
 	int _ID;

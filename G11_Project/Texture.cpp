@@ -25,6 +25,8 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Effect/Tail1.png",
 	"data/texture/Effect/Star.png",
 	"data/texture/Effect/turueffect.png",
+	"data/texture/Effect/smoke.png",
+	"data/texture/Effect/Light.png",
 	"data/texture/Effect/kaziru.png",
 
 	"data/texture/Interface/gauge.png",
@@ -44,7 +46,9 @@ const LPCSTR TextureFileName[] = {
 
 	"data/texture/Creature/taizou.png",
 
-	"data/texture/Stage/Log_000.png",
+	"data/texture/Stage/Log_Gimmick_000.png",
+	"data/texture/Stage/Log_Wall_000.png",
+	"data/texture/Stage/Log_Break_000.png",
 	"data/texture/Stage/Ivy_000.png",
 	"data/texture/Stage/rock.png",
 	"data/texture/Stage/Block_Breakable_000.png",

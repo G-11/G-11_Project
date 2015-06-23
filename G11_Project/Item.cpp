@@ -12,13 +12,14 @@
 #include "Player.h"
 #include "Game.h"
 #include "Shader2D.h"
-
+#include "GrowupEffect.h"
 //================================================================================
 //	静的メンバ
 //================================================================================
 List<Item> Item::_ItemList;
 
 const D3DXVECTOR2 DEFAULT_ITEM_SIZE = D3DXVECTOR2(84.0f,84.0f);//アイテムのデフォルトサイズ(いーたんが128x128の時)
+Player* Item::_Player = nullptr;
 
 //================================================================================
 //	アイテムテーブル
@@ -77,6 +78,7 @@ Item::~Item()
 //================================================================================
 void Item::Update()
 {
+	_Speed *= 0.95f;
 	//食べられている時のアニメーション
 	if (_State == ITEM_STATE_EATED)
 	{
@@ -101,6 +103,10 @@ void Item::Update()
 		_Pass = CShader2D::ALPHA_MASK;
 		break;
 	case 2:
+		if (_Player != nullptr)
+		{
+			GrowupEffect::Creates(_Pos,_Player->PosPtr(),250.0f,60,12,((_Score < 0) ? CShader2D::SUB : CShader2D::NORMAL));
+		}
 		SetRelease();
 		break;
 	default:

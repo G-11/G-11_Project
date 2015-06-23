@@ -137,8 +137,11 @@
     <ClCompile Include="Orbit2D.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerLight.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Counter.cpp" />
+    <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="Smoke.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Stage_1.cpp" />
@@ -210,8 +213,11 @@
     <ClInclude Include="Orbit2D.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerLight.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Counter.h" />
+    <ClInclude Include="Sensor.h" />
+    <ClInclude Include="Smoke.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Renderer.h" />

@@ -13,6 +13,8 @@ public:
 	virtual void Capture(void);
 	virtual bool HitWall(void);
 
+	static List<Creature>* HitList(void){ return &_HitList; }
+
 protected:
 	static List<Creature> _HitList;
 	VALUE<Creature>* SelfIterator;
