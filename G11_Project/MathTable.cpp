@@ -256,6 +256,14 @@ D3DXVECTOR2 EaseOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float
 
 	return D3DXVECTOR2(pos.x,pos.y);
 }
+
+float EaseOut(const float start,const float end,float per)
+{
+	float sub = end - start;
+	float pos = start + (2.0f*sub*per) - (sub*per*per);
+
+	return pos;
+}
 D3DXVECTOR2 EaseInOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent)
 {
 	D3DXVECTOR3 sub = destPos - startPos;

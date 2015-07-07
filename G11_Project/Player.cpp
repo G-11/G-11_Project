@@ -18,6 +18,12 @@
 #include "GrowupEffect.h"
 #include "CheckPoint.h"
 #include "Clog.h"
+#include "Input\Keyboard.h"
+#include "Star.h"
+#include "Wind.h"
+#include "StageManager.h"
+#include "Interface.h"
+
 //================================================================================
 //	定数
 //================================================================================
@@ -39,11 +45,12 @@
 //================================================================================
 Player::Player(int Priority) :Eatan(Priority)
 {
-	HitCheckFlag = true;
+	_HitCheckFlag = true;
 	ActionFlag = true;
 	CurrentCheckPoint = nullptr;
 	CheckPointPos = D3DXVECTOR3(0,0,0);
 	HavingObject = nullptr;
+	OffsetPos = D3DXVECTOR2(0,0);
 }
 
 //================================================================================
@@ -80,14 +87,20 @@ void Player::Update()
 {
 	VC* vc = VC::Instance();
 
-	bool have = false;
+	//時間切れで眠る
+	Interface* IF = StageManager::Interface();
+
+	if (IF->Percent() > 0.95)
+	{
+		SetState(EATAN_STATE_SLEEP);
+		ActionFlag = false;
+	}
+
 	//当たり判定フラグ
-	if (HitCheckFlag)
+	if (_HitCheckFlag)
 	{
 		HitWall();
 		HitCheckPoint();
-		have = HitClog();
-
 	}
 
 	//操作フラグ
@@ -97,7 +110,33 @@ void Player::Update()
 		//	移動
 		//****************************************
 
-		_Speed += D3DXVECTOR3(vc->LStickX(), vc->LStickY(), 0.0f) * PLAYER_SPEED;
+		if (_State != EATAN_STATE_DASH)
+		{
+			_Speed += D3DXVECTOR3(vc->LStickX(),vc->LStickY(),0.0f) * PLAYER_SPEED;
+		}
+		else
+		{
+			_Speed += D3DXVECTOR3(vc->LStickX(),vc->LStickY(),0.0f) * PLAYER_SPEED*3.0f;
+			if (vc->Press(COMMAND_B))
+			{
+				if (frame % 5 == 0)
+				{
+					vector3 pos = _Pos - _Speed;
+					float angle = Randf(0,PI*2.0f);
+					float length = Randf(50.0f,100.0f);
+					pos.x += sinf(angle)*length;
+					pos.y += cosf(angle)*length;
+					angle = atan2(_Speed.x,_Speed.y);
+					Wind::Create(vector2(pos.x,pos.y),vector2(8.0f,128.0f),angle + PI);
+				}
+				float vec = D3DXVec3Length(&_Speed);
+				if (vec < 2.0f)
+				{
+					SetState(EATAN_STATE_MOVE);
+				}
+			}
+		}
+		frame++;
 		_Speed *= PLAYER_INERTIA;
 
 		if (_State == EATAN_STATE_EAT || _State == EATAN_STATE_MASTICATION || _State == EATAN_STATE_REVERSE)
@@ -109,33 +148,62 @@ void Player::Update()
 		if (HavingObject != nullptr)
 		{
 			D3DXVECTOR3 pos = _Pos;
-			pos.y += _Size.y/2.0f;
+			pos.y += _Size.y/2.8f;
 			HavingObject->SetPos(pos);
 		}
 
 		//****************************************
-		//	攻撃
+		//	ダッシュ
 		//****************************************
 		if (vc->Trigger(COMMAND_B))
 		{
-			SetState(EATAN_STATE_ATTACK);
+			_Speed.x *= 0.1f;
+			SetState(EATAN_STATE_EARN);
 		}
+		else if (vc->Release(COMMAND_B))
+		{
+			SetState(EATAN_STATE_MOVE);
+		}
+		if (_State == EATAN_STATE_EARN)
+		{
+			OffsetPos.x += Randf(-3.0f,3.0f);
+			OffsetPos.y += Randf(-3.0f,3.0f);
+			float vec = D3DXVec3Length(&_Speed);
+			if (vec > 5.0f)
+			{
+				_Speed.x *= 4.0f;
+				SetState(EATAN_STATE_DASH);
+			}
+		}
+
+		OffsetPos *= 0.9f;
 
 		//****************************************
 		//	食べる
 		//****************************************
-		if (vc->Trigger(COMMAND_A))
+		if (_State != EATAN_STATE_EAT && _State != EATAN_STATE_MASTICATION)
 		{
-			if (!have && HavingObject != nullptr)
+			if (vc->Trigger(COMMAND_A))
 			{
-				HavingObject->SetHave(false);
-				HavingObject = nullptr;
-			}
-			else
-			{
-				SetState(EATAN_STATE_EAT);
-			}
+				bool have = false;
 
+				if (HavingObject != nullptr)
+				{
+					HavingObject->SetHave(false);
+					HavingObject = nullptr;
+					have = true;
+					SetState(EATAN_STATE_MOVE);
+				}
+				else
+				{
+					have = HitClog();
+					SetState(EATAN_STATE_HAVE);
+				}
+				if (!have)
+				{
+					SetState(EATAN_STATE_EAT);
+				}
+			}
 		}
 
 		//食べる判定
@@ -170,6 +238,10 @@ void Player::Update()
 			
 		}
 	}
+	else
+	{
+		_Speed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
 
 	
 	OldPos = _Pos;
@@ -183,7 +255,38 @@ void Player::Update()
 void Player::Draw()
 {
 	CDebugProc::Print("Player:x.%f,y.%f",_Pos.x,_Pos.y);
-	Eatan::Draw();
+	if (_Color.a > 0.01f)
+	{
+		D3DXMATRIX MtxScl,MtxRot,MtxTrans;
+		WorldMtx = _Shader->Identity();
+
+
+		D3DXMatrixScaling(&MtxScl,_Size.x,_Size.y,_Size.z);
+		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxScl);
+		//回転を反映
+		D3DXMatrixRotationYawPitchRoll(&MtxRot,_Rot.y,_Rot.x,_Rot.z);
+		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxRot);
+
+
+		//位置を反映
+		D3DXMatrixTranslation(&MtxTrans,_Pos.x + OffsetPos.x,_Pos.y+OffsetPos.y,_Pos.z);
+		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
+
+		_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
+
+		CastMatrix();
+		_Shader->SetFloatArray(CShader2D::OFFSET,_Offset,2);
+		_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
+		_Shader->SetFloatArray(CShader2D::MASK_COLOR,_MaskColor,4);
+		_Shader->SetFloatArray(CShader2D::UV,uv,4);
+		_Shader->SetFloatArray(CShader2D::MASK_UV,MaskUV,4);
+		//テクスチャの設定
+		_Shader->SetTexture(Texture);
+		_Shader->SetMask(Mask);
+
+		//ポリゴンを描画
+		_Shader->Draw((CShader2D::PASS)_Pass,D3DPT_TRIANGLESTRIP);
+	}
 }
 
 void Player::HitWall(void)
@@ -196,7 +299,7 @@ void Player::HitWall(void)
 		D3DXVECTOR3 reflectVec(0,0,0);
 		D3DXVECTOR3 *quad = itr->Data->Quad();
 
-		if (Collision::CircleQuad(_Pos,5.0f,quad,4,_Speed,&reflectVec))
+		if (Collision::CircleQuad(_Pos,_Size.x/4.0f,quad,4,_Speed,&reflectVec))
 		{
 			if (!itr->Data->HitAffect())
 			{
@@ -217,6 +320,13 @@ void Player::HitWall(void)
 				_Speed.y = cosf(angle)*sp;
 				angle = RAD2DEG(angle);
 				SetPos(OldPos);
+				float size = Randf(5.0f,20.0f);
+				angle += PI*0.5f;
+				for (int cnt = 0;cnt < 5;cnt++)
+				{
+					size = Randf(5.0f,20.0f);
+					Star::Create(vector2(_Pos.x,_Pos.y),vector2(size,size),angle + Randf(DEG2RAD(-20.0f),DEG2RAD(20.0f)));
+				}
 			}
 		}
 

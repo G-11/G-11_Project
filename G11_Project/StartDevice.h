@@ -35,7 +35,7 @@ public:
 	bool Active(void){ return _Active; }
 
 	void SetActive(bool flag){ _Active = flag; }
-
+	void SetHitClog(bool flag){ _HitClog = flag; }
 	static List<StartDevice>& StartDeviceList(void){ return _StartDeviceList; }
 	static void InitList(void){ _StartDeviceList.Clear(); }
 
@@ -44,6 +44,7 @@ protected:
 
 	bool HitClog(void);
 	bool _Active;
+	bool _HitClog;
 	TRIGGER_TYPE TriggerType;
 	static List<StartDevice> _StartDeviceList;
 	VALUE<StartDevice>* SelfIterator;

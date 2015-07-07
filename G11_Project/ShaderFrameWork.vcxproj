@@ -43,7 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\</OutDir>
-    <TargetName>$(ProjectName)_Debug</TargetName>
+    <TargetName>わたげのいーたん_Debug</TargetName>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <LibraryPath>D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -52,6 +52,7 @@
     <OutDir>$(SolutionDir)\</OutDir>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <LibraryPath>D:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <TargetName>わたげのいーたん</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,6 +104,7 @@
     <ClCompile Include="Clog.cpp" />
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="CutEffect.cpp" />
+    <ClCompile Include="FixedCamera.cpp" />
     <ClCompile Include="Gate.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Common.cpp" />
@@ -122,6 +124,7 @@
     <ClCompile Include="Input\VC.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="Ivy.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Light2D.cpp" />
@@ -156,6 +159,7 @@
     <ClCompile Include="Shimmer.cpp" />
     <ClCompile Include="ShimmerParticle2D.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Stage_2.cpp" />
     <ClCompile Include="Star.cpp" />
     <ClCompile Include="StartDevice.cpp" />
     <ClCompile Include="Stump.cpp" />
@@ -163,6 +167,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Wind.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +182,7 @@
     <ClInclude Include="Clog.h" />
     <ClInclude Include="Creature.h" />
     <ClInclude Include="CutEffect.h" />
+    <ClInclude Include="FixedCamera.h" />
     <ClInclude Include="Gate.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Collision.h" />
@@ -197,6 +203,7 @@
     <ClInclude Include="Input\VC.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Ivy.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Light2D.h" />
@@ -234,6 +241,7 @@
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Stage_1.h" />
+    <ClInclude Include="Stage_2.h" />
     <ClInclude Include="Star.h" />
     <ClInclude Include="StartDevice.h" />
     <ClInclude Include="stdafx.h" />
@@ -242,6 +250,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="Wind.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

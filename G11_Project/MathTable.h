@@ -88,6 +88,7 @@ float Randf(float min,float max);
 
 D3DXVECTOR2 EaseIn(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
 D3DXVECTOR2 EaseOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
+float EaseOut(const float start,const float end,float per);
 D3DXVECTOR2 EaseInOut(const D3DXVECTOR3& startPos,const D3DXVECTOR3& destPos,float percent);
 D3DXVECTOR2 Bezier(const D3DXVECTOR2& startPos,const D3DXVECTOR2& destPos,const D3DXVECTOR2& relay1,const D3DXVECTOR2& relay2,float percent);
 #endif

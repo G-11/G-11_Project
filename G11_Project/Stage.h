@@ -12,6 +12,9 @@ typedef enum
 }STAGE_MODE;
 
 class Gimmick;
+class Sprite;
+class Interface;
+class Camera2D;
 
 class Stage
 {
@@ -20,13 +23,19 @@ protected:
 public:
 
 	Stage();
-	~Stage(){};
+	virtual ~Stage();
 
 	virtual void Init(void){};
 
 	virtual void Release(void){};
-	virtual void Update(void){};
+	virtual void Update(void);
 
+	Interface* GetInterface(){ return _Interface; }
+
+protected:
+	static Sprite	*_Field;
+	Interface* _Interface;
+	Camera2D* _Camera;
 };
 
 #endif

@@ -14,6 +14,7 @@ StartDevice::StartDevice(int priority) :Sprite(priority)
 	SelfIterator = _StartDeviceList.Add(this);
 	frame = 0;
 	TriggerType = TRIGGER;
+	_HitClog = true;
 }
 
 StartDevice::~StartDevice()
@@ -142,7 +143,10 @@ void StartDevice::Update(void)
 	}
 	if (_Active == false)
 	{
-		buffActive = HitClog();
+		if (_HitClog)
+		{
+			buffActive = HitClog();
+		}
 	}
 
 	OldActive = buffActive;

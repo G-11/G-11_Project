@@ -8,7 +8,7 @@
 #define AREA_HEIGHT (875.0f)
 #define ITEM_GET_BORDER_LINE (250.0f)
 
-class CPause;
+class Pause;
 class Gauge;
 class ItemManager;
 class Sprite;
@@ -36,13 +36,9 @@ public:
 #endif
 
 private:
-	CPause* Pause;
 	static bool _PauseFlag;
 
-	static Sprite	*_Field;
-	static Wall	*_cilling;
-	static Wall	*_floor;
-
+	static Pause* _Pause;
 	static Player	*_player;
 	static Item		*_item;
 	static StageManager* Stage;

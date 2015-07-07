@@ -71,10 +71,12 @@ public:
 protected:
 	static List<Item> _ItemList;
 	static Player* _Player;
+	static int _Num;
 
 	VALUE<Item>* SelfIterator;
 	int _ID;
 	float _Score;
+	int Identity;//Ž¯•Ê—pID
 	static const float ItemScore[ITEM_ID_MAX];
 
 	int _State;

@@ -9,7 +9,7 @@ Sensor* Sensor::Create(const vector2& pos,float r)
 	sensor->_Size = vector3(100.0f,100.0f,1.0f);
 
 #ifdef _DEBUG
-	sensor->_Color = WHITE(1.0);
+	sensor->_Color = WHITE(1.0f);
 #else
 	sensor->_Color = WHITE(0);
 #endif

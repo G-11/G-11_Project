@@ -11,7 +11,7 @@ typedef enum
 	STAGE_MAX
 }STAGE;
 
-class Stage;
+class Interface;
 
 class StageManager
 {
@@ -26,6 +26,8 @@ public:
 
 	static STAGE_MODE stageMode;
 	static Stage* _CurrentStage;
+
+	static Interface* Interface(){ return _CurrentStage->GetInterface(); }
 
 private:
 

@@ -10,7 +10,6 @@
 
 #include "Player.h"
 #include "Item.h"
-#include "Interface.h"
 
 #include "Wall.h"
 #include "ScreenRender.h"
@@ -35,13 +34,10 @@ bool Game::Hit = false;
 
 bool Game::_PauseFlag = false;
 
-Sprite			*Game::_Field = nullptr;
-Wall			*Game::_cilling = nullptr;
-Wall			*Game::_floor = nullptr;
-
 Player			*Game::_player = nullptr;
 Item			*Game::_item = nullptr;
 StageManager	*Game::Stage = nullptr;
+Pause*			Game::_Pause = nullptr;
 
 float time = 0;
 void Game::Init(void)
@@ -49,34 +45,27 @@ void Game::Init(void)
 	Camera2D* camera = Camera2D::GetCamera(0);
 	
 	Window* window = Window::Instance();
-	Sound::Instance()->Play(BGM_TITLE);
 
 	//ステージ
 	Stage = new StageManager;
 	Stage->Init(STAGE_1);
 	
-	// 背景
-	_Field = Sprite::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, 0), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT), WHITE(1.0f), Sprite::LAYER_BACKGROUND);
-	_Field->SetTexture(GetTexture(TEX_FIELD1_BG));
-
-	_Field->SetMask(GetTexture(TEX_SKY_MAP));
-	_Field->SetPass(CShader2D::SKY);
-
 	// プレイヤー
-	_player = Player::Create(D3DXVECTOR3(200.0f, 500.0f, 0), D3DXVECTOR2(158.0f, 158.0f), WHITE(1.0f), Sprite::LAYER_1);
+	_player = Player::Create(D3DXVECTOR3(500.0f, 450.0f, 0), D3DXVECTOR2(158.0f, 158.0f), WHITE(1.0f), Sprite::LAYER_1);
 	StartDevice::SetPlayer(_player);
 	BreakObject::SetPlayer(_player);
+	BoundObject::SetPlayer(_player);
 	D3DXVECTOR3 pos = _player->Pos();
 	pos.x = 0;
 	camera->ResetPos(pos);
+	camera->SetDestPos(vector3(0,0,0));
 
 	Goal::SetPlayer(_player);
 	Item::SetPlayer(_player);
 
 	camera->SetPlayer(_player);
-
-	_Interface = new Interface;
-	_Interface->Init(360000,100);
+	_Pause = new Pause();
+	_Pause->Init();
 
 }
 
@@ -84,13 +73,13 @@ void Game::Uninit(void)
 {
 	Camera2D* camera = Camera2D::GetCamera(0);
 	camera->SetPlayer(nullptr);
-	
-	
+	camera->ResetPos(vector3(0,0,0));
 	StartDevice::SetPlayer(nullptr);
 	BreakObject::SetPlayer(nullptr);
+	BoundObject::SetPlayer(nullptr);
 	Item::SetPlayer(nullptr);
 	SafeDelete(Stage);
-	SafeDelete(_Interface);
+	SafeDelete(_Pause);
 	Renderer::SetRenderMode(CScreenRender::MODE_NORMAL);
 	Sound::Instance()->Fade(100);
 	Manager::ReleaseObject();
@@ -98,47 +87,51 @@ void Game::Uninit(void)
 
 void Game::Update(void)
 {
-	Stage->Update();
-
-	_Interface->Update();
-	_Field->SetMaskUVX(_Interface->Percent());
-
-	_Field->AddUVX(Camera2D::GetCamera(0)->GetSpeed().x*-0.00001f);
-
-	if (Pause != nullptr)
+	if (VC::Instance()->Trigger(COMMAND_START))
 	{
-		Pause->Update();
+		_PauseFlag = ((_PauseFlag) ? false : true);
+		Manager::SetPause(_PauseFlag);
 	}
+	if (_PauseFlag)
+	{
+		_Pause->PauseUpdate();
+	}
+	else
+	{
+		_Pause->Update();
+
+		Stage->Update();
 
 #ifdef _DEBUG
-	CDebugProc::Print("0 リザルトへ遷移\n");
-	if (VC::Instance()->keyboard()->Trigger(DIK_0) &&
-		Fade::Instance()->Mode() == Fade::FADE_NONE)
-	{
-		Manager::Instance()->SetScene(Manager::SCENE_RESULT);
-	}
 
-	//アイテム生成
-	if (VC::Instance()->keyboard()->Trigger(DIK_F1))
-	{
-		Item::Create(_player->Pos(), D3DXVECTOR2(84.0f, 84.0f), WHITE(1.0f), Randi(1, ITEM_ID_MAX-1), Sprite::LAYER_2);
-	}
+		CDebugProc::Print("0 リザルトへ遷移\n");
+		if (VC::Instance()->keyboard()->Trigger(DIK_0) &&
+			Fade::Instance()->Mode() == Fade::FADE_NONE)
+		{
+			Manager::Instance()->SetScene(Manager::SCENE_RESULT);
+		}
 
-	//ゲージリセット
-	if (VC::Instance()->keyboard()->Trigger(DIK_F2))
-	{
-		Interface::AddScore(-Interface::Score());
-	}
+		if (VC::Instance()->keyboard()->Trigger(DIK_8))
+		{
+			bool hit = _player->HitCheckFlag();
+			_player->SetHitCheckFlag(!hit);
+		}
 
-	//ゲームリセット
-	if (VC::Instance()->keyboard()->Trigger(DIK_9) &&
-		Fade::Instance()->Mode() == Fade::FADE_NONE)
-	{
-		Manager::Instance()->SetScene(Manager::SCENE_GAME);
-	}
+		//アイテム生成
+		if (VC::Instance()->keyboard()->Trigger(DIK_F1))
+		{
+			Item::Create(_player->Pos(),D3DXVECTOR2(84.0f,84.0f),WHITE(1.0f),Randi(1,ITEM_ID_MAX - 1),Sprite::LAYER_2);
+		}
+
+		//ゲームリセット
+		if (VC::Instance()->keyboard()->Trigger(DIK_9) &&
+			Fade::Instance()->Mode() == Fade::FADE_NONE)
+		{
+			Manager::Instance()->SetScene(Manager::SCENE_GAME);
+		}
 
 #endif
-
+	}
 }
 
 void Game::Draw(void)

@@ -209,6 +209,9 @@ private:
 	static Sprite* Top_[LAYER_MAX];
 	static Sprite* Cur_[LAYER_MAX];
 
+#ifdef _DEBUG
+	static int DrawNum;
+#endif
 };
 
 

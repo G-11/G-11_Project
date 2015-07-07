@@ -27,6 +27,7 @@
 #include "Title.h"
 #include "Option.h"
 #include "Game.h"
+#include "Pause.h"
 #include "Result.h"
 //=============================================================================
 // ƒOƒ[ƒoƒ‹•Ï”
@@ -238,7 +239,7 @@ void Manager::ChangeScene(void)
 					break;
 				}
 			}
-			Fade->Start(30,Fade::FADE_IN,BLACK(0.0f));
+			Fade->Start(60,Fade::FADE_IN,BLACK(0.0f));
 			SceneChangeFlag = false;
 		}
 	}
@@ -248,8 +249,9 @@ void Manager::SetScene(SCENE next)
 {
 
 	Next = next;
-	Fade::Instance()->Start(30,Fade::FADE_OUT,BLACK(1.0f));
+	Fade::Instance()->Start(60,Fade::FADE_OUT,BLACK(1.0f));
 	SceneChangeFlag = true;
+	Sound::Instance()->Fade(30);
 
 }
 void Manager::ReleaseObject(void)

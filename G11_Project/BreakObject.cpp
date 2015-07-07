@@ -69,7 +69,7 @@ bool BreakObject::HitPlayer(void)
 		float speed = 0;
 		vec = _Player->Speed();
 		speed = D3DXVec3LengthSq(&vec);
-		if (speed > 30.0f)
+		if (speed > 100.0f)
 		{
 			_Active = true;
 			float angle = atan2(vec.y,vec.x) + Randf(DEG2RAD(-70.0f),DEG2RAD(70.0f));

@@ -37,13 +37,17 @@ public:
 	float Current(void)const { return _Current; }
 	float MaxSize(void)const { return _MaxSize; }
 	float Per(void)const { return (_Current-_Min)/(_Max-_Min); }
-	float Delay(void)const { return _Delay; }
+	float Delay(void)const { return _RequireTime; }
+	bool Active(void)const { return _Active; }
 
 	void SetMin(float min){ _Min = min; }
 	void SetMax(float max){ _Max = max; }
-	void SetDelay(float delay){ _Delay = delay; }
+	void SetRequireTime(float delay){ _RequireTime = delay; }
 
 	void SetCurrent(float current){
+		frame = 0;
+		Original = _Current;
+		_Active = true;
 		if (current > _Max){
 			DestCurrent = _Max;
 		}
@@ -59,10 +63,13 @@ public:
 
 	void AddMin(float min){ _Min += min; }
 	void AddMax(float max){ _Max += max; }
-	void AddDelay(float delay){ _Delay += delay; }
+	void AddRequireTime(float time){ _RequireTime += time; }
 
 	void AddCurrent(float num){
-		float current = _Current + num;
+		float current = DestCurrent + num;
+		frame = 0;
+		_Active = true;
+		Original = _Current;
 		if (current > _Max){
 			DestCurrent = _Max;
 		}
@@ -80,9 +87,12 @@ protected:
 	float _Min;
 	float _Max;
 	float _MaxSize;//
+	float Original;
 	float _Current;
 	float DestCurrent;
-	float _Delay;	//0`1.0f 1‚É‹ß‚¢‚Ù‚Ç‘‚­Œ»İ‚Ì’l‚Ü‚Å•Ï“®‚·‚é
+	float _RequireTime;	//0`1.0f 1‚É‹ß‚¢‚Ù‚Ç‘‚­Œ»İ‚Ì’l‚Ü‚Å•Ï“®‚·‚é
+	float frame;
+	bool _Active;
 	DIRECTION Direction;
 
 };

@@ -28,6 +28,7 @@ const COMMAND Command[COMMAND_MAX]=
 	{ { DIK_E,-1,-1,-1,-1 },{ GAMEPAD_B,-1,-1,-1,-1 } },
 	{ { DIK_A,-1,-1,-1,-1 },{ GAMEPAD_X,-1,-1,-1,-1 } },
 	{ { DIK_S,-1,-1,-1,-1 },{ GAMEPAD_Y,-1,-1,-1,-1 } },
+	{ { DIK_P,-1,-1,-1,-1 },{ GAMEPAD_START,-1,-1,-1,-1 } },
 	{ { DIK_UP,-1,-1,-1,-1 },{ GAMEPAD_DPAD_UP,-1,-1,-1,-1} },
 	{ { DIK_RIGHT,-1,-1,-1,-1 },{ GAMEPAD_DPAD_RIGHT,-1,-1,-1,-1 } },
 	{ { DIK_DOWN,-1,-1,-1,-1 },{ GAMEPAD_DPAD_DOWN,-1,-1,-1,-1 } },

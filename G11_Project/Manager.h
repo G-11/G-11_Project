@@ -14,6 +14,7 @@
 class Renderer;
 class CPlayer;
 class Scene;
+class Pause;
 class CDebugProc;
 
 typedef void (*Function)(void);

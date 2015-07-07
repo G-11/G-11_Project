@@ -3,6 +3,7 @@
 #include "Sprite.h"
 
 float Interface::_Score = 0;
+bool Interface::AddedScore = false;
 
 Interface::Interface()
 {
@@ -30,7 +31,7 @@ void Interface::Init(int timeLimit,int gaugeMax)
 	
 	GlowGauge = Gauge::Create(D3DXVECTOR2(144.0f,70.0f),D3DXVECTOR2(93.0f,512.0f),0,(float)gaugeMax,0,UP,Sprite::LAYER_INTERFACE);
 	GlowGauge->SetRot(PI*0.5f);
-	GlowGauge->SetDelay(0.02f);
+	GlowGauge->SetRequireTime(30.0f);
 	GlowGauge->SetTexture(GetTexture(TEX_GLOW_GAUGE));
 
 	GaugeFrame = Sprite::Create(D3DXVECTOR3(400.0f,70.0f,0),D3DXVECTOR2(93.0f,512.0f),WHITE(1.0f),Sprite::LAYER_INTERFACE);
@@ -45,7 +46,11 @@ void Interface::Update(void)
 	float Angle = _Percent * (PI * 2);
 
 	ClockNeedle->SetRot(Angle);
-	GlowGauge->SetCurrent(_Score);
+	if (AddedScore)
+	{
+		GlowGauge->SetCurrent(_Score);
+		AddedScore = false;
+	}
 	if (Time < TimeLimit)
 	{
 		Time++;

@@ -1,6 +1,7 @@
 #include "StageManager.h"
 #include "main.h"
 #include "Stage_1.h"
+#include "Stage_2.h"
 
 STAGE_MODE StageManager::stageMode = STAGE_MODEMAX;
 Stage *StageManager::_CurrentStage = nullptr;
@@ -45,12 +46,12 @@ void StageManager::SetStage(STAGE mode)
 		_CurrentStage = Stage_1::Create();
 		break;
 
-		//case STAGE_MODE2:
-		//_stageSelect = new Stage_2;
-		//	break;
+	case STAGE_MODE2:
+		_CurrentStage = Stage_2::Create();
+		break;
 
 		//case STAGE_MODE3:
-		//_stageSelect = new Stage_3;
+		//_CurrentStage = Stage_3::Create();
 		//	break;
 
 	default:

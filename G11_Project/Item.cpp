@@ -13,11 +13,12 @@
 #include "Game.h"
 #include "Shader2D.h"
 #include "GrowupEffect.h"
+#include "ItemManager.h"
 //================================================================================
 //	静的メンバ
 //================================================================================
 List<Item> Item::_ItemList;
-
+int Item::_Num = 0;
 const D3DXVECTOR2 DEFAULT_ITEM_SIZE = D3DXVECTOR2(84.0f,84.0f);//アイテムのデフォルトサイズ(いーたんが128x128の時)
 Player* Item::_Player = nullptr;
 
@@ -47,6 +48,7 @@ Item* Item::Create(const D3DXVECTOR3 &pos, const D3DXVECTOR2 &size, const D3DXCO
 	item->SetID(id);
 	item->SetTexture(GetTexture(TEX((int)TEX_ITEM_OFFSET + id)));
 	item->SetScore(ItemScore[id-1]);
+	ItemManager::SetItem((ITEM_ID)id,ItemScore[id-1],item->Identity);
 
 	return item;
 }
@@ -62,6 +64,7 @@ Item::Item(int priority) :Sprite(priority)
 	_State = ITEM_STATE_NON;
 	EatedCount = 0;
 	ChangeStateFlag = true;
+	Identity = Randi(0,INT_MAX);
 }
 
 //================================================================================
@@ -71,6 +74,7 @@ Item::~Item()
 {
 	_ItemList.Delete(SelfIterator);
 	SelfIterator = nullptr;
+	Identity = -1;
 }
 
 //================================================================================
@@ -92,6 +96,7 @@ void Item::Update()
 			if (player->State() == Player::EATAN_STATE_MASTICATION)
 			{
 				EatedCount++;
+				Sound::Instance()->Play(SE_EAT);
 				ChangeStateFlag = false;
 			}
 		}
@@ -107,6 +112,7 @@ void Item::Update()
 		{
 			GrowupEffect::Creates(_Pos,_Player->PosPtr(),250.0f,60,12,((_Score < 0) ? CShader2D::SUB : CShader2D::NORMAL));
 		}
+		ItemManager::Eat(Identity);
 		SetRelease();
 		break;
 	default:

@@ -43,7 +43,7 @@ Camera2D::Camera2D(const D3DXVECTOR2 &LUPos,D3DXVECTOR2 &size)
 
 	_LeftLimit = -200.0f;
 	_RightLimit = SCREEN_WIDTH + 200;
-
+	Fixed = false;
 	CameraNum++;
 
 	LinkList();
@@ -174,6 +174,12 @@ Camera2D* Camera2D::Create(const D3DXVECTOR3 &PPos)
 		0,-2.0f / SCREEN_HEIGHT,0,0,
 		0,0,1.0f,0,
 		-1.0f,1.0f,0,1.0f);
+
+	pCamera->ViewQuad[0] = PPos;
+	pCamera->ViewQuad[1] = vector3(PPos.x + SCREEN_WIDTH,PPos.y,PPos.z);
+	pCamera->ViewQuad[2] = vector3(PPos.x + SCREEN_WIDTH,PPos.y + SCREEN_HEIGHT,PPos.z);
+	pCamera->ViewQuad[3] = vector3(PPos.x,PPos.y + SCREEN_HEIGHT,PPos.z);
+
 	return pCamera;
 }
 //=============================================================================
@@ -202,31 +208,40 @@ void Camera2D::Update(void)
 {
 	if (player != nullptr)
 	{
-		D3DXVECTOR3 playerPos = player->Pos();
-
-		//プレイヤーの動きに追従させる(プレイヤーの座標から画面の半分ずらす)
-		DestPos.x = playerPos.x - SCREEN_WIDTH*0.5f;
-		DestPos.y = playerPos.y - SCREEN_HEIGHT*0.5f;
-
-		//プレイヤーが上下のリミットを超えたらYをもとに戻す
-		if (playerPos.y < _TopLimit || playerPos.y > _BottomLimit)
+		if (!Fixed)
 		{
-			DestPos.y = OldPos.y;
-		}
+			D3DXVECTOR3 playerPos = player->Pos();
 
-		//プレイヤーが左右のリミットを超えたらXをもとに戻す	
-		if (playerPos.x < _LeftLimit || playerPos.x > _RightLimit)
-		{
-			DestPos.x = OldPos.x;
+			//プレイヤーの動きに追従させる(プレイヤーの座標から画面の半分ずらす)
+			DestPos.x = playerPos.x - SCREEN_WIDTH*0.5f;
+			DestPos.y = playerPos.y - SCREEN_HEIGHT*0.5f;
+
+			//プレイヤーが上下のリミットを超えたらYをもとに戻す
+			if (playerPos.y < _TopLimit || playerPos.y > _BottomLimit)
+			{
+				DestPos.y = OldPos.y;
+			}
+
+			//プレイヤーが左右のリミットを超えたらXをもとに戻す	
+			if (playerPos.x < _LeftLimit || playerPos.x > _RightLimit)
+			{
+				DestPos.x = OldPos.x;
+			}
 		}
 		OldPos = DestPos;
-
+		
 		//プレイヤーの移動方向にカメラを少しずらす
 		DestPos += player->Speed()*5.0f;
 
 		Pos += (DestPos - Pos)*0.03f;
+		
 	}
 	
+	ViewQuad[0] = Pos;
+	ViewQuad[1] = vector3(Pos.x + SCREEN_WIDTH,Pos.y,Pos.z);
+	ViewQuad[2] = vector3(Pos.x + SCREEN_WIDTH,Pos.y+SCREEN_HEIGHT,Pos.z);
+	ViewQuad[3] = vector3(Pos.x,Pos.y+SCREEN_HEIGHT,Pos.z);
+
 	Speed = Pos - OldPos;
 }
 //======================================================

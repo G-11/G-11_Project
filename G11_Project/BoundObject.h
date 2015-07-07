@@ -5,6 +5,8 @@
 #include "Wall.h"
 
 class BoundObject;
+class Player;
+
 typedef void(*BOAction)(BoundObject*);
 
 class BoundObject :public Wall
@@ -19,7 +21,10 @@ public:
 
 	void CastMatrix(void);
 
+	static void SetPlayer(Player* player){ _Player = player; }
+
 private:
+	static Player* _Player;
 	int Count;
 
 	BOAction TrigAction;//‹N“®‚µ‚½Œã‚Ì‹““®

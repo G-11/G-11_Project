@@ -15,9 +15,14 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/white.bmp",
 
 	"data/texture/Interface/numbarseat.png",
+	"data/texture/Interface/numbarseatChoke.png",
 	"data/texture/Interface/CGauge.png",
 	"data/texture/Interface/GaugePoint.png",
 	"data/texture/Interface/Cursor_000.png",
+
+	"data/texture/Tutorial/board1.png",
+	"data/texture/Tutorial/board2.png",
+	"data/texture/Tutorial/board3.png",
 
 	"data/texture/Effect/SkyMap.png",
 	"data/texture/Effect/GrowUp.png",
@@ -27,6 +32,8 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Effect/turueffect.png",
 	"data/texture/Effect/smoke.png",
 	"data/texture/Effect/Light.png",
+	"data/texture/Effect/Starnumber.png",
+	"data/texture/Effect/Wind.png",
 	"data/texture/Effect/kaziru.png",
 
 	"data/texture/Interface/gauge.png",
@@ -56,19 +63,35 @@ const LPCSTR TextureFileName[] = {
 	"data/texture/Stage/kirikabu.png",
 
 	"data/texture/Interface/botun.png",
+	"data/texture/Interface/Button_Start_000.png",
+	"data/texture/Interface/Button_Collection_000.png",
+	"data/texture/Interface/Button_Option_000.png",
 	"data/texture/Interface/mokuhyou1.png",
 	"data/texture/Interface/mokuhyou2.png",
 
+	"data/texture/Stage/Button_Game_Back_000.png",
+	"data/texture/Stage/Button_Stage_Select_000.png",
+	"data/texture/Stage/Button_Operation_Description_000.png",
+
 	"data/texture/field1.jpg",
-	"data/texture/BG_Options_000.png",
 	"data/texture/result.jpg",
-	"data/texture/gelfÉçÉS.png",
+	"data/texture/BG_Title_000.png",
+
+	"data/texture/Option/BG_Options_000.png",
+	"data/texture/Option/settei.png",
+	"data/texture/Option/ongaku.png",
+	"data/texture/Option/koukaon.png",
+	"data/texture/Option/modoru.png",
 
 	"data/texture/Stage/field1.jpg",
 	"data/texture/Stage/tenzyou1.png",
 	"data/texture/Stage/yuka1.png",
 
-	"data/texture/Stage/ueki.png"
+	"data/texture/Stage/ueki.png",
+
+	"data/texture/me.png",
+	"data/texture/tubomi.png",
+	"data/texture/seityou.png"
 };
 LPDIRECT3DTEXTURE9 Texture[TEXTURE_MAX];
 static D3DXIMAGE_INFO ImageInfo[TEXTURE_MAX];

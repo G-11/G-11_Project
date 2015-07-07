@@ -53,6 +53,9 @@ protected:
 	float _LeftLimit;
 	float _RightLimit;
 
+	bool Fixed;
+	D3DXVECTOR3 ViewQuad[4];
+
 
 public:
 	Camera2D(const D3DXVECTOR2 &LUPos = D3DXVECTOR2(0,0),D3DXVECTOR2 &size = D3DXVECTOR2(SCREEN_WIDTH,SCREEN_HEIGHT));//コストラクタ
@@ -83,6 +86,7 @@ public:
 	D3DXVECTOR2 GetViewPortPos(void)const	{ return D3DXVECTOR2((float)ViewPort.X,(float)ViewPort.Y); }
 	D3DXVECTOR2 GetViewPortSize(void)const	{ return D3DXVECTOR2((float)ViewPort.Width,(float)ViewPort.Height); }
 	D3DXMATRIX Projection(void){ return Projection2D; }
+	vector3* Quad(void){ return ViewQuad; }
 
 	void SetPosP(const D3DXVECTOR3 &pos){ Pos = pos; }
 	void SetSpeed	(const D3DXVECTOR3 &speed)		{ Speed = speed; }
@@ -90,6 +94,7 @@ public:
 	void SetViewPortPos(const D3DXVECTOR2 &Pos)	{ ViewPort.X = (DWORD)Pos.x; ViewPort.Y = (DWORD)Pos.y; }
 	void SetViewPortSize(const D3DXVECTOR2 &Size)	{ ViewPort.Width = (DWORD)Size.x;ViewPort.Height = (DWORD)Size.y; }
 	void SetDestPos(const D3DXVECTOR3& pos){ DestPos = pos; }
+	void SetFiexed(bool flag){ Fixed = flag; }
 	static void SetShader(CShader2D* shader){_Shader = shader;}
 	void AddPosP(const D3DXVECTOR3 &pos)			{ Pos += pos; }
 	void AddRot	(const D3DXVECTOR3 &rot)			{ Rot += rot; }

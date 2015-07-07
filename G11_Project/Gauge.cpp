@@ -4,7 +4,7 @@ Gauge::Gauge(int priority) :Sprite(priority)
 {
 	_Min = _Max = _Current = 0;
 	_MaxSize = 0;
-	_Delay = 1.0f;
+	_RequireTime = 30.0f;
 	Texture = GetTexture(TEX_NONE);
 
 }
@@ -17,6 +17,7 @@ Gauge* Gauge::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,float min,fl
 	gauge->_Size = D3DXVECTOR3(size.x,size.y,1.0f);
 	gauge->_Min = min;
 	gauge->_Max = max;
+	gauge->Original = 
 	gauge->_Current = gauge->DestCurrent = current;
 	gauge->Direction = direction;
 	gauge->Init();
@@ -58,7 +59,17 @@ void Gauge::Init()
 
 void Gauge::Update(void)
 {
-	_Current += (DestCurrent - _Current)*_Delay;
+	if (_Active)
+	{
+		frame += 1.0f / _RequireTime;
+		if (frame > 1.0f)
+		{
+			frame = 1.0f;
+			_Active = false;
+		}
+		_Current = EaseOut(Original,DestCurrent,frame);
+	}
+	
 	float per = Per();
 
 	if (Direction == UP || Direction == DOWN)

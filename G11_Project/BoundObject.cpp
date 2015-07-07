@@ -1,4 +1,8 @@
 #include "BoundObject.h"
+#include "Star.h"
+#include "Player.h"
+
+Player* BoundObject::_Player = nullptr;
 
 BoundObject* BoundObject::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texID,int count,int priority)
 {
@@ -28,6 +32,8 @@ bool BoundObject::HitAffect(void)
 	if (Count > 0)
 	{
 		Count --;
+		float angle = atan2(_Player->Speed().y,_Player->Speed().x) + PI + DEG2RAD(Randf(-30.0f,30.0f));
+		Star::CreateNumber(vector2(_Player->Pos().x,_Player->Pos().y),100.0f,angle,Count,60);
 	}
 	if (Count <= 0)
 	{

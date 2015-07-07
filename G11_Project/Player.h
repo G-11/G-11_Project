@@ -27,7 +27,9 @@ public:
 	void Update();
 	void Draw();
 
-	void SetHitCheckFlag(bool Flag){ HitCheckFlag = Flag; }
+	bool HitCheckFlag(){ return _HitCheckFlag; }
+
+	void SetHitCheckFlag(bool Flag){ _HitCheckFlag = Flag; }
 	void SetActionFlag(bool Flag){ ActionFlag = Flag; }
 	
 	D3DXVECTOR3* PosPtr(void){ return &_Pos; }
@@ -38,7 +40,8 @@ private:
 	bool HitClog(void);
 
 	D3DXVECTOR3 OldPos;
-	bool HitCheckFlag;
+	D3DXVECTOR2 OffsetPos;
+	bool _HitCheckFlag;
 	bool ActionFlag;
 	CheckPoint* CurrentCheckPoint;
 	D3DXVECTOR3 CheckPointPos;

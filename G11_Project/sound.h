@@ -22,7 +22,15 @@ typedef struct
 typedef enum {
 	SOUND_NONE = 0,
 	BGM_TITLE,
-	SE_JINGLE,
+	BGM_RESULT,
+	BGM_STAGE1,
+	BGM_STAGE2,
+	BGM_STAGE3,
+
+	SE_CURSOL,
+	SE_DECISION,
+	SE_EAT,
+	SE_SCREAM,
 	MAX_SOUND
 
 }SOUND_TYPE; //–¼‘O‚ð“ü—Í

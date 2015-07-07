@@ -26,10 +26,6 @@ void Taizou::Update(void)
 		{
 			_Speed.y = 0;
 		}
-		if (ReflectVec.x < -0.5f || ReflectVec.x > 0.5f)
-		{
-			//_Speed.x *= -1.0f;
-		}
 	}
 	_Pos += _Speed;
 	OldPos = _Pos;
@@ -42,6 +38,7 @@ void Taizou::Update(void)
 
 void Taizou::Capture(void)
 {
+	Sound::Instance()->Play(SE_SCREAM);
 	Smoke::Create(vector2(_Pos.x,_Pos.y),vector2(300.0f,300.0f));
 	Item* item = Item::Create(_Pos,vector2(84.0f,84.0f),WHITE(1.0f),ITEM_ID_TAIZOU);
 	item->SetSpeedY(-10.0f);

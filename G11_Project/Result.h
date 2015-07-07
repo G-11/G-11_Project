@@ -15,7 +15,9 @@ class Gauge;
 typedef struct 
 {
 	int id;
+	float Score;
 	bool vis;
+	bool shadow;
 }VIS_CHAR;
 
 
@@ -34,7 +36,8 @@ private:
 	Sprite *REatan;//リザルト用いーたん
 	Sprite *CharFream;//コレクション用キャラ枠
 
-	Sprite *ResultChar[RESULTCHARMAX];//キャラクタ数
+	Item *ResultChar[RESULTCHARMAX];//キャラクタ数
+
 
 	Sprite *GaugeFream;//ゲージ外枠
 	Gauge *GlowGauge;//ゲージ
@@ -46,8 +49,8 @@ private:
 	int charVisCnt;
 	int gaugeCnt;//ゲージ用カウント数、全体に対し取得したアイテム分のゲージ上昇用
 	int gaugeChangeColor;//ゲージの色変え用変数
+	float Score;
 	void ResetResultChar(void);
-
 };
 
 #endif

@@ -24,6 +24,23 @@ Wall* Wall::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int 
 	wall->_Pos = Vector3(pos,0);
 	wall->_Size = Vector3(size,1.0f);
 	wall->Texture = GetTexture(texId);
+	vector2 per(0,0);
+	per.x = size.x / 64.0f;
+	per.y = size.y / 64.0f;
+	wall->uv.z = per.x;
+	wall->uv.w = per.y;
+	
+
+	return wall;
+}
+Wall* Wall::CreateFloor(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int priority)
+{
+	Wall* wall = new Wall(priority);
+	if (wall == nullptr){ return wall; }
+
+	wall->_Pos = Vector3(pos,0);
+	wall->_Size = Vector3(size,1.0f);
+	wall->Texture = GetTexture(texId);
 	float widthPer = 1.0f;
 	if (size.x > size.y)
 	{
@@ -39,7 +56,7 @@ Wall* Wall::Create(const D3DXVECTOR2& pos,const D3DXVECTOR2& size,TEX texId,int 
 		wall->uv.z = 0.98f;
 		wall->uv.w = widthPer;
 	}
-	
+
 
 	return wall;
 }

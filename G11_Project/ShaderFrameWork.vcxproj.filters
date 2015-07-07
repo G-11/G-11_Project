@@ -224,6 +224,9 @@
     <Filter Include="01.SCENE\02_GAME\Creature\Taizou">
       <UniqueIdentifier>{9fb385e2-0c75-4dad-b9dd-7ae1f532110a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.SCENE\02_GAME\Stage\Stage_2">
+      <UniqueIdentifier>{5d4bcd6d-9ab9-4311-950c-be5891154090}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.SCENE\02_GAME\Stage\Gimmick">
       <UniqueIdentifier>{2484944d-c5e8-4a88-b076-990cc76e69a3}</UniqueIdentifier>
     </Filter>
@@ -244,6 +247,18 @@
     </Filter>
     <Filter Include="01.SCENE\02_GAME\Player\Light">
       <UniqueIdentifier>{9683ab40-e975-4e3f-b87e-b7fba6cea15a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Item\Manager">
+      <UniqueIdentifier>{9644e6b4-f6db-4cae-8d07-c7d6522da400}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Gimmick\FixedCamra">
+      <UniqueIdentifier>{771a8512-e622-4025-b88c-6729973a44cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\01_TITLE\StageSelect">
+      <UniqueIdentifier>{787e9b86-a2f0-4da1-a2c0-2bf1300114c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.SCENE\02_GAME\Effect\Wind">
+      <UniqueIdentifier>{d328ee6e-9224-4103-8d65-47711c8d6111}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +469,9 @@
     <ClCompile Include="Taizou.cpp">
       <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
     </ClCompile>
+    <ClCompile Include="Stage_2.cpp">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_2</Filter>
+    </ClCompile>
     <ClCompile Include="Sensor.cpp">
       <Filter>01.SCENE\02_GAME\Stage\Gimmick\Sensor</Filter>
     </ClCompile>
@@ -462,6 +480,15 @@
     </ClCompile>
     <ClCompile Include="PlayerLight.cpp">
       <Filter>01.SCENE\02_GAME\Player\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>01.SCENE\02_GAME\Item\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedCamera.cpp">
+      <Filter>01.SCENE\02_GAME\Gimmick\FixedCamra</Filter>
+    </ClCompile>
+    <ClCompile Include="Wind.cpp">
+      <Filter>01.SCENE\02_GAME\Effect\Wind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -683,6 +710,9 @@
     <ClInclude Include="Taizou.h">
       <Filter>01.SCENE\02_GAME\Creature\Taizou</Filter>
     </ClInclude>
+    <ClInclude Include="Stage_2.h">
+      <Filter>01.SCENE\02_GAME\Stage\Stage_2</Filter>
+    </ClInclude>
     <ClInclude Include="Sensor.h">
       <Filter>01.SCENE\02_GAME\Stage\Gimmick\Sensor</Filter>
     </ClInclude>
@@ -691,6 +721,15 @@
     </ClInclude>
     <ClInclude Include="PlayerLight.h">
       <Filter>01.SCENE\02_GAME\Player\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>01.SCENE\02_GAME\Item\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedCamera.h">
+      <Filter>01.SCENE\02_GAME\Gimmick\FixedCamra</Filter>
+    </ClInclude>
+    <ClInclude Include="Wind.h">
+      <Filter>01.SCENE\02_GAME\Effect\Wind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

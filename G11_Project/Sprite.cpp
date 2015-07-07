@@ -5,14 +5,18 @@
 #include "Renderer.h"
 #include "Camera2D.h"
 #include "Shader2D.h"
+#include "Collision.h"
 //=============================================================================
 //グローバル変数
 //=============================================================================
-int Sprite::PolygonNum=0;
-Sprite* Sprite::Top_[LAYER_MAX] = {NULL};
-Sprite* Sprite::Cur_[LAYER_MAX] = {NULL};
+int Sprite::PolygonNum = 0;
+Sprite* Sprite::Top_[LAYER_MAX] = { NULL };
+Sprite* Sprite::Cur_[LAYER_MAX] = { NULL };
 bool Sprite::PauseFlag = false;
 CShader2D* Sprite::_Shader = nullptr;
+#ifdef _DEBUG
+int Sprite::DrawNum = 0;
+#endif
 
 const D3DXVECTOR3 Sprite::QuadBase[4] = {
 	D3DXVECTOR3(-0.5f,-0.5f,0),
@@ -28,21 +32,21 @@ Sprite::Sprite(int priority)
 
 	//ステータスの初期化
 	_Color =
-	_MaskColor = WHITE(1.0f);
-	_Pos	= D3DXVECTOR3(0,0,0);
+		_MaskColor = WHITE(1.0f);
+	_Pos = D3DXVECTOR3(0,0,0);
 	_Offset = D3DXVECTOR2(0,0);
-	_Size	= D3DXVECTOR3(1.0f,1.0f,1.0f);
-	_Speed	= D3DXVECTOR3(0,0,0);
-	_Rot		= D3DXVECTOR3(0,0,0);
-	uv		= 
-	MaskUV	= D3DXVECTOR4(0,0,1.0f,1.0f);
-	Texture = 
-	Mask = GetTexture(TEX_NONE);
+	_Size = D3DXVECTOR3(1.0f,1.0f,1.0f);
+	_Speed = D3DXVECTOR3(0,0,0);
+	_Rot = D3DXVECTOR3(0,0,0);
+	uv =
+		MaskUV = D3DXVECTOR4(0,0,1.0f,1.0f);
+	Texture =
+		Mask = GetTexture(TEX_NONE);
 	ReleaseFlag = false;
 	Priority = priority;
 	_Pass = CShader2D::NORMAL;
-	memcpy(_LocalQuadBase,QuadBase,sizeof(D3DXVECTOR3)*4);
-	memcpy(_Quad,QuadBase,sizeof(D3DXVECTOR3)*4);
+	memcpy(_LocalQuadBase,QuadBase,sizeof(D3DXVECTOR3) * 4);
+	memcpy(_Quad,QuadBase,sizeof(D3DXVECTOR3) * 4);
 	PolygonNum++;
 	LinkList();
 }
@@ -51,7 +55,7 @@ Sprite::Sprite(int priority)
 //=============================================================================
 void Sprite::LinkList(void)
 {
-	if(Top_[Priority] != NULL)//二つ目以降の処理
+	if (Top_[Priority] != NULL)//二つ目以降の処理
 	{
 		Sprite* Polygon = Cur_[Priority];
 		Polygon->Next_ = this;
@@ -72,9 +76,9 @@ void Sprite::LinkList(void)
 //=============================================================================
 void Sprite::UnlinkList(void)
 {
-	if(Prev_ == NULL)//先頭
+	if (Prev_ == NULL)//先頭
 	{
-		if(Next_ != NULL)//次がある
+		if (Next_ != NULL)//次がある
 		{
 			Next_->Prev_ = NULL;
 			Top_[Priority] = Next_;
@@ -85,9 +89,9 @@ void Sprite::UnlinkList(void)
 			Cur_[Priority] = NULL;
 		}
 	}
-	else if(Next_ == NULL)//終端
+	else if (Next_ == NULL)//終端
 	{
-		if(Prev_ != NULL)//前がある
+		if (Prev_ != NULL)//前がある
 		{
 			Prev_->Next_ = NULL;
 			Cur_[Priority] = Prev_;
@@ -140,7 +144,7 @@ void Sprite::ReleaseAll(void)
 		}
 	}
 	Sprite::Clear();
-	
+
 }
 //=============================================================================
 //先頭と終端をNULLに
@@ -170,7 +174,7 @@ Sprite* Sprite::Create(const D3DXVECTOR3 &pos,const D3DXVECTOR2 &size,const D3DX
 //=============================================================================
 void Sprite::Update(void)
 {
-	
+
 	_Pos += _Speed;
 
 }
@@ -216,37 +220,48 @@ void Sprite::UpdateAll(void)
 //=============================================================================
 void Sprite::Draw(void)
 {
+
+
+	D3DXMATRIX MtxScl,MtxRot,MtxTrans;
+	WorldMtx = _Shader->Identity();
+
+
+	D3DXMatrixScaling(&MtxScl,_Size.x,_Size.y,_Size.z);
+	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxScl);
+	//回転を反映
+	D3DXMatrixRotationYawPitchRoll(&MtxRot,_Rot.y,_Rot.x,_Rot.z);
+	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxRot);
+
+
+	//位置を反映
+	D3DXMatrixTranslation(&MtxTrans,_Pos.x,_Pos.y,_Pos.z);
+	D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
+
+	CastMatrix();
 	if (_Color.a > 0.01f)
 	{
-		D3DXMATRIX MtxScl,MtxRot,MtxTrans;
-		WorldMtx = _Shader->Identity();
+		Camera2D* camera = Camera2D::GetCamera(0);
+		vector3 pos = (camera->Quad()[0] + camera->Quad()[2])*0.5f;
+		if (Collision::Quad(_Pos,_Quad,4,pos,camera->Quad(),4) || Priority == LAYER_BACKGROUND || Priority == LAYER_INTERFACE)
+		{
 
-		
-		D3DXMatrixScaling(&MtxScl,_Size.x,_Size.y,_Size.z);
-		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxScl);
-		//回転を反映
-		D3DXMatrixRotationYawPitchRoll(&MtxRot,_Rot.y,_Rot.x,_Rot.z);
-		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxRot);
-		
+			_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
 
-		//位置を反映
-		D3DXMatrixTranslation(&MtxTrans,_Pos.x,_Pos.y,_Pos.z);
-		D3DXMatrixMultiply(&WorldMtx,&WorldMtx,&MtxTrans);
+			_Shader->SetFloatArray(CShader2D::OFFSET,_Offset,2);
+			_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
+			_Shader->SetFloatArray(CShader2D::MASK_COLOR,_MaskColor,4);
+			_Shader->SetFloatArray(CShader2D::UV,uv,4);
+			_Shader->SetFloatArray(CShader2D::MASK_UV,MaskUV,4);
+			//テクスチャの設定
+			_Shader->SetTexture(Texture);
+			_Shader->SetMask(Mask);
 
-		_Shader->SetMatrix(CShader2D::WORLD_MTX,WorldMtx);
-
-		CastMatrix();
-		_Shader->SetFloatArray(CShader2D::OFFSET,_Offset,2);
-		_Shader->SetFloatArray(CShader2D::DIFFUSE,_Color,4);
-		_Shader->SetFloatArray(CShader2D::MASK_COLOR,_MaskColor,4);
-		_Shader->SetFloatArray(CShader2D::UV,uv,4);
-		_Shader->SetFloatArray(CShader2D::MASK_UV,MaskUV,4);
-		//テクスチャの設定
-		_Shader->SetTexture(Texture);
-		_Shader->SetMask(Mask);
-
-		//ポリゴンを描画
-		_Shader->Draw((CShader2D::PASS)_Pass,D3DPT_TRIANGLESTRIP);
+			//ポリゴンを描画
+			_Shader->Draw((CShader2D::PASS)_Pass,D3DPT_TRIANGLESTRIP);
+#ifdef _DEBUG
+			DrawNum++;
+#endif
+		}
 	}
 }
 //=============================================================================
@@ -254,13 +269,16 @@ void Sprite::Draw(void)
 //=============================================================================
 void Sprite::DrawAll(int priority)
 {
+#ifdef _DEBUG
+	DrawNum = 0;
+#endif
 	Renderer::SetStream2D();
 	Sprite* Polygon = Top_[priority];
 	if (_Shader == nullptr){ _Shader = CShader2D::Instance(); }
-	
+
 	if (priority == LAYER_INTERFACE || priority == LAYER_BACKGROUND){ Camera2D::GetCamera(0)->SetNoMove(); }
 	else { Camera2D::Set(0); }
-	
+
 	_Shader->DrawBegin();
 	while (Polygon)
 	{
@@ -268,21 +286,25 @@ void Sprite::DrawAll(int priority)
 		Polygon = Polygon->Next_;
 	}
 	_Shader->DrawEnd();
-	
+
+#ifdef _DEBUG
+	CDebugProc::Print("SpriteDrawNum:%d\n",DrawNum);
+#endif
+
 }
 //=============================================================================
 //特定のポリゴンを消去 正直あまり使わない
 //=============================================================================
 void Sprite::Delete(int index)
 {
-	if(index>-1&&index<PolygonNum)
+	if (index > -1 && index < PolygonNum)
 	{
 		Sprite* Polygon = Top_[0];
-		for(int cnt=0;cnt<index;cnt++)
+		for (int cnt = 0;cnt < index;cnt++)
 		{
 			Polygon = Polygon->Next_;
 		}
-		if(Polygon != NULL)
+		if (Polygon != NULL)
 		{
 			Polygon->Release();
 		}

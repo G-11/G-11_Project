@@ -78,32 +78,32 @@ void Counter::Update(void)
 	}
 	else if(TargetScore<CurrentScore)
 	{
-		if (CurrentScore - TargetScore > 100000)
-		{
-			CurrentScore -= 11111;
-		}
-		else if (CurrentScore - TargetScore > 10000)
-		{
-			CurrentScore -= 1111;
-		}
-		else if (CurrentScore - TargetScore > 1000)
-		{
-			CurrentScore -= 111;
-		}
-		else if (CurrentScore - TargetScore > 100)
-		{
-			CurrentScore -= 11;
-		}
-		else
-		{
-			CurrentScore--;
-		}
+if (CurrentScore - TargetScore > 100000)
+{
+	CurrentScore -= 11111;
+}
+else if (CurrentScore - TargetScore > 10000)
+{
+	CurrentScore -= 1111;
+}
+else if (CurrentScore - TargetScore > 1000)
+{
+	CurrentScore -= 111;
+}
+else if (CurrentScore - TargetScore > 100)
+{
+	CurrentScore -= 11;
+}
+else
+{
+	CurrentScore--;
+}
 	}
 
 	int num = CurrentScore;
-	for(int cnt = 0; cnt<CountPlace; cnt++)
+	for (int cnt = 0; cnt < CountPlace; cnt++)
 	{//数字クラスに値をセット
-		number[cnt]->SetNum(num%10);
+		number[cnt]->SetNum(num % 10);
 		num /= 10;
 	}
 
@@ -124,7 +124,7 @@ void Counter::Update(void)
 //=============================================================================
 void Counter::Release(void)
 {
-	for(int cnt = 0; cnt<CountPlace; cnt++)
+	for (int cnt = 0; cnt < CountPlace; cnt++)
 	{
 		number[cnt]->Release();
 		//Number[cnt] = nullptr;
@@ -172,5 +172,13 @@ void Counter::AddSize(const D3DXVECTOR2& size)
 	for (int cnt = 0;cnt < CountPlace;cnt++)
 	{
 		number[cnt]->SetSize(_size);
+	}
+}
+
+void Counter::SetTexture(LPDIRECT3DTEXTURE9 tex)
+{
+	for(int cnt = 0;cnt < CountPlace;cnt++)
+	{
+		number[cnt]->SetTexture(tex);
 	}
 }

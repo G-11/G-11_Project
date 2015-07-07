@@ -19,7 +19,7 @@ public:
 
 	static float Score(void){ return _Score; }
 
-	static void AddScore(float score){ _Score += score; }
+	static void AddScore(float score){ _Score += score; AddedScore = true; }
 
 private:
 	float TimeLimit;
@@ -32,6 +32,7 @@ private:
 	Sprite* ClockNeedle;
 
 	static float _Score;
+	static bool AddedScore;
 };
 
 #endif

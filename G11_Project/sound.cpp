@@ -15,8 +15,15 @@ float Sound::MasterVolumeSE = 1.0f;
 const PARAM Sound::Param[MAX_SOUND] =
 {
 	{ NULL,false }, //空データとして用意
-	{ "data/sound/BGM/星の破線.wav",true },
-	{ "data/sound/SE/Jingle.wav",false },
+	{ "data/sound/BGM/Title.wav",true },
+	{ "data/sound/BGM/Result.wav",true },
+	{ "data/sound/BGM/Stage1.wav",true },
+	{ "data/sound/BGM/Stage2.wav",true },
+	{ "data/sound/BGM/Stage3.wav",true },
+	{ "data/sound/SE/cursor.wav",false },
+	{ "data/sound/SE/decision.wav",false },
+	{ "data/sound/SE/eat.wav",false },
+	{ "data/sound/SE/scream.wav",false },
 
 };
 
@@ -492,7 +499,8 @@ void Sound::Update(void)
 				if (CurrentVolume[cnt] <= 0.01f)
 				{
 					Stop((SOUND_TYPE)cnt);//音を停止
-					ChangeVolume[cnt] = 1;
+					ChangeVolume[cnt] = 0;
+					CurrentVolume[cnt] = 1.0f;
 					FadeFlag[cnt] = false;//フェードのフラグをOFF
 				}
 			}

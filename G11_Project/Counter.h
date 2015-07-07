@@ -29,6 +29,7 @@ public:
 	void SetMoveFrame(float frame){MoveFrame = frame;}
 	void SetSize(const D3DXVECTOR2& size);
 	void SetColor(const D3DXCOLOR& color);
+	void SetTexture(LPDIRECT3DTEXTURE9 tex);
 
 	void AddPos(const D3DXVECTOR3& pos){ _Pos += pos;DestPos = _Pos; }
 	void AddDestPos(const D3DXVECTOR3& pos){DestPos += pos;}
